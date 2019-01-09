@@ -1,0 +1,149 @@
+{
+	"type":"maternal_postpartum_assessment",
+	"nature":"visit",
+	"record_guid":"",
+	"template_guid":"41591cac-7df2-4bb3-81ad-8ef8db337a26",
+	"date_entered":"",
+	"title":"Maternal Postpartum Assessment",
+	"notes":"",
+	"record_attachment":"",
+	"groups":{
+		"maternal_assessment":"Maternal Assessment",
+		"instructions":"Instructions",
+		"education_provided":"Education Provided",
+	},
+	"items":{
+		"delivery":{
+			"group":"maternal_assessment",
+			"field_type":"dropdown",
+			"title":"Kind of Delivery",
+			"order":1,
+			"value":"",
+			"dropdown_options":["Vaginal", "Ceserean"],
+			"optional_fields":{
+				"why_ceserean":{
+					"show_on":"Ceserean",
+					"title":"Why?",
+					"field_type":"notes",
+					"value":""
+				},
+				"incision_assessment":{
+					"show_on":"Ceserean",
+					"title":"Incision Assessment?",
+					"field_type":"notes",
+					"value":""
+				}
+			}
+		},
+		"delivery_complications":{
+			"group":"maternal_assessment",
+			"field_type":"notes",
+			"title":"Delivery Complications",
+			"order":2,
+			"value":"",
+			"optional_fields":{}
+		},
+		"current_problems":{
+			"group":"maternal_assessment",
+			"field_type":"notes",
+			"title":"Current Problems",
+			"order":3,
+			"value":"",
+			"optional_fields":{}
+		},
+		"constipation":{
+			"group":"maternal_assessment",
+			"field_type":"notes",
+			"title":"Constipation?",
+			"order":4,
+			"value":"",
+			"optional_fields":{}
+		},
+		"bleeding":{
+			"group":"maternal_assessment",
+			"field_type":"notes",
+			"title":"Bleeding?",
+			"order":5,
+			"value":"",
+			"optional_fields":{}
+		},
+		"fundal_height":{
+			"group":"maternal_assessment",
+			"field_type":"numeric",
+			"title":"Fundal Height",
+			"order":6,
+			"value":"",
+			"optional_fields":{}
+		},
+		"breast_feeding":{
+			"group":"maternal_assessment",
+			"field_type":"true_false",
+			"title":"Breast Feeding?",
+			"order":7,
+			"value":"",
+			"optional_fields":{}
+		},
+		"breast_feeding_hours":{
+			"group":"education_provided",
+			"field_type":"true_false",
+			"title":"Breast feed every 2 hours, 10 minutes on each side",
+			"order":1,
+			"value":"",
+			"optional_fields":{}
+		},
+		"breast_feeding_comfort":{
+			"group":"education_provided",
+			"field_type":"true_false",
+			"title":"Be comfortable breast feeding",
+			"order":2,
+			"value":"",
+			"optional_fields":{}
+		},
+		"nutrition_food":{
+			"group":"education_provided",
+			"field_type":"true_false",
+			"title":"Nutrition:Food",
+			"order":3,
+			"value":"",
+			"optional_fields":{}
+		},
+		"nutrition_food":{
+			"group":"education_provided",
+			"field_type":"true_false",
+			"title":"Nutrition:Water",
+			"order":4,
+			"value":"",
+			"optional_fields":{}
+		},
+		
+		"prenatal_vitamins":{
+			"group":"instructions",
+			"field_type":"true_false",
+			"title":"PNV?",
+			"order":1,
+			"value":"",
+			"optional_fields":{
+				"pnv_boxes":{
+					"title":"Boxes?",
+					"field_type":"numeric",
+					"value":"1"
+				}
+			}
+		},
+		
+		"other_instructions":{
+			"group":"instructions",
+			"field_type":"true_false",
+			"title":"Other Instructions?",
+			"order":2,
+			"value":"",
+			"optional_fields":{
+				"other_instructions_notes":{
+					"title":"Instructions",
+					"field_type":"notes",
+					"value":""
+				}
+			}
+		}
+	}
+}

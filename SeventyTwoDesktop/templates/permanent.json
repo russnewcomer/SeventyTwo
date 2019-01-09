@@ -1,0 +1,13 @@
+{
+	"type":"permanent",
+	"title":"Patient Permanent Record",
+	"guid":"",
+	"name":"",
+	"address":"",
+	"gender":"",
+	"spouse":"",
+	"birthdate":"",
+	"phone_number":"",
+	"record_array":[
+	]
+}

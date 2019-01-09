@@ -1,0 +1,221 @@
+{
+	"type":"pregnancy_permanent",
+	"nature":"permanent",
+	"record_guid":"",
+	"template_guid":"84faad8a-56c7-44e6-8cbd-d5fe77accaca",
+	"date_entered":"01/01/2019",
+	"title":"Maternal Permanent Record",
+	"notes":"",
+	"groups":{
+		"dates":"Conception and Due Date",
+		"pregnancies":"Previous Pregnancies",
+		"living_children":"Living Children",
+		"medical_history":"Medical History",
+	},
+	"items":{
+		"conception_date":{
+			"group":"dates",
+			"field_type":"date",
+			"title":"Estimated Date Of Conception",
+			"order":1,
+			"value":"",
+			"optional_fields":[]
+		},
+		"due_date":{
+			"group":"dates",
+			"field_type":"date",
+			"title":"Estimated Due Date",
+			"order":2,
+			"calculation":{
+				"type":"add",
+				"source_field":"conception_date",
+				"value":"280",
+				"units":"d",
+			},
+			"optional_fields":[]
+		},
+		"month_of_pregnancy":{
+			"group":"dates",
+			"field_type":"numeric",
+			"title":"Estimated Month",
+			"order":3,
+			"calculation":{
+				"type":"nowdiff",
+				"display":"abs",
+				"source_field":"conception_date",
+				"units":"m"
+			},
+			"optional_fields":[]
+		},
+
+		"history_of_diabetes":{
+			"group":"medical_history",
+			"field_type":"true_false",
+			"title":"History Of Diabetes?",
+			"order":1,
+			"value":false,
+			"optional_fields":[]
+		},		
+		"history_of_hypertension":{
+			"group":"medical_history",
+			"field_type":"true_false",
+			"title":"History Of Hypertension?",
+			"order":2,
+			"value":false,
+			"optional_fields":[]
+		},		
+		"current_medications":{
+			"group":"medical_history",
+			"field_type":"notes",
+			"title":"Current Medications?",
+			"order":3,
+			"value":"",
+			"optional_fields":[]
+		},
+		"tetanus_vaccine":{
+			"group":"medical_history",
+			"field_type":"numeric",
+			"title":"Tetanus Vaccine? (# of 5)",
+			"order":4,
+			"value":"",
+			"optional_fields":[]
+		},
+		"other_vaccines":{
+			"group":"medical_history",
+			"field_type":"notes",
+			"title":"Other Vaccines?",
+			"order":5,
+			"value":"",
+			"optional_fields":[]
+		},
+		"blood_type":{
+			"group":"medical_history",
+			"field_type":"text",
+			"title":"Blood Type?",
+			"order":6,
+			"value":"",
+			"optional_fields":[]
+		},
+		"other_medical_problems":{
+			"group":"medical_history",
+			"field_type":"notes",
+			"title":"Any Other Medical Problems?",
+			"order":7,
+			"value":"",
+			"optional_fields":[]
+		},
+		"family_history":{
+			"group":"medical_history",
+			"field_type":"notes",
+			"title":"Family Medical History (Anyone in the family with medical problems)",
+			"order":8,
+			"value":"",
+			"optional_fields":[]
+		},
+		"number_pregnancies":{
+			"group":"pregnancies",
+			"field_type":"numeric",
+			"title":"Number of Pregnancies",
+			"order":1,
+			"value":3,
+			"optional_fields":{
+				"number_pregnancies_notes":{
+					"title":"Notes",
+					"field_type":"notes",
+					"value":"All within 2 years"
+				}
+			}
+		},
+		"number_miscarriages":{
+			"group":"pregnancies",
+			"field_type":"numeric",
+			"title":"Number of Miscarriages",
+			"order":2,
+			"value":"",
+			"optional_fields":{
+				"number_miscarriages_notes":{
+					"title":"Notes",
+					"field_type":"notes",
+					"value":""
+				}
+			}
+		},
+		"number_natal_deaths":{
+			"group":"pregnancies",
+			"field_type":"numeric",
+			"title":"Number of stillborns/child deaths",
+			"order":3,
+			"value":"",
+			"optional_fields":{
+				"number_natal_deaths_notes":{
+					"title":"Notes",
+					"field_type":"notes",
+					"value":""
+				}
+			}
+		},
+		"number_living_children":{
+			"group":"living_children",
+			"field_type":"numeric",
+			"title":"Number Of Living Children",
+			"value":"1",
+			"order":1,
+			"optional_fields":[]
+		},
+		"living_children_records":{
+			"group":"living_children",
+			"field_type":"subrecord",
+			"record_type_guid":"669abe87-42f8-41f2-8599-3d27ffd6e98d"
+		}
+	},
+	"subrecord_type":{
+		"669abe87-42f8-41f2-8599-3d27ffd6e98d":{
+			"title":"Chart of Living Children",
+			"fields":{
+				"birthdate":{
+					"field_type":"date",
+					"title":"Birth Date",
+					"order":1,
+					"value":""
+				},
+				"name":{
+					"field_type":"text",
+					"title":"Name",
+					"order":2,
+					"value":""
+				},
+				"gender":{
+					"field_type":"text",
+					"title":"Gender",
+					"order":3,
+					"value":""
+				},
+				"months_at_delivery":{
+					"field_type":"numeric",
+					"title":"Months At Delivery",
+					"order":4,
+					"value":""
+				},
+				"place_of_delivery":{
+					"field_type":"text",
+					"title":"Place of Delivery",
+					"order":5,
+					"value":""
+				},
+				"maternal_complications_at_delivery":{
+					"field_type":"notes",
+					"title":"Maternal Complications At Delivery",
+					"order":6,
+					"value":""
+				},				
+				"child_complications_at_delivery":{
+					"field_type":"notes",
+					"title":"Child Complications At Delivery",
+					"order":7,
+					"value":""
+				},
+			}
+		}
+	}
+
+}

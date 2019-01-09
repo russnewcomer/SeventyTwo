@@ -1,0 +1,167 @@
+{
+	"type":"child_postpartum_assessment",
+	"nature":"visit",
+	"record_guid":"",
+	"template_guid":"1dd27321-5eb2-4f1c-828d-f81884627fad",
+	"date_entered":"",
+	"title":"Child Postpartum Assessment",
+	"notes":"",
+	"record_attachment":"",
+	"groups":{
+		"information":"Basic Information",
+		"reflexes":"Reflexes",
+		"physical":"Physical Condition"
+	},
+	"items":{
+		"gender":{
+			"group":"information",
+			"field_type":"dropdown",
+			"title":"Gender (Boy/Girl)",
+			"order":1,
+			"value":"",
+			"dropdown_options":["Boy", "Girl"],
+			"optional_fields":{
+				"testicle_assessment":{
+					"show_on":"Boy",
+					"title":"Testicle Assessment",
+					"field_type":"notes",
+					"value":""
+				}
+			}
+		},
+		"name":{
+			"group":"information",
+			"field_type":"text",
+			"title":"Baby Name",
+			"order":2,
+			"value":"",
+			"optional_fields":{}
+		},
+		"delivery_weight":{
+			"group":"information",
+			"field_type":"numeric",
+			"title":"Weight at Delivery",
+			"order":3,
+			"value":"",
+			"optional_fields":{}
+		},
+		"current_weight":{
+			"group":"information",
+			"field_type":"numeric",
+			"title":"Weight Today",
+			"order":4,
+			"value":"",
+			"optional_fields":{}
+		},
+		"fontanelles":{
+			"group":"information",
+			"field_type":"text",
+			"title":"Fontanelles",
+			"order":5,
+			"value":"",
+			"optional_fields":{}
+		},
+		"moro":{
+			"group":"reflexes",
+			"field_type":"text",
+			"title":"Moro",
+			"order":6,
+			"value":"",
+			"optional_fields":{}
+		},
+		"rooting":{
+			"group":"reflexes",
+			"field_type":"text",
+			"title":"Rooting",
+			"order":7,
+			"value":"",
+			"optional_fields":{}
+		},
+		"sucking":{
+			"group":"reflexes",
+			"field_type":"text",
+			"title":"Sucking",
+			"order":8,
+			"value":"",
+			"optional_fields":{}
+		},
+		"babinski":{
+			"group":"reflexes",
+			"field_type":"text",
+			"title":"Babinski",
+			"order":9,
+			"value":"",
+			"optional_fields":{}
+		},
+		"umbilical_cord":{
+			"group":"physical",
+			"field_type":"text",
+			"title":"Umbilical Cord",
+			"order":9,
+			"value":"",
+			"optional_fields":{}
+		},
+		"skin":{
+			"group":"physical",
+			"field_type":"dropdown",
+			"title":"Skin",
+			"order":10,
+			"value":"",
+			"dropdown_options":["Pink", "Jaundice", "Rash"],
+			"optional_fields":{
+				"jaundice_assessment":{
+					"show_on":"Jaundice",
+					"title":"Jaundice Details",
+					"field_type":"notes",
+					"value":""
+				}, 
+				"rash_assessment":{
+					"show_on":"Rash",
+					"title":"Rash Details",
+					"field_type":"notes",
+					"value":""
+				}
+			}
+		},
+		"heart_rhythm":{
+			"group":"physical",
+			"field_type":"text",
+			"title":"Heart Rhythm",
+			"order":11,
+			"value":"",
+			"optional_fields":{}
+		},
+		"heart_murmur":{
+			"group":"physical",
+			"field_type":"text",
+			"title":"Heart Murmur",
+			"order":12,
+			"value":"",
+			"optional_fields":{}
+		},
+		"lung_breathing":{
+			"group":"physical",
+			"field_type":"text",
+			"title":"Breathing Pattern",
+			"order":13,
+			"value":"",
+			"optional_fields":{}
+		},
+		"lung_sounds":{
+			"group":"physical",
+			"field_type":"text",
+			"title":"Breathing Sounds",
+			"order":12,
+			"value":"",
+			"optional_fields":{}
+		},
+		"other":{
+			"group":"physical",
+			"field_type":"notes",
+			"title":"Other Physical Assessments",
+			"order":12,
+			"value":"",
+			"optional_fields":{}
+		},
+	}
+}
