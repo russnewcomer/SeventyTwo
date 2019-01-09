@@ -49,18 +49,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="frmMain.cs">
+    <Compile Include="Controllers\PatientListController.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="UI\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMain.Designer.cs">
+    <Compile Include="UI\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Log.cs" />
-    <Compile Include="Patient.cs" />
-    <Compile Include="PatientListItem.cs" />
+    <Compile Include="Models\Log.cs" />
+    <Compile Include="Models\PatientItem.cs" />
+    <Compile Include="Models\PatientListItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Search.cs" />
+    <Compile Include="Models\Search.cs" />
+    <Compile Include="UI\ucPermanentRecord.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ucPermanentRecord.Designer.cs">
+      <DependentUpon>ucPermanentRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ucTemplateItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ucTemplateItem.Designer.cs">
+      <DependentUpon>ucTemplateItem.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="UI\frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -70,6 +87,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\ucPermanentRecord.resx">
+      <DependentUpon>ucPermanentRecord.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

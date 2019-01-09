@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace SeventyTwoDesktop
 {
-    public partial class frmMain : Form
+    public partial class ucTemplateItem : UserControl
     {
-        public frmMain()
+        public ucTemplateItem()
         {
             InitializeComponent();
-        }
-
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

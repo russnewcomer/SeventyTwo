@@ -13,11 +13,10 @@ namespace SeventyTwoDesktop
         {
             try
             {
-                string logFileName = "../Log/" + DateTime.Now.ToString("dd-MMM-yyyy") + ".txt";
+                string logFileName = "log/" + DateTime.Now.ToString("dd-MMM-yyyy") + ".txt";
                 File.AppendAllText(logFileName, exc.ToString());
                 
-            } catch ( Exception logExc )
-            {
+            } catch ( Exception logExc ) {
                 string errText = Environment.NewLine + Environment.NewLine + exc.ToString() + Environment.NewLine + logExc.ToString();
                 var result = System.Windows.Forms.MessageBox.Show("Sorry about this.  A really strange error has happened.  You probably want to email whoever is helping you this error.  If you click yes, I'll copy this to your clipboard, then you can paste it into an email to your technical person." +errText , "Argh. Sorry.", System.Windows.Forms.MessageBoxButtons.YesNo);
                 if ( result == System.Windows.Forms.DialogResult.Yes )
