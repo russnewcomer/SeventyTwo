@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Newtonsoft.Json;
+using SeventyTwoDesktop.Models;
 
-namespace SeventyTwoDesktop
+namespace SeventyTwoDesktop.Controllers
 {
     class PatientController
     {

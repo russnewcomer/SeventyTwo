@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Controllers\PatientListController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Models\DynTemplate.cs" />
     <Compile Include="UI\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>

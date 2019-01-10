@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SeventyTwoDesktop
+namespace SeventyTwoDesktop.Models
 {
     public static class Log
     {

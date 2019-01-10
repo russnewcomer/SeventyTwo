@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SeventyTwoDesktop
+namespace SeventyTwoDesktop.Models
 {
     class PatientItem
     {

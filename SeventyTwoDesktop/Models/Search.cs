@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 
 
-namespace SeventyTwoDesktop
+namespace SeventyTwoDesktop.Models
 {
     class Search
     {
