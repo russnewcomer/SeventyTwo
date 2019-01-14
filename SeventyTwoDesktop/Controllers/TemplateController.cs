@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,25 +8,34 @@ namespace SeventyTwoDesktop.Controllers
 {
     class TemplateController
     {
-        private string templateType;
+        private string _templateType;
         public JObject jsonTemplate;
-        private string fileName;
+        private string _fileName;
 
         public TemplateController( string templateTypeName ) {
-            templateType = templateTypeName;
-            fileName = "templates/" + templateTypeName + ".json";
-            if ( !File.Exists( fileName ) ) {
+            try {
+                BaseConstructor( templateTypeName );
+            } catch ( Exception err ) {
+                throw err;
+            }
+            
+        }
+
+        public void BaseConstructor( string templateTypeName ) {
+            _templateType = templateTypeName;
+            _fileName = "templates/" + _templateType + ".json";
+            if( !File.Exists( _fileName ) ) {
                 throw new Exception( "No template with that name exists." );
             }
-            string templateRawString = File.ReadAllText( fileName );
+
+            string templateRawString = File.ReadAllText( _fileName );
             jsonTemplate = JObject.Parse( templateRawString );
         }
 
-        public JObject TemplateToSimpleRecord( )
+        public JObject TemplateToBlankRecordObject( string fileName )
         {
             JObject recordData = new JObject( );
-
-
+            
             dynamic record = recordData;
             //This is the basic stuff
             recordData[ "type" ]= jsonTemplate[ "type" ];
@@ -55,12 +62,8 @@ namespace SeventyTwoDesktop.Controllers
                 }
                 //Console.WriteLine( property.Key + " - " + property.Value );
             }
-
-           
-
-            
-
-            File.WriteAllText( "log/temp.json", JsonConvert.SerializeObject( recordData ));
+          
+            File.WriteAllText( fileName, JsonConvert.SerializeObject( recordData ));
 
             return recordData;
         }
