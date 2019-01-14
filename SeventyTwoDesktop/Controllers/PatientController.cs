@@ -12,11 +12,16 @@ namespace SeventyTwoDesktop.Controllers
     class PatientController
     {
 
-        private PatientItem Patient { get; set; }
+        public PatientItem Patient { get; set; }
         private Dictionary<string, RecordController> Records { get; set; }
         
 
         public PatientController() {
+        }
+
+
+        public PatientController( string guid ) {
+            loadPatientData( guid );
         }
 
         //Initialize the patient
@@ -79,42 +84,19 @@ namespace SeventyTwoDesktop.Controllers
             }
         }
 
-        public JObject PatientDataToSimpleRecord( string fileName = "" ) {
+        public JObject PatientDataToSimpleRecord( ) {
 
             JObject recordData = new JObject( );
 
             try {
 
-            
-                //This is the basic stuff
-                recordData[ "type" ] = Template.jsonTemplate[ "type" ];
-                recordData[ "template_guid" ] = Template.jsonTemplate[ "template_guid" ];
-                recordData[ "record_guid" ] = Patient.guid;
-                recordData[ "date_entered" ] = Template.jsonTemplate[ "date_entered" ];
-                recordData[ "notes" ] = Template.jsonTemplate[ "notes" ];
-                recordData[ "record_attachment" ] = Template.jsonTemplate[ "record_attachment" ];
+                foreach( KeyValuePair<string, RecordController> Record in Records )
+                {
 
+                    RecordController curRecord = Record.Value;
 
-                JObject items = ( JObject )Template.jsonTemplate[ "items" ];
-                foreach( KeyValuePair<string, JToken> property in items ) {
-                    //Write the record data
-                    string groupName = items[ property.Key ][ "group" ].ToString( );
-                    if( !recordData.ContainsKey( groupName ) )
-                    {
-                        recordData[ groupName ] = new JObject( );
-                    }
-                    recordData[ groupName ][ property.Key ] = items[ property.Key ][ "value" ];
-                    JObject optionalFields = ( JObject )items[ property.Key ][ "optional_fields" ];
-                    foreach( KeyValuePair<string, JToken> optField in optionalFields ) {
-                        recordData[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value" ];
-                    }
-                    //Console.WriteLine( property.Key + " - " + property.Value );
+                    curRecord.RenderDataToSimpleJSON( );
                 }
-
-                if( fileName != "" ) {
-                    File.WriteAllText( fileName, JsonConvert.SerializeObject( recordData ) );
-                }
-
             } catch( Exception errMsg ) {
                 //Figure out how to log these somewhere.
                 Log.writeToLog( errMsg );

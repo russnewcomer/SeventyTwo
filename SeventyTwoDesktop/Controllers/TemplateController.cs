@@ -9,8 +9,13 @@ namespace SeventyTwoDesktop.Controllers
     class TemplateController
     {
         private string _templateType;
+        public string TemplateType { get { return _templateType; } set { _templateType = value; } }
         public JObject jsonTemplate;
         private string _fileName;
+
+        public TemplateController( JObject _SourceTemplate ) {
+            jsonTemplate = _SourceTemplate;
+        }
 
         public TemplateController( string templateTypeName ) {
             try {
@@ -18,7 +23,6 @@ namespace SeventyTwoDesktop.Controllers
             } catch ( Exception err ) {
                 throw err;
             }
-            
         }
 
         public void BaseConstructor( string templateTypeName ) {
@@ -32,7 +36,7 @@ namespace SeventyTwoDesktop.Controllers
             jsonTemplate = JObject.Parse( templateRawString );
         }
 
-        public JObject TemplateToBlankRecordObject( string fileName )
+        public JObject TemplateToSimpleRecordObject( string fileNameToSaveFileTo = "" )
         {
             JObject recordData = new JObject( );
             
@@ -47,8 +51,7 @@ namespace SeventyTwoDesktop.Controllers
 
 
             JObject items = ( JObject )jsonTemplate[ "items" ];
-            foreach( KeyValuePair<string, JToken> property in items )
-            {
+            foreach( KeyValuePair<string, JToken> property in items ) {
                 //Write the record data
                 string groupName = items[ property.Key ][ "group" ].ToString();
                 if ( !recordData.ContainsKey( groupName ) ) {
@@ -56,14 +59,15 @@ namespace SeventyTwoDesktop.Controllers
                 }
                 recordData[ groupName ][ property.Key ] = items[ property.Key ][ "value" ];
                 JObject optionalFields = ( JObject )items[ property.Key ][ "optional_fields" ];
-                foreach( KeyValuePair<string, JToken> optField in optionalFields )
-                {
-                    recordData[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value"];
+                foreach( KeyValuePair<string, JToken> optField in optionalFields ) {
+                    recordData[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value" ];
                 }
                 //Console.WriteLine( property.Key + " - " + property.Value );
             }
-          
-            File.WriteAllText( fileName, JsonConvert.SerializeObject( recordData ));
+
+            if( fileNameToSaveFileTo != "" ) {
+                File.WriteAllText( fileNameToSaveFileTo, JsonConvert.SerializeObject( recordData ) );
+            }
 
             return recordData;
         }
