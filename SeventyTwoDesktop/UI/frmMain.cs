@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using SeventyTwoDesktop.Controllers;
 namespace SeventyTwoDesktop
 {
     public partial class frmMain : Form
@@ -31,7 +31,7 @@ namespace SeventyTwoDesktop
         private string createNewPatient()
         {
             string currentGUID = "";
-            
+
             PatientController np = new PatientController();
             currentGUID = np.InitializePatient();
             Console.WriteLine(currentGUID);
@@ -63,5 +63,10 @@ namespace SeventyTwoDesktop
             return tabPageToCreate;
         }
 
+        private void button1_Click( object sender, EventArgs e )
+        {
+            TemplateController dt = new TemplateController( "maternal_antenatal_visit" );
+            dt.TemplateToSimpleRecord( );
+        }
     }
 }

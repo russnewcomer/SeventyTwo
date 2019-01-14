@@ -63,7 +63,7 @@
 			"title":"Blood Pressure",
 			"order":1,
 			"value":"",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"blood_sugar":{
 			"group":"measurements",
@@ -71,7 +71,7 @@
 			"title":"Blood Sugar",
 			"order":2,
 			"value":"",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"fetal_movement":{
 			"group":"measurements",
@@ -79,7 +79,7 @@
 			"title":"Fetal Movement?",
 			"order":3,
 			"value":"",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"fetal_heart_rate":{
 			"group":"measurements",
@@ -87,7 +87,7 @@
 			"title":"Fetal Heartrate (BPM)",
 			"order":4,
 			"value":"",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"fundal_height":{
 			"group":"measurements",
@@ -95,7 +95,7 @@
 			"title":"Fundal Height (cm)?",
 			"order":5,
 			"value":"",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"prenatal_vitamins":{
 			"group":"instructions",
@@ -131,7 +131,7 @@
 			"title":"Ultrasound",
 			"order":3,
 			"value":"",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"other_instructions":{
 			"group":"instructions",
@@ -153,7 +153,7 @@
 			"title":"Nutrition",
 			"order":1,
 			"value":"false",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"eight_glasses_of_water":{
 			"group":"education",
@@ -161,7 +161,7 @@
 			"title":"8 Glasses of Water",
 			"order":2,
 			"value":"false",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"activity_exercise":{
 			"group":"education",
@@ -169,7 +169,7 @@
 			"title":"Activity/Exercise",
 			"order":3,
 			"value":"false",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"bleed_fluid_swell":{
 			"group":"education",
@@ -177,7 +177,7 @@
 			"title":"Bleeding/Fluid/Swelling",
 			"order":4,
 			"value":"false",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"birth_plan":{
 			"group":"education",
@@ -185,7 +185,7 @@
 			"title":"Birth Plan",
 			"order":5,
 			"value":"false",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"family_planning":{
 			"group":"education",
@@ -193,7 +193,7 @@
 			"title":"Family Planning",
 			"order":6,
 			"value":"false",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"mental_health":{
 			"group":"education",
@@ -201,7 +201,7 @@
 			"title":"Mental Health",
 			"order":7,
 			"value":"false",
-			"optional_fields":[]
+			"optional_fields":{}
 		},
 		"other_education":{
 			"group":"education",

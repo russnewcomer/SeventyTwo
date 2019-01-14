@@ -32,6 +32,7 @@
             this.tabPatients = new System.Windows.Forms.TabPage();
             this.btnNewPatient = new System.Windows.Forms.Button();
             this.grpExisting = new System.Windows.Forms.GroupBox();
+            this.dtpSearch = new System.Windows.Forms.DateTimePicker();
             this.btnSearch = new System.Windows.Forms.Button();
             this.lblSearchByDate = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -40,7 +41,7 @@
             this.lstPatients = new System.Windows.Forms.ListBox();
             this.tabCalendar = new System.Windows.Forms.TabPage();
             this.tabReports = new System.Windows.Forms.TabPage();
-            this.dtpSearch = new System.Windows.Forms.DateTimePicker();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabPatients.SuspendLayout();
             this.grpExisting.SuspendLayout();
@@ -60,6 +61,7 @@
             // 
             // tabPatients
             // 
+            this.tabPatients.Controls.Add(this.button1);
             this.tabPatients.Controls.Add(this.btnNewPatient);
             this.tabPatients.Controls.Add(this.grpExisting);
             this.tabPatients.Location = new System.Drawing.Point(4, 24);
@@ -96,6 +98,15 @@
             this.grpExisting.TabIndex = 7;
             this.grpExisting.TabStop = false;
             this.grpExisting.Text = "Existing Patients";
+            // 
+            // dtpSearch
+            // 
+            this.dtpSearch.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpSearch.Location = new System.Drawing.Point(284, 37);
+            this.dtpSearch.Name = "dtpSearch";
+            this.dtpSearch.Size = new System.Drawing.Size(107, 23);
+            this.dtpSearch.TabIndex = 12;
+            this.dtpSearch.Value = new System.DateTime(2019, 1, 1, 0, 0, 0, 0);
             // 
             // btnSearch
             // 
@@ -169,14 +180,15 @@
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
             // 
-            // dtpSearch
+            // button1
             // 
-            this.dtpSearch.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpSearch.Location = new System.Drawing.Point(284, 37);
-            this.dtpSearch.Name = "dtpSearch";
-            this.dtpSearch.Size = new System.Drawing.Size(107, 23);
-            this.dtpSearch.TabIndex = 12;
-            this.dtpSearch.Value = new System.DateTime(2019, 1, 1, 0, 0, 0, 0);
+            this.button1.Location = new System.Drawing.Point(544, 69);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmMain
             // 
@@ -210,5 +222,6 @@
         private System.Windows.Forms.TabPage tabCalendar;
         private System.Windows.Forms.TabPage tabReports;
         private System.Windows.Forms.DateTimePicker dtpSearch;
+        private System.Windows.Forms.Button button1;
     }
 }

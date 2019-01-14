@@ -34,6 +34,12 @@ namespace SeventyTwoDesktop
                 System.IO.Directory.CreateDirectory("log");
             }
 
+            //make sure the 'templates' directory exists.
+            if( !System.IO.Directory.Exists( "config" ) )
+            {
+                System.IO.Directory.CreateDirectory( "config" );
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMain());
