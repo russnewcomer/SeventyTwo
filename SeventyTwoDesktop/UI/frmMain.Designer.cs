@@ -41,7 +41,6 @@
             this.lstPatients = new System.Windows.Forms.ListBox();
             this.tabCalendar = new System.Windows.Forms.TabPage();
             this.tabReports = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabPatients.SuspendLayout();
             this.grpExisting.SuspendLayout();
@@ -61,7 +60,6 @@
             // 
             // tabPatients
             // 
-            this.tabPatients.Controls.Add(this.button1);
             this.tabPatients.Controls.Add(this.btnNewPatient);
             this.tabPatients.Controls.Add(this.grpExisting);
             this.tabPatients.Location = new System.Drawing.Point(4, 24);
@@ -180,16 +178,6 @@
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(544, 69);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -222,6 +210,5 @@
         private System.Windows.Forms.TabPage tabCalendar;
         private System.Windows.Forms.TabPage tabReports;
         private System.Windows.Forms.DateTimePicker dtpSearch;
-        private System.Windows.Forms.Button button1;
     }
 }

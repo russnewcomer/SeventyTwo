@@ -53,6 +53,7 @@
     <Compile Include="Controllers\PatientListController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Models\TemplateItem.cs" />
     <Compile Include="UI\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>

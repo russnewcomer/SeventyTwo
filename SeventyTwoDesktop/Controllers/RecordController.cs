@@ -17,6 +17,7 @@ namespace SeventyTwoDesktop.Controllers
         private TemplateController Template { get; set; }
         private JObject RecordData { get; set; }
         public string RecordGUID { get; }
+        public string PatientGUID { get; set; }
 
         //This is a base constructor
         public RecordController() {
@@ -38,13 +39,14 @@ namespace SeventyTwoDesktop.Controllers
         {
             try
             {
+                JObject recordJObj = JsonConvert.DeserializeObject<JObject>( File.ReadAllText( fileName ) );
                 //If this record is just the simple record, we can write it into this. 
-                if( recordStyle == RecordStyleEnum.Simple ) {
-                    //Read a simple record in from the file.
-                    LoadFromSimpleRecord( JsonConvert.DeserializeObject<JObject>( File.ReadAllText( fileName ) ) );
-                
-                } else {
+                if( recordStyle == RecordStyleEnum.Template ) {
                     //Read a full record in from the file.;
+                    LoadFromFullTemplateRecord( recordJObj );
+                } else {
+                    //Read a simple record in from the file.
+                    LoadFromSimpleRecord( recordJObj );
                 }
             } catch( Exception errMsg ) {
                 //Log Exception
@@ -70,7 +72,6 @@ namespace SeventyTwoDesktop.Controllers
 
                 //Now get the simple record object.
                 RecordData = Template.TemplateToSimpleRecordObject( );
-
 
                 retVal = true;
             } catch( Exception errMsg ) {

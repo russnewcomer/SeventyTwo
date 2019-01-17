@@ -36,13 +36,35 @@ namespace SeventyTwoDesktop.Controllers
             jsonTemplate = JObject.Parse( templateRawString );
         }
 
-        public JObject TemplateToSimpleRecordObject( string fileNameToSaveFileTo = "" )
-        {
+        public bool SaveTemplateToFullRecordObject( ) {
+            bool retVal = false;
+            try {
+                string fileName = "patients/" + jsonTemplate[ "patient_guid" ].ToString( ) + "/" + jsonTemplate[ "record_guid" ].ToString( ) + ".json";
+                File.WriteAllText( fileName, JsonConvert.SerializeObject( jsonTemplate ) );
+                retVal = true;
+            } catch ( Exception err ) {
+                Models.Log.writeToLog( err );
+            }
+            return retVal;
+        }
+
+        public bool SaveSimpleRecordObject( string fileNameToSaveFileTo ) {
+            bool retVal = false;
+            try {
+                File.WriteAllText( fileNameToSaveFileTo, JsonConvert.SerializeObject( TemplateToSimpleRecordObject() ) );
+                retVal = true;
+            } catch( Exception err ) {
+                Models.Log.writeToLog( err );
+            }
+            return retVal;
+        }
+
+        public JObject TemplateToSimpleRecordObject( ) {
             JObject recordData = new JObject( );
             
-            dynamic record = recordData;
             //This is the basic stuff
             recordData[ "type" ]= jsonTemplate[ "type" ];
+            recordData[ "patient_guid" ] = jsonTemplate[ "patient_guid" ];
             recordData[ "template_guid" ] = jsonTemplate[ "template_guid" ];
             recordData[ "record_guid" ] = Guid.NewGuid( ).ToString( );
             recordData[ "date_entered" ] = jsonTemplate[ "date_entered" ];
@@ -65,11 +87,38 @@ namespace SeventyTwoDesktop.Controllers
                 //Console.WriteLine( property.Key + " - " + property.Value );
             }
 
-            if( fileNameToSaveFileTo != "" ) {
-                File.WriteAllText( fileNameToSaveFileTo, JsonConvert.SerializeObject( recordData ) );
+            return recordData;
+        }
+
+
+        public JObject TemplateUserInterfaceSpecifications( )
+        {
+            JObject uiSpecs = new JObject( );
+
+            //This is the basic stuff
+            uiSpecs[ "type" ] = jsonTemplate[ "type" ];
+            uiSpecs[ "title" ] = jsonTemplate[ "title" ];
+
+
+            JObject items = ( JObject )jsonTemplate[ "items" ];
+            foreach( KeyValuePair<string, JToken> property in items )
+            {
+                //Write the record data
+                string groupName = items[ property.Key ][ "group" ].ToString( );
+                if( !uiSpecs.ContainsKey( groupName ) )
+                {
+                    uiSpecs[ groupName ] = new JObject( );
+                }
+                uiSpecs[ groupName ][ property.Key ] = 
+                JObject optionalFields = ( JObject )items[ property.Key ][ "optional_fields" ];
+                foreach( KeyValuePair<string, JToken> optField in optionalFields )
+                {
+                    uiSpecs[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value" ];
+                }
+                //Console.WriteLine( property.Key + " - " + property.Value );
             }
 
-            return recordData;
+            return uiSpecs;
         }
     }
 }
