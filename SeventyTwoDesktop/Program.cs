@@ -14,35 +14,27 @@ namespace SeventyTwoDesktop
         [STAThread]
         static void Main()
         {
-
-            //make sure the 'patients' directory exists.
-            if (!System.IO.Directory.Exists("patients"))
-            {
-                System.IO.Directory.CreateDirectory("patients");
-            }
-
-            //make sure the 'templates' directory exists.
-            if (!System.IO.Directory.Exists("templates"))
-            {
-                System.IO.Directory.CreateDirectory("templates");
-            }
+            
+            ConfirmDirectory( "patients" );
+            ConfirmDirectory( "templates" );
+            ConfirmDirectory( "log" );
+            ConfirmDirectory( "config" );
+            ConfirmDirectory( "export" );
+            ConfirmDirectory( "reconcile" );
 
 
-            //make sure the 'templates' directory exists.
-            if (!System.IO.Directory.Exists("log"))
-            {
-                System.IO.Directory.CreateDirectory("log");
-            }
-
-            //make sure the 'templates' directory exists.
-            if( !System.IO.Directory.Exists( "config" ) )
-            {
-                System.IO.Directory.CreateDirectory( "config" );
-            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMain());
+        }
+
+        static void ConfirmDirectory( string directoryName ) {
+            //make sure the 'config' directory exists.
+            if( !System.IO.Directory.Exists( directoryName ) )
+            {
+                System.IO.Directory.CreateDirectory( directoryName );
+            }
         }
     }
 }

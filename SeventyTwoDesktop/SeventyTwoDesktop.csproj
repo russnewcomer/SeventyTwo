@@ -53,6 +53,7 @@
     <Compile Include="Controllers\PatientListController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TemplateItem.cs" />
     <Compile Include="UI\frmMain.cs">
       <SubType>Form</SubType>
@@ -92,6 +93,9 @@
     </Compile>
     <EmbeddedResource Include="UI\ucPermanentRecord.resx">
       <DependentUpon>ucPermanentRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ucTemplateItem.resx">
+      <DependentUpon>ucTemplateItem.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

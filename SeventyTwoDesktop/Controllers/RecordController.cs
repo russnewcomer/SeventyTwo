@@ -14,7 +14,7 @@ namespace SeventyTwoDesktop.Controllers
 
     class RecordController {
 
-        private TemplateController Template { get; set; }
+        private TemplateController TC { get; set; }
         private JObject RecordData { get; set; }
         public string RecordGUID { get; }
         public string PatientGUID { get; set; }
@@ -68,10 +68,10 @@ namespace SeventyTwoDesktop.Controllers
             try {
 
                 //Create a new template based on the type from the record.
-                Template = new TemplateController( fullRecordData );
+                TC = new TemplateController( fullRecordData );
 
                 //Now get the simple record object.
-                RecordData = Template.TemplateToSimpleRecordObject( );
+                RecordData = TC.TemplateToSimpleRecordObject( );
 
                 retVal = true;
             } catch( Exception errMsg ) {
@@ -91,7 +91,7 @@ namespace SeventyTwoDesktop.Controllers
                 RecordData = simpleData;
 
                 //Create a new template based on the type from the record.
-                Template = new TemplateController( simpleData["type"].ToString() );
+                TC = new TemplateController( simpleData["type"].ToString() );
 
                 retVal = true;
             } catch( Exception errMsg )
@@ -104,7 +104,7 @@ namespace SeventyTwoDesktop.Controllers
 
         public string GetTemplateType()
         {
-            return Template.TemplateType;
+            return TC.TemplateType;
         }
 
         public JObject RenderDataToSimpleJSON( )

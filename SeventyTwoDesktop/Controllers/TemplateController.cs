@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SeventyTwoDesktop.Models;
+
 
 namespace SeventyTwoDesktop.Controllers
 {
-    class TemplateController
-    {
-        private string _templateType;
-        public string TemplateType { get { return _templateType; } set { _templateType = value; } }
-        public JObject jsonTemplate;
-        private string _fileName;
+    class TemplateController {
+        public string TemplateType { get; set; }
+        private JObject jsonTemplate { get; set; }
+        private string _fileName { get; set; }
+        private Template TemplateInstance { get; set; }
 
         public TemplateController( JObject _SourceTemplate ) {
             jsonTemplate = _SourceTemplate;
@@ -26,20 +27,23 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         public void BaseConstructor( string templateTypeName ) {
-            _templateType = templateTypeName;
-            _fileName = "templates/" + _templateType + ".json";
+            TemplateType = templateTypeName;
+            _fileName = "templates/" + TemplateType + ".json";
             if( !File.Exists( _fileName ) ) {
                 throw new Exception( "No template with that name exists." );
             }
 
             string templateRawString = File.ReadAllText( _fileName );
             jsonTemplate = JObject.Parse( templateRawString );
+
+            TemplateInstance = new Template( templateRawString );
+
         }
 
-        public bool SaveTemplateToFullRecordObject( ) {
+        public bool ExportTemplateToFullRecordObject( ) {
             bool retVal = false;
             try {
-                string fileName = "patients/" + jsonTemplate[ "patient_guid" ].ToString( ) + "/" + jsonTemplate[ "record_guid" ].ToString( ) + ".json";
+                string fileName = "export/" + jsonTemplate[ "template_guid" ].ToString( ) + ".json";
                 File.WriteAllText( fileName, JsonConvert.SerializeObject( jsonTemplate ) );
                 retVal = true;
             } catch ( Exception err ) {
@@ -90,35 +94,15 @@ namespace SeventyTwoDesktop.Controllers
             return recordData;
         }
 
-
-        public JObject TemplateUserInterfaceSpecifications( )
+        public Dictionary<string, TemplateItem> GetTemplateItems(  )
         {
-            JObject uiSpecs = new JObject( );
-
-            //This is the basic stuff
-            uiSpecs[ "type" ] = jsonTemplate[ "type" ];
-            uiSpecs[ "title" ] = jsonTemplate[ "title" ];
-
-
-            JObject items = ( JObject )jsonTemplate[ "items" ];
-            foreach( KeyValuePair<string, JToken> property in items )
-            {
-                //Write the record data
-                string groupName = items[ property.Key ][ "group" ].ToString( );
-                if( !uiSpecs.ContainsKey( groupName ) )
-                {
-                    uiSpecs[ groupName ] = new JObject( );
-                }
-                uiSpecs[ groupName ][ property.Key ] = 
-                JObject optionalFields = ( JObject )items[ property.Key ][ "optional_fields" ];
-                foreach( KeyValuePair<string, JToken> optField in optionalFields )
-                {
-                    uiSpecs[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value" ];
-                }
-                //Console.WriteLine( property.Key + " - " + property.Value );
-            }
-
-            return uiSpecs;
+            return TemplateInstance.Items;
         }
+
+        public TemplateItem GetTemplateItem( string itemName )
+        {
+            return TemplateInstance.Items[ itemName ];
+        }
+
     }
 }

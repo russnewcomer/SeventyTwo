@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SeventyTwoDesktop.Controllers;
+using SeventyTwoDesktop.Models;
+
 namespace SeventyTwoDesktop
 {
     public partial class frmMain : Form
@@ -56,6 +58,30 @@ namespace SeventyTwoDesktop
             {
                 tabPageToCreate.Text = permRecordControl.GetPatName();
             };
+            
+            
+            FlowLayoutPanel flowPanel = new FlowLayoutPanel {
+                Top = 230,
+                Left = 5,
+                Width = 600,
+                FlowDirection = FlowDirection.TopDown,
+                AutoScroll = true,
+                BackColor = Color.White
+               
+            };
+
+            
+            TemplateController tmp = new TemplateController( "maternal_antenatal_visit" );
+            Dictionary<string, TemplateItem> tilist = tmp.GetTemplateItems( );
+
+            foreach(KeyValuePair<string, TemplateItem> ti in tilist) {
+                ucTemplateItem item = new ucTemplateItem( );
+                item.LoadTemplateItem( ti.Value );
+                flowPanel.Controls.Add( item );
+            }
+            
+            tabPageToCreate.Controls.Add( flowPanel );
+
 
             tabPageToCreate.Name = guidToLoad;
             tabPageToCreate.Text = "New Patient";
