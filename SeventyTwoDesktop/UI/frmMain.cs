@@ -62,8 +62,27 @@ namespace SeventyTwoDesktop
                 Top = 5,
                 Left = 5,
                 Height = 220,
-                Width = 600, Visible = false
+                Width = 600
             };
+
+            TreeView tvTemplateItems = new TreeView {
+                Top = 5,
+                Left = 605,
+                Width = 250,
+                Height = 420,
+                Font = new Font( "Segoe UI", 9 ),
+            };
+            Dictionary<string, int> dStrIntNodeIndex = new Dictionary<string, int>( );
+
+            Panel pnlGuidanceControls = new Panel {
+                Top = 50,
+                Height = 200,
+                Left = 5,
+                Width = 550
+            };
+
+
+
 
             tabPageToCreate.Controls.Add(permRecordControl);
             permRecordControl.ProfileNameChange += delegate (object o, EventArgs e)
@@ -76,80 +95,72 @@ namespace SeventyTwoDesktop
                 tabPageToCreate.Text = permRecordControl.GetProfileName( );
                 lblProfileName.Text = permRecordControl.GetProfileName( );
                 permRecordControl.Hide( );
+                pnlGuidanceControls.Show( );
             };
 
 
-            lblProfileName.Click += delegate ( Object o, EventArgs e ) {
+            lblProfileName.Click += delegate ( object o, EventArgs e ) {
                 permRecordControl.Show( );
-                
+                pnlGuidanceControls.Hide( );
             };
 
             Button btnEditProfile = new Button { Left = 400, Top = 4, Height = 30, Width = 150, Text = "Edit Profile" };
-            btnEditProfile.Click += delegate ( Object o, EventArgs e ) {
+            btnEditProfile.Click += delegate ( object o, EventArgs e ) {
                 permRecordControl.Show( );
+                pnlGuidanceControls.Hide( );
             };
 
             tabPageToCreate.Controls.Add( btnEditProfile );
             tabPageToCreate.Controls.Add( lblProfileName );
 
-
-            ScrollableControl scPanel = new ScrollableControl {
-                Top = 5,
-                Left = 605,
-                Width = 250,
-                Height = 420,
-                AutoScroll = true
-                
+            Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 30, Width = 150, Text = "Previous" };
+            btnPreviousGuidanceItem.Click += delegate ( object o, EventArgs e ) {
+                //Go previous
             };
 
-            Panel pnlGuidanceControls = new Panel {
-                Top = 250,
-                Height = 220,
-                Left = 5,
-                Width = 400
+            Button btnNextGuidanceItem = new Button { Left = 225, Top = 250, Height = 30, Width = 150, Text = "Next" };
+            btnNextGuidanceItem.Click += delegate ( object o, EventArgs e ) {
+                //Go Next
             };
-            
 
-            
+            tabPageToCreate.Controls.Add( btnPreviousGuidanceItem );
+            tabPageToCreate.Controls.Add( btnNextGuidanceItem );
+
             TemplateController tmp = new TemplateController( "maternal_antenatal_visit" );
             Dictionary<string, TemplateItem> tilist = tmp.GetTemplateItems( );
             
-            int countOfItems = 0;
-            foreach( KeyValuePair<string, TemplateItem> ti in tilist ) {
-                ucTemplateItem outlineItem = new ucTemplateItem( );
-                outlineItem.OutlineMode = true;
-                outlineItem.LoadTemplateItem( ti.Value );
-                outlineItem.Left = 0;
-                //I'm doing some non-obvious postfix incrementing here 
-                //because I want to write a long comment explaining it instead of having another line of code.
-                outlineItem.Top = ( countOfItems++ * 60 );
 
-                outlineItem.OutlineModeClick += delegate ( object o, EventArgs e ) {
-                    TemplateItemEventArgs  args = ( TemplateItemEventArgs  )e;
-                    foreach ( ucTemplateItem ctl in pnlGuidanceControls.Controls ) {
-                        if ( ctl.Visible ) {
-                            //save this 
-                            //ctl.ItemValue
-                        }
-                        ctl.Visible = ctl.ItemName == args.Key;
-                    }
-                };
-                scPanel.Controls.Add( outlineItem );
+            foreach( KeyValuePair<string, TemplateItem> ti in tilist ) {
 
                 ucTemplateItem guidanceItem = new ucTemplateItem {
                     OutlineMode = false,
                     Visible = false
                 };
                 guidanceItem.ItemValueChanged += delegate ( object o, EventArgs e ) {
-                    MessageBox.Show( guidanceItem.ItemValue );
+                    //MessageBox.Show( guidanceItem.ItemValue );
+                    string displayText = guidanceItem.ItemValue;
+                    //Terning right around... to show yes/no instead of True/False
+                    displayText = ( displayText == "true" ) ? "Yes" : ( displayText == "False" ) ? "No" : displayText;
+                    tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ guidanceItem.ItemName ].Text = ti.Value.Title + " - " + displayText;
                 };
+
                 guidanceItem.LoadTemplateItem( ti.Value );
 
                 pnlGuidanceControls.Controls.Add( guidanceItem );
 
+
+                if( !dStrIntNodeIndex.ContainsKey( ti.Value.Group ) ) {
+                    tvTemplateItems.Nodes.Add( tmp.GetGroupDisplayName( ti.Value.Group ) );
+                    dStrIntNodeIndex.Add( ti.Value.Group, tvTemplateItems.Nodes.Count - 1 );
+                }
+                tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes.Add( ti.Value.Name, ti.Value.Title );
+
+
+
             }
             
-            tabPageToCreate.Controls.Add( scPanel );
+
+            tabPageToCreate.Controls.Add( tvTemplateItems );
 
             tabPageToCreate.Controls.Add( pnlGuidanceControls );
 
@@ -158,6 +169,20 @@ namespace SeventyTwoDesktop
 
             tabPageToCreate.Name = guidToLoad;
             tabPageToCreate.Text = "New Profile";
+
+
+            tvTemplateItems.NodeMouseClick += delegate ( object o, TreeNodeMouseClickEventArgs e ) {
+                if( e.Node.Name != "" ) {
+                    MessageBox.Show( e.Node.Name );
+                    foreach( ucTemplateItem ctl in pnlGuidanceControls.Controls ) {
+                        if( ctl.Visible ) {
+                            //save this 
+                            //ctl.ItemValue
+                        }
+                        ctl.Visible = ctl.ItemName == e.Node.Name;//.Key;
+                    }
+                }
+            };
 
             return tabPageToCreate;
         }

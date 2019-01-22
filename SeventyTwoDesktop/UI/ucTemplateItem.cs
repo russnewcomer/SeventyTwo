@@ -30,10 +30,15 @@ namespace SeventyTwoDesktop
         private string _value { get; set; }
         public string ItemValue { get { return _value; } }
 
+
+        private string _group { get; set; }
+        public string ItemGroup { get { return _group; } }
+
         private bool HasOptionalFields { get; set; } = false;
 
         public event EventHandler OutlineModeClick;
         public event EventHandler ItemValueChanged;
+        public event EventHandler OptionalValueChanged;
 
         public ucTemplateItem()
         {
@@ -44,6 +49,7 @@ namespace SeventyTwoDesktop
         public void LoadTemplateItem( TemplateItem template ) {
             ti = template;
             _name = ti.Name;
+            _group = ti.Group;
             if ( OutlineMode ) {
                 GenerateOutlineControl( );
             } else {
@@ -178,8 +184,8 @@ namespace SeventyTwoDesktop
                             this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
                         //}
                     };
-                    Button btnYes = new Button { Left = 10, Top = 40, Height = 90, Width = 150, Text = "YES", Font = new Font( "Segoe UI", 20 ) };
-                    Button btnNo = new Button { Left = 170, Top = 40, Height = 90, Width = 150, Text = "NO", Font = new Font( "Segoe UI", 20 ) };
+                    Button btnYes = new Button { Left = 10, Top = 40, Height = 100, Width = 150, Text = "YES", Font = new Font( "Segoe UI", 20 ) };
+                    Button btnNo = new Button { Left = 170, Top = 40, Height = 100, Width = 150, Text = "NO", Font = new Font( "Segoe UI", 20 ) };
 
                     btnYes.Click += delegate ( object o, EventArgs e ) {
                         cbMVC.Checked = true;
@@ -187,9 +193,6 @@ namespace SeventyTwoDesktop
                         btnNo.BackColor = Color.Transparent;
                         if( HasOptionalFields ) {
                             OptionalFieldsFlowPanel.Show( );
-                            btnYes.Height = 30;
-                            btnNo.Height = 100;
-                            btnYes.Font = new Font( "Segoe UI", 9 );
                         }
                     };
 
@@ -199,9 +202,6 @@ namespace SeventyTwoDesktop
                         btnNo.BackColor = Color.Red;
                         if( HasOptionalFields ) {
                             OptionalFieldsFlowPanel.Hide( );
-                            btnYes.Font = new Font( "Segoe UI", 20 );
-                            btnYes.Height = 100;
-                            btnNo.Height = 100;
                         }
                     };
 
@@ -209,13 +209,12 @@ namespace SeventyTwoDesktop
                     this.Controls.Add( btnYes );
                     this.Controls.Add( btnNo );
 
-                    foreach( TemplateItem optVal in ti.OptionalFields )
-                    {
+                    foreach( TemplateItem optVal in ti.OptionalFields ) {
                         HasOptionalFields = true;
 
                         if( OptionalFieldsFlowPanel == null ) {
                             OptionalFieldsFlowPanel = new FlowLayoutPanel {
-                                Visible = false, Top = 70, Left = 10, Width = 150, Height = 60
+                                Visible = false, Top = 40, Left = 330, Width = 150, Height = 100
                             };
                             this.Controls.Add( OptionalFieldsFlowPanel );
                             OptionalFieldsFlowPanel.BringToFront( );
@@ -228,8 +227,8 @@ namespace SeventyTwoDesktop
 
                                 RichTextBox notesCtl = new RichTextBox {
                                     Left = 4,
-                                    Width = 132,
-                                    Height = 45,
+                                    Width = 130,
+                                    Height = 75,
                                     Text = optVal.Value,
                                     Multiline = true,
                                     WordWrap = true,
@@ -246,7 +245,7 @@ namespace SeventyTwoDesktop
                             case "numeric":
                                 NumericUpDown nudCtl = new NumericUpDown {
                                     Left = 4,
-                                    Width = 132,
+                                    Width = 130,
                                     Text = ti.Value,
                                     Font = new Font( "Segoe UI", 20 )
                                 };

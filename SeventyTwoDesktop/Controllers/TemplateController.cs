@@ -104,5 +104,9 @@ namespace SeventyTwoDesktop.Controllers
             return TemplateInstance.Items[ itemName ];
         }
 
+        public string GetGroupDisplayName( string groupKey ) {
+            return TemplateInstance.Groups[ groupKey ].ToString( );
+        }
+
     }
 }
