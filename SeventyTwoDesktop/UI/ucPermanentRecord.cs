@@ -14,23 +14,22 @@ namespace SeventyTwoDesktop
     public partial class ucPermanentRecord : UserControl
     {
 
-        private PatientController PatientInfo { get; set; } = new PatientController();
+        private ProfileController ProfileInfo { get; set; } = new ProfileController();
 
         public ucPermanentRecord()
         {
             InitializeComponent();
-            clearData();
+            ClearData();
         }
 
-        public event EventHandler PatientNameChange;
+        public event EventHandler ProfileNameChange;
+
+        public event EventHandler ProfileSaved;
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            PatientInfo.Patient.name = txtName.Text;
-            if (this.PatientNameChange != null)
-            {
-                this.PatientNameChange(this, e);
-            }   
+            ProfileInfo.Profile.name = txtName.Text;
+            this.ProfileNameChange?.Invoke( this, e );
         }
 
         private void ucPermanentRecord_Load(object sender, EventArgs e)
@@ -41,45 +40,47 @@ namespace SeventyTwoDesktop
         private void btnSaveChanges_Click(object sender, EventArgs e)
         {
             //Naive update.
-            saveData();
+            SaveData();
+            this.ProfileSaved?.Invoke( this, e );
+            
         }
 
-        public void loadData( string guid ) {
-            //PatientInfo.loadPatientData(guid);
-            PatientInfo.loadPatientData("4eea8a97-38bd-478a-9f6b-4b963ee779ce");
-            txtName.Text = PatientInfo.Patient.name;
-            txtNumber.Text = PatientInfo.Patient.number;
-            txtSpouse.Text = PatientInfo.Patient.spouse;
-            txtAddress.Text = PatientInfo.Patient.address;
-            txtPhone.Text = PatientInfo.Patient.phonenumber;
-            cbGender.SelectedText = PatientInfo.Patient.gender;
-            dtpBirthDate.Value = PatientInfo.Patient.birthdate;
+        public void LoadData( string guid ) {
+            //ProfileInfo.loadProfileData(guid);
+            ProfileInfo.LoadProfileData("4eea8a97-38bd-478a-9f6b-4b963ee779ce");
+            txtName.Text = ProfileInfo.Profile.name;
+            txtNumber.Text = ProfileInfo.Profile.number;
+            txtSpouse.Text = ProfileInfo.Profile.spouse;
+            txtAddress.Text = ProfileInfo.Profile.address;
+            txtPhone.Text = ProfileInfo.Profile.phonenumber;
+            cbGender.SelectedText = ProfileInfo.Profile.gender;
+            dtpBirthDate.Value = ProfileInfo.Profile.birthdate;
         }
-        public void saveData() {
-            PatientInfo.Patient.name = txtName.Text;
-            PatientInfo.Patient.number = txtNumber.Text;
-            PatientInfo.Patient.spouse = txtSpouse.Text;
-            PatientInfo.Patient.address = txtAddress.Text;
-            PatientInfo.Patient.phonenumber = txtPhone.Text;
-            PatientInfo.Patient.gender = cbGender.ValueMember.ToString();
-            PatientInfo.Patient.birthdate = dtpBirthDate.Value;
-            PatientInfo.savePatientData();
+        public void SaveData() {
+            ProfileInfo.Profile.name = txtName.Text;
+            ProfileInfo.Profile.number = txtNumber.Text;
+            ProfileInfo.Profile.spouse = txtSpouse.Text;
+            ProfileInfo.Profile.address = txtAddress.Text;
+            ProfileInfo.Profile.phonenumber = txtPhone.Text;
+            ProfileInfo.Profile.gender = cbGender.ValueMember.ToString();
+            ProfileInfo.Profile.birthdate = dtpBirthDate.Value;
+            ProfileInfo.saveProfileData();
         }
-        public void clearData()
+        public void ClearData()
         {
-            PatientInfo.InitializePatient();
+            ProfileInfo.InitializeProfile();
 
-            PatientInfo.Patient.name = "";
-            PatientInfo.Patient.number = "";
-            PatientInfo.Patient.spouse = "";
-            PatientInfo.Patient.address = "";
-            PatientInfo.Patient.phonenumber = "";
-            PatientInfo.Patient.gender = "";
-            PatientInfo.Patient.birthdate = DateTime.Now;
+            ProfileInfo.Profile.name = "";
+            ProfileInfo.Profile.number = "";
+            ProfileInfo.Profile.spouse = "";
+            ProfileInfo.Profile.address = "";
+            ProfileInfo.Profile.phonenumber = "";
+            ProfileInfo.Profile.gender = "";
+            ProfileInfo.Profile.birthdate = DateTime.Now;
         }
-        public string GetPatName()
+        public string GetProfileName( )
         {
-            return PatientInfo.Patient.name;
+            return ProfileInfo.Profile.name;
         } 
     }
 }

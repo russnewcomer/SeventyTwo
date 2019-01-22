@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SeventyTwoDesktop.Models
 {
-    class PatientListItem: IComparable
+    class ProfileListItem: IComparable
     {
         public string Name { get; set; } = "";
         public string Number { get; set; } = "";
@@ -17,12 +17,12 @@ namespace SeventyTwoDesktop.Models
         }
         public string GUID { get; set; } = "";
 
-        public PatientListItem()
+        public ProfileListItem()
         {
 
         }
 
-        public PatientListItem( string name, string number, string itemGUID )
+        public ProfileListItem( string name, string number, string itemGUID )
         {
             Name = name;
             Number = number;
@@ -36,10 +36,10 @@ namespace SeventyTwoDesktop.Models
 
         public int CompareTo(Object o)
         {
-            PatientListItem pli = o as PatientListItem;
+            ProfileListItem pli = o as ProfileListItem;
             if ( pli == null )
             {
-                throw new Exception("Object is not a PatientListItem");
+                throw new Exception("Object is not a ProfileListItem");
             }
             return GUID.CompareTo(pli.GUID);
         }

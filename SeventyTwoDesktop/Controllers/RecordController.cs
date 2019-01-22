@@ -17,7 +17,7 @@ namespace SeventyTwoDesktop.Controllers
         private TemplateController TC { get; set; }
         private JObject RecordData { get; set; }
         public string RecordGUID { get; }
-        public string PatientGUID { get; set; }
+        public string ProfileGUID { get; set; }
 
         //This is a base constructor
         public RecordController() {
@@ -116,7 +116,7 @@ namespace SeventyTwoDesktop.Controllers
                 //This is the basic stuff
                 recordData[ "type" ] = curTemplate.GetTemplateType( );
                 recordData[ "template_guid" ] = Template.jsonTemplate[ "template_guid" ];
-                recordData[ "record_guid" ] = Patient.guid;
+                recordData[ "record_guid" ] = Profile.guid;
                 recordData[ "date_entered" ] = Template.jsonTemplate[ "date_entered" ];
                 recordData[ "notes" ] = Template.jsonTemplate[ "notes" ];
                 recordData[ "record_attachment" ] = Template.jsonTemplate[ "record_attachment" ];

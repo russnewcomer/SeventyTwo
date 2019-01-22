@@ -72,12 +72,13 @@
             // 
             // btnNewPatient
             // 
+            this.btnNewPatient.BackColor = System.Drawing.Color.Transparent;
             this.btnNewPatient.Location = new System.Drawing.Point(365, 20);
             this.btnNewPatient.Name = "btnNewPatient";
             this.btnNewPatient.Size = new System.Drawing.Size(140, 43);
             this.btnNewPatient.TabIndex = 8;
             this.btnNewPatient.Text = "Create &New Patient";
-            this.btnNewPatient.UseVisualStyleBackColor = true;
+            this.btnNewPatient.UseVisualStyleBackColor = false;
             this.btnNewPatient.Click += new System.EventHandler(this.btnNewPatient_Click);
             // 
             // grpExisting
@@ -182,7 +183,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(645, 463);
+            this.ClientSize = new System.Drawing.Size(942, 463);
             this.Controls.Add(this.tabMain);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Name = "frmMain";

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace SeventyTwoDesktop.Models
 {
-    class PatientItem
+    class ProfileItem
     {
         public string type = "permanent";
-        public string title = "Patient Permanent Record";
+        public string title = "Profile Permanent Record";
         public string guid { get; set; }
         public string name { get; set; }
         public string number { get; set; }
@@ -17,7 +17,7 @@ namespace SeventyTwoDesktop.Models
         public string phonenumber { get; set; }
         public List<string> recordArray { get; set; }
 
-        public PatientItem()
+        public ProfileItem()
         {
         }
     }

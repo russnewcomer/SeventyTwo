@@ -16,9 +16,9 @@ namespace SeventyTwoDesktop.Models
             // initialized
         }
 
-        public List<PatientListItem> SearchByPatientName( string searchTerm ) {
+        public List<ProfileListItem> SearchByProfileName( string searchTerm ) {
 
-            List<PatientListItem> retVal = new List<PatientListItem>();
+            List<ProfileListItem> retVal = new List<ProfileListItem>();
             
             //Here we need to read in a list of patients
             

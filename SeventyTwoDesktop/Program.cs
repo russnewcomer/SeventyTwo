@@ -15,7 +15,7 @@ namespace SeventyTwoDesktop
         static void Main()
         {
             
-            ConfirmDirectory( "patients" );
+            ConfirmDirectory( "profiles" );
             ConfirmDirectory( "templates" );
             ConfirmDirectory( "log" );
             ConfirmDirectory( "config" );

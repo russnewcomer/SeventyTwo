@@ -50,8 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\RecordController.cs" />
-    <Compile Include="Controllers\PatientListController.cs" />
-    <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Controllers\ProfileListController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TemplateItem.cs" />
@@ -62,8 +62,8 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Log.cs" />
-    <Compile Include="Models\PatientItem.cs" />
-    <Compile Include="Models\PatientListItem.cs" />
+    <Compile Include="Models\ProfileItem.cs" />
+    <Compile Include="Models\ProfileListItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Search.cs" />

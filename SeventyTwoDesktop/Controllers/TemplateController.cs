@@ -68,7 +68,7 @@ namespace SeventyTwoDesktop.Controllers
             
             //This is the basic stuff
             recordData[ "type" ]= jsonTemplate[ "type" ];
-            recordData[ "patient_guid" ] = jsonTemplate[ "patient_guid" ];
+            recordData[ "profile_guid" ] = jsonTemplate[ "profile_guid" ];
             recordData[ "template_guid" ] = jsonTemplate[ "template_guid" ];
             recordData[ "record_guid" ] = Guid.NewGuid( ).ToString( );
             recordData[ "date_entered" ] = jsonTemplate[ "date_entered" ];

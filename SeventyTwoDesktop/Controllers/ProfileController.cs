@@ -9,42 +9,41 @@ using SeventyTwoDesktop.Models;
 
 namespace SeventyTwoDesktop.Controllers
 {
-    class PatientController
+    class ProfileController
     {
 
-        public PatientItem Patient { get; set; }
+        public ProfileItem Profile { get; set; }
         private Dictionary<string, RecordController> Records { get; set; }
         
 
-        public PatientController() {
+        public ProfileController() {
         }
 
 
-        public PatientController( string guid ) {
-            loadPatientData( guid );
+        public ProfileController( string guid ) {
+            LoadProfileData( guid );
         }
-
-        //Initialize the patient
-        public string InitializePatient()
+        
+        public string InitializeProfile()
         {
             //Set the guid
             string guid = Guid.NewGuid().ToString();
-            Patient = new PatientItem();
-            Patient.guid = guid;
+            Profile = new ProfileItem();
+            Profile.guid = guid;
    
             return guid;
 
         }
 
-        public void loadPatientData(string guid)
+        public void LoadProfileData(string guid)
         {
             try
             {
                 //Read and load the permanent JSON item.
-                Patient = JsonConvert.DeserializeObject<PatientItem>( File.ReadAllText( "patients/" + guid + "/permanent.json" ) );
+                Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( "Profiles/" + guid + "/permanent.json" ) );
 
                 //Read and load all other JSON templates.
-                IEnumerable<string> records = Directory.EnumerateFiles( "patients/guid" );
+                IEnumerable<string> records = Directory.EnumerateFiles( "Profiles/guid" );
 
                 foreach ( string filename in records) {
                     string record_guid = filename.Replace( ".json", "" );
@@ -58,24 +57,18 @@ namespace SeventyTwoDesktop.Controllers
             {
                 //Figure out how to log these somewhere.
                 Log.writeToLog(errMsg);
-                Patient.guid = "";
+                Profile.guid = "";
             }
         }
 
-        public void savePatientData()
+        public void saveProfileData()
         {
             try
             {
-                //Create the directory if necessary.
-                if (!Directory.Exists("patients/" + Patient.guid))
-                {
-                    Directory.CreateDirectory("patients/" + Patient.guid);
-                }
-
-                //Overwrites existing changes
-                File.WriteAllText("patients/" + Patient.guid + "/permanent.json", JsonConvert.SerializeObject(Patient));
                 
-
+                //Overwrites existing changes
+                File.WriteAllText("profiles/" + Profile.guid + "/permanent.json", JsonConvert.SerializeObject(Profile));
+                
             }
             catch (Exception errMsg)
             {
@@ -84,7 +77,7 @@ namespace SeventyTwoDesktop.Controllers
             }
         }
 
-        public JObject PatientDataToSimpleRecord( ) {
+        public JObject ProfileDataToSimpleRecord( ) {
 
             JObject recordData = new JObject( );
 

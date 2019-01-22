@@ -52,9 +52,9 @@
             this.lblPermRecord.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPermRecord.Location = new System.Drawing.Point(9, 12);
             this.lblPermRecord.Name = "lblPermRecord";
-            this.lblPermRecord.Size = new System.Drawing.Size(189, 21);
+            this.lblPermRecord.Size = new System.Drawing.Size(187, 21);
             this.lblPermRecord.TabIndex = 0;
-            this.lblPermRecord.Text = "Patient Permanent Record";
+            this.lblPermRecord.Text = "Profile Permanent Record";
             // 
             // label1
             // 
@@ -165,7 +165,7 @@
             // 
             this.dtpBirthDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpBirthDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpBirthDate.Location = new System.Drawing.Point(275, 196);
+            this.dtpBirthDate.Location = new System.Drawing.Point(275, 194);
             this.dtpBirthDate.Name = "dtpBirthDate";
             this.dtpBirthDate.Size = new System.Drawing.Size(110, 23);
             this.dtpBirthDate.TabIndex = 7;
@@ -195,9 +195,9 @@
             this.lblNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNumber.Location = new System.Drawing.Point(10, 86);
             this.lblNumber.Name = "lblNumber";
-            this.lblNumber.Size = new System.Drawing.Size(51, 15);
+            this.lblNumber.Size = new System.Drawing.Size(88, 15);
             this.lblNumber.TabIndex = 15;
-            this.lblNumber.Text = "Number";
+            this.lblNumber.Text = "Profile Number";
             // 
             // ucPermanentRecord
             // 
@@ -220,7 +220,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblPermRecord);
             this.Name = "ucPermanentRecord";
-            this.Size = new System.Drawing.Size(400, 236);
+            this.Size = new System.Drawing.Size(400, 226);
             this.Load += new System.EventHandler(this.ucPermanentRecord_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

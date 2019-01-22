@@ -6,24 +6,24 @@ using SeventyTwoDesktop.Models;
 
 namespace SeventyTwoDesktop.Controllers
 {
-    class PatientListController
+    class ProfileListController
     {
 
-        public List<PatientListItem> PatientList {get; set;} = new List<PatientListItem>();
+        public List<ProfileListItem> ProfileList {get; set;} = new List<ProfileListItem>();
         public bool LoadList()
         {
             bool retVal = false;
             try
             {
                 //Open the list and deserialize it
-                string json = File.ReadAllText("patients/list.json");
-                PatientList = JsonConvert.DeserializeObject<List<PatientListItem>>(json);
+                string json = File.ReadAllText("Profiles/list.json");
+                ProfileList = JsonConvert.DeserializeObject<List<ProfileListItem>>(json);
                 retVal = true;
             }
             catch (Exception errMsg)
             {
                 Log.writeToLog(errMsg);
-                PatientList = new List<PatientListItem>();
+                ProfileList = new List<ProfileListItem>();
             }
             return retVal;
         }
@@ -33,15 +33,15 @@ namespace SeventyTwoDesktop.Controllers
             bool retVal = false;
             try
             {
-                if (PatientList.Count > 0)
+                if (ProfileList.Count > 0)
                 {
                     //Make a quick copy of the old list
-                    if (File.Exists("patients/old-list.json") ) {
-                        File.Delete("patients/old-list.json");
+                    if (File.Exists("Profiles/old-list.json") ) {
+                        File.Delete("Profiles/old-list.json");
                     }
                     //Make a quick copy of the old list
-                    File.Copy("patients/list.json", "patients/old-list.json");
-                    File.WriteAllText("patients/list.json", JsonConvert.SerializeObject(PatientList));
+                    File.Copy("Profiles/list.json", "Profiles/old-list.json");
+                    File.WriteAllText("Profiles/list.json", JsonConvert.SerializeObject(ProfileList));
                     retVal = true;
                 }
             }
@@ -53,11 +53,11 @@ namespace SeventyTwoDesktop.Controllers
             return retVal;
         }
 
-        public bool AddItemToList(PatientListItem newItem) {
+        public bool AddItemToList(ProfileListItem newItem) {
             bool retVal = false;
             try
             {
-                PatientList.Add(newItem);
+                ProfileList.Add(newItem);
                 SaveList();
             }
             catch (Exception errMsg)
@@ -68,15 +68,15 @@ namespace SeventyTwoDesktop.Controllers
             return retVal;
         }
 
-        public bool AlterExistingItem( PatientListItem itemToAlter )
+        public bool AlterExistingItem( ProfileListItem itemToAlter )
         {
             bool retVal = false;
             try
             {
-                int idx = PatientList.FindIndex( pli => pli.GUID == itemToAlter.GUID );
+                int idx = ProfileList.FindIndex( pli => pli.GUID == itemToAlter.GUID );
                 if (idx > -1)
                 {
-                    PatientList[idx] = itemToAlter;
+                    ProfileList[idx] = itemToAlter;
                     SaveList();
                     retVal = true;
                 }
