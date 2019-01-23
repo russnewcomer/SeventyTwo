@@ -35,8 +35,8 @@
             this.lblAddress = new System.Windows.Forms.Label();
             this.txtPhone = new System.Windows.Forms.TextBox();
             this.lblPhone = new System.Windows.Forms.Label();
-            this.txtSpouse = new System.Windows.Forms.TextBox();
-            this.lblSpouse = new System.Windows.Forms.Label();
+            this.txtCommunity = new System.Windows.Forms.TextBox();
+            this.lblCommunity = new System.Windows.Forms.Label();
             this.cbGender = new System.Windows.Forms.ComboBox();
             this.lblGender = new System.Windows.Forms.Label();
             this.lblDate = new System.Windows.Forms.Label();
@@ -44,6 +44,8 @@
             this.btnSaveChanges = new System.Windows.Forms.Button();
             this.txtNumber = new System.Windows.Forms.TextBox();
             this.lblNumber = new System.Windows.Forms.Label();
+            this.txtLocation = new System.Windows.Forms.TextBox();
+            this.lblLocation = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblPermRecord
@@ -60,7 +62,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(10, 57);
+            this.label1.Location = new System.Drawing.Point(10, 62);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(39, 15);
             this.label1.TabIndex = 1;
@@ -69,7 +71,7 @@
             // txtName
             // 
             this.txtName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtName.Location = new System.Drawing.Point(115, 57);
+            this.txtName.Location = new System.Drawing.Point(115, 62);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(270, 23);
             this.txtName.TabIndex = 1;
@@ -78,7 +80,7 @@
             // txtAddress
             // 
             this.txtAddress.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAddress.Location = new System.Drawing.Point(115, 141);
+            this.txtAddress.Location = new System.Drawing.Point(115, 120);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(270, 23);
             this.txtAddress.TabIndex = 4;
@@ -87,7 +89,7 @@
             // 
             this.lblAddress.AutoSize = true;
             this.lblAddress.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddress.Location = new System.Drawing.Point(10, 141);
+            this.lblAddress.Location = new System.Drawing.Point(10, 120);
             this.lblAddress.Name = "lblAddress";
             this.lblAddress.Size = new System.Drawing.Size(49, 15);
             this.lblAddress.TabIndex = 3;
@@ -96,7 +98,7 @@
             // txtPhone
             // 
             this.txtPhone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPhone.Location = new System.Drawing.Point(115, 167);
+            this.txtPhone.Location = new System.Drawing.Point(115, 207);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(270, 23);
             this.txtPhone.TabIndex = 5;
@@ -105,29 +107,29 @@
             // 
             this.lblPhone.AutoSize = true;
             this.lblPhone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPhone.Location = new System.Drawing.Point(10, 167);
+            this.lblPhone.Location = new System.Drawing.Point(10, 207);
             this.lblPhone.Name = "lblPhone";
             this.lblPhone.Size = new System.Drawing.Size(88, 15);
             this.lblPhone.TabIndex = 7;
             this.lblPhone.Text = "Phone Number";
             // 
-            // txtSpouse
+            // txtCommunity
             // 
-            this.txtSpouse.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSpouse.Location = new System.Drawing.Point(115, 115);
-            this.txtSpouse.Name = "txtSpouse";
-            this.txtSpouse.Size = new System.Drawing.Size(270, 23);
-            this.txtSpouse.TabIndex = 3;
+            this.txtCommunity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCommunity.Location = new System.Drawing.Point(115, 149);
+            this.txtCommunity.Name = "txtCommunity";
+            this.txtCommunity.Size = new System.Drawing.Size(270, 23);
+            this.txtCommunity.TabIndex = 3;
             // 
-            // lblSpouse
+            // lblCommunity
             // 
-            this.lblSpouse.AutoSize = true;
-            this.lblSpouse.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSpouse.Location = new System.Drawing.Point(10, 115);
-            this.lblSpouse.Name = "lblSpouse";
-            this.lblSpouse.Size = new System.Drawing.Size(45, 15);
-            this.lblSpouse.TabIndex = 5;
-            this.lblSpouse.Text = "Spouse";
+            this.lblCommunity.AutoSize = true;
+            this.lblCommunity.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCommunity.Location = new System.Drawing.Point(10, 149);
+            this.lblCommunity.Name = "lblCommunity";
+            this.lblCommunity.Size = new System.Drawing.Size(71, 15);
+            this.lblCommunity.TabIndex = 5;
+            this.lblCommunity.Text = "Community";
             // 
             // cbGender
             // 
@@ -136,7 +138,7 @@
             this.cbGender.Items.AddRange(new object[] {
             "Female",
             "Male"});
-            this.cbGender.Location = new System.Drawing.Point(115, 194);
+            this.cbGender.Location = new System.Drawing.Point(115, 234);
             this.cbGender.Name = "cbGender";
             this.cbGender.Size = new System.Drawing.Size(93, 23);
             this.cbGender.TabIndex = 6;
@@ -145,7 +147,7 @@
             // 
             this.lblGender.AutoSize = true;
             this.lblGender.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGender.Location = new System.Drawing.Point(10, 194);
+            this.lblGender.Location = new System.Drawing.Point(10, 234);
             this.lblGender.Name = "lblGender";
             this.lblGender.Size = new System.Drawing.Size(45, 15);
             this.lblGender.TabIndex = 10;
@@ -155,7 +157,7 @@
             // 
             this.lblDate.AutoSize = true;
             this.lblDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDate.Location = new System.Drawing.Point(214, 196);
+            this.lblDate.Location = new System.Drawing.Point(214, 236);
             this.lblDate.Name = "lblDate";
             this.lblDate.Size = new System.Drawing.Size(55, 15);
             this.lblDate.TabIndex = 11;
@@ -165,7 +167,7 @@
             // 
             this.dtpBirthDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpBirthDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpBirthDate.Location = new System.Drawing.Point(275, 194);
+            this.dtpBirthDate.Location = new System.Drawing.Point(275, 234);
             this.dtpBirthDate.Name = "dtpBirthDate";
             this.dtpBirthDate.Size = new System.Drawing.Size(110, 23);
             this.dtpBirthDate.TabIndex = 7;
@@ -184,7 +186,7 @@
             // txtNumber
             // 
             this.txtNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNumber.Location = new System.Drawing.Point(115, 86);
+            this.txtNumber.Location = new System.Drawing.Point(115, 91);
             this.txtNumber.Name = "txtNumber";
             this.txtNumber.Size = new System.Drawing.Size(270, 23);
             this.txtNumber.TabIndex = 2;
@@ -193,16 +195,36 @@
             // 
             this.lblNumber.AutoSize = true;
             this.lblNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNumber.Location = new System.Drawing.Point(10, 86);
+            this.lblNumber.Location = new System.Drawing.Point(10, 91);
             this.lblNumber.Name = "lblNumber";
             this.lblNumber.Size = new System.Drawing.Size(88, 15);
             this.lblNumber.TabIndex = 15;
             this.lblNumber.Text = "Profile Number";
             // 
+            // txtLocation
+            // 
+            this.txtLocation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLocation.Location = new System.Drawing.Point(115, 178);
+            this.txtLocation.Name = "txtLocation";
+            this.txtLocation.Size = new System.Drawing.Size(270, 23);
+            this.txtLocation.TabIndex = 16;
+            // 
+            // lblLocation
+            // 
+            this.lblLocation.AutoSize = true;
+            this.lblLocation.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLocation.Location = new System.Drawing.Point(10, 178);
+            this.lblLocation.Name = "lblLocation";
+            this.lblLocation.Size = new System.Drawing.Size(53, 15);
+            this.lblLocation.TabIndex = 17;
+            this.lblLocation.Text = "Location";
+            // 
             // ucPermanentRecord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.txtLocation);
+            this.Controls.Add(this.lblLocation);
             this.Controls.Add(this.txtNumber);
             this.Controls.Add(this.lblNumber);
             this.Controls.Add(this.btnSaveChanges);
@@ -212,15 +234,15 @@
             this.Controls.Add(this.cbGender);
             this.Controls.Add(this.txtPhone);
             this.Controls.Add(this.lblPhone);
-            this.Controls.Add(this.txtSpouse);
-            this.Controls.Add(this.lblSpouse);
+            this.Controls.Add(this.txtCommunity);
+            this.Controls.Add(this.lblCommunity);
             this.Controls.Add(this.txtAddress);
             this.Controls.Add(this.lblAddress);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblPermRecord);
             this.Name = "ucPermanentRecord";
-            this.Size = new System.Drawing.Size(400, 226);
+            this.Size = new System.Drawing.Size(400, 275);
             this.Load += new System.EventHandler(this.ucPermanentRecord_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -236,8 +258,8 @@
         private System.Windows.Forms.Label lblAddress;
         private System.Windows.Forms.TextBox txtPhone;
         private System.Windows.Forms.Label lblPhone;
-        private System.Windows.Forms.TextBox txtSpouse;
-        private System.Windows.Forms.Label lblSpouse;
+        private System.Windows.Forms.TextBox txtCommunity;
+        private System.Windows.Forms.Label lblCommunity;
         private System.Windows.Forms.ComboBox cbGender;
         private System.Windows.Forms.Label lblGender;
         private System.Windows.Forms.Label lblDate;
@@ -245,5 +267,7 @@
         private System.Windows.Forms.Button btnSaveChanges;
         private System.Windows.Forms.TextBox txtNumber;
         private System.Windows.Forms.Label lblNumber;
+        private System.Windows.Forms.TextBox txtLocation;
+        private System.Windows.Forms.Label lblLocation;
     }
 }

@@ -15,6 +15,7 @@ namespace SeventyTwoDesktop
     public partial class frmMain : Form
     {
 
+        private ucTemplateItem ActiveGuidanceItem { get; set; }
 
         public frmMain()
         {
@@ -61,15 +62,17 @@ namespace SeventyTwoDesktop
             {
                 Top = 5,
                 Left = 5,
-                Height = 220,
+                Height = 300,
                 Width = 600
             };
 
+
+
             TreeView tvTemplateItems = new TreeView {
-                Top = 5,
+                Top = 55,
                 Left = 605,
-                Width = 250,
-                Height = 420,
+                Width = 325,
+                Height = 400,
                 Font = new Font( "Segoe UI", 9 ),
             };
             Dictionary<string, int> dStrIntNodeIndex = new Dictionary<string, int>( );
@@ -85,15 +88,18 @@ namespace SeventyTwoDesktop
 
 
             tabPageToCreate.Controls.Add(permRecordControl);
-            permRecordControl.ProfileNameChange += delegate (object o, EventArgs e)
-            {
-                tabPageToCreate.Text = permRecordControl.GetProfileName();
-                lblProfileName.Text = permRecordControl.GetProfileName( );
+            permRecordControl.ProfileNameChange += delegate ( object o, EventArgs e ) {
+                string profileName = permRecordControl.GetProfileName( );
+                profileName = ( profileName != "" ) ? profileName : "New Profile";
+                tabPageToCreate.Text = profileName;
+                lblProfileName.Text = profileName;
             };
 
             permRecordControl.ProfileSaved += delegate ( object o, EventArgs e ) {
-                tabPageToCreate.Text = permRecordControl.GetProfileName( );
-                lblProfileName.Text = permRecordControl.GetProfileName( );
+                string profileName = permRecordControl.GetProfileName( );
+                profileName = ( profileName != "" ) ? profileName : "New Profile";
+                tabPageToCreate.Text = profileName;
+                lblProfileName.Text = profileName;
                 permRecordControl.Hide( );
                 pnlGuidanceControls.Show( );
             };
@@ -113,12 +119,12 @@ namespace SeventyTwoDesktop
             tabPageToCreate.Controls.Add( btnEditProfile );
             tabPageToCreate.Controls.Add( lblProfileName );
 
-            Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 30, Width = 150, Text = "Previous" };
+            Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 30, Width = 150, Text = "Previous", Visible = false };
             btnPreviousGuidanceItem.Click += delegate ( object o, EventArgs e ) {
                 //Go previous
             };
 
-            Button btnNextGuidanceItem = new Button { Left = 225, Top = 250, Height = 30, Width = 150, Text = "Next" };
+            Button btnNextGuidanceItem = new Button { Left = 225, Top = 250, Height = 30, Width = 150, Text = "Next", Visible = false };
             btnNextGuidanceItem.Click += delegate ( object o, EventArgs e ) {
                 //Go Next
             };
@@ -126,7 +132,7 @@ namespace SeventyTwoDesktop
             tabPageToCreate.Controls.Add( btnPreviousGuidanceItem );
             tabPageToCreate.Controls.Add( btnNextGuidanceItem );
 
-            TemplateController tmp = new TemplateController( "maternal_antenatal_visit" );
+            TemplateController tmp = new TemplateController( "pregnancy_permanent" );
             Dictionary<string, TemplateItem> tilist = tmp.GetTemplateItems( );
             
 
@@ -134,7 +140,8 @@ namespace SeventyTwoDesktop
 
                 ucTemplateItem guidanceItem = new ucTemplateItem {
                     OutlineMode = false,
-                    Visible = false
+                    Visible = false,
+                    Name = "ucti" + ti.Value.Name
                 };
                 guidanceItem.ItemValueChanged += delegate ( object o, EventArgs e ) {
                     //MessageBox.Show( guidanceItem.ItemValue );
@@ -174,18 +181,24 @@ namespace SeventyTwoDesktop
             tvTemplateItems.NodeMouseClick += delegate ( object o, TreeNodeMouseClickEventArgs e ) {
                 if( e.Node.Name != "" ) {
                     MessageBox.Show( e.Node.Name );
-                    foreach( ucTemplateItem ctl in pnlGuidanceControls.Controls ) {
-                        if( ctl.Visible ) {
-                            //save this 
-                            //ctl.ItemValue
-                        }
-                        ctl.Visible = ctl.ItemName == e.Node.Name;//.Key;
-                    }
+                    EnableGuidanceItem( e.Node.Name, pnlGuidanceControls, btnPreviousGuidanceItem, btnNextGuidanceItem );
                 }
             };
 
             return tabPageToCreate;
         }
 
+
+        private void EnableGuidanceItem( string ControlKey, Panel CurrentPanel, Button Next, Button Previous ) {
+            
+            ActiveGuidanceItem?.Hide( );
+            Previous.Show( );
+            Next.Show( );
+
+            foreach( ucTemplateItem ctl in CurrentPanel.Controls.Find( "ucti" + ControlKey, false ) ) {
+                ActiveGuidanceItem = ctl;
+                ActiveGuidanceItem.Show( );
+            }
+        }
     }
 }

@@ -295,6 +295,20 @@ namespace SeventyTwoDesktop
                         this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
                     };
                     break;
+
+                case "date":
+                    MainValueControl = new DateTimePicker {
+                        Top = 50,
+                        Left = 4,
+                        Width = 300,
+                        Text = ti.Value
+                    };
+                    MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
+                        //Raise the textchanged event.
+                        _value = MainValueControl.Text;
+                        this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
+                    };
+                    break;
                 case "dropdown":
                     MainValueControl = new ComboBox {
                         Top = 50,

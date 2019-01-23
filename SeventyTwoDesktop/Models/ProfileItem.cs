@@ -11,8 +11,9 @@ namespace SeventyTwoDesktop.Models
         public string name { get; set; }
         public string number { get; set; }
         public string address { get; set; }
+        public string community { get; set; }
+        public string location { get; set; }
         public string gender { get; set; }
-        public string spouse { get; set; }
         public DateTime birthdate { get; set; }
         public string phonenumber { get; set; }
         public List<string> recordArray { get; set; }

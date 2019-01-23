@@ -82,8 +82,7 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         //Load a record from a full template record.
-        public bool LoadFromSimpleRecord( JObject simpleData )
-        {
+        public bool LoadFromSimpleRecord( JObject simpleData ) {
             bool retVal = false;
             try {
 
@@ -102,13 +101,11 @@ namespace SeventyTwoDesktop.Controllers
             return retVal;
         }
 
-        public string GetTemplateType()
-        {
+        public string GetTemplateType() {
             return TC.TemplateType;
         }
 
-        public JObject RenderDataToSimpleJSON( )
-        {
+        public JObject RenderDataToSimpleJSON( ) {
             return RecordData;
             /*
               try {
@@ -152,5 +149,33 @@ namespace SeventyTwoDesktop.Controllers
             */
         }
 
+
+        public RecordDataUpdate UpdateData( string Key, string Value) {
+            RecordDataUpdate retVal = new RecordDataUpdate();
+            try {
+
+                RecordData[ Key ] = Value;
+                //Check to see if I need to do a calculation
+                Models.TemplateItem ti = TC.GetTemplateItem( Key );
+                for( int i = 0; i < ti.Calculation.Count; i++ ) {
+                    JObject calcDef = ( JObject )ti.Calculation[ i ];
+                    switch ( calcDef["type"].ToString() ) {
+                        case "add":
+                            break;
+                        case "nowdiff":
+                            break;
+                    }
+                }
+
+               
+                retVal.UpdateSuccess = true;
+            } catch ( Exception er ) { Models.Log.writeToLog( er ); }
+            return retVal;
+        }
+    }
+
+    public struct RecordDataUpdate {
+        public bool UpdateSuccess;
+        public Dictionary<string, string> AdditionalValuesUpdated;
     }
 }

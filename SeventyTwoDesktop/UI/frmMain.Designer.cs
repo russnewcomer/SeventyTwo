@@ -39,8 +39,8 @@
             this.lblSearchByPatientName = new System.Windows.Forms.Label();
             this.lblPatientList = new System.Windows.Forms.Label();
             this.lstProfiles = new System.Windows.Forms.ListBox();
-            this.tabCalendar = new System.Windows.Forms.TabPage();
             this.tabReports = new System.Windows.Forms.TabPage();
+            this.gbCalendar = new System.Windows.Forms.GroupBox();
             this.tabMain.SuspendLayout();
             this.tabProfiles.SuspendLayout();
             this.grpExisting.SuspendLayout();
@@ -49,23 +49,23 @@
             // tabMain
             // 
             this.tabMain.Controls.Add(this.tabProfiles);
-            this.tabMain.Controls.Add(this.tabCalendar);
             this.tabMain.Controls.Add(this.tabReports);
             this.tabMain.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.tabMain.Location = new System.Drawing.Point(1, 1);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(931, 462);
+            this.tabMain.Size = new System.Drawing.Size(982, 508);
             this.tabMain.TabIndex = 1;
             // 
             // tabProfiles
             // 
+            this.tabProfiles.Controls.Add(this.gbCalendar);
             this.tabProfiles.Controls.Add(this.btnNewProfile);
             this.tabProfiles.Controls.Add(this.grpExisting);
             this.tabProfiles.Location = new System.Drawing.Point(4, 24);
             this.tabProfiles.Name = "tabProfiles";
             this.tabProfiles.Padding = new System.Windows.Forms.Padding(3);
-            this.tabProfiles.Size = new System.Drawing.Size(923, 434);
+            this.tabProfiles.Size = new System.Drawing.Size(974, 480);
             this.tabProfiles.TabIndex = 0;
             this.tabProfiles.Text = "Profiles";
             this.tabProfiles.UseVisualStyleBackColor = true;
@@ -73,7 +73,7 @@
             // btnNewProfile
             // 
             this.btnNewProfile.BackColor = System.Drawing.Color.Transparent;
-            this.btnNewProfile.Location = new System.Drawing.Point(365, 20);
+            this.btnNewProfile.Location = new System.Drawing.Point(20, 28);
             this.btnNewProfile.Name = "btnNewProfile";
             this.btnNewProfile.Size = new System.Drawing.Size(140, 43);
             this.btnNewProfile.TabIndex = 8;
@@ -91,9 +91,9 @@
             this.grpExisting.Controls.Add(this.lblPatientList);
             this.grpExisting.Controls.Add(this.lstProfiles);
             this.grpExisting.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.grpExisting.Location = new System.Drawing.Point(7, 69);
+            this.grpExisting.Location = new System.Drawing.Point(181, 11);
             this.grpExisting.Name = "grpExisting";
-            this.grpExisting.Size = new System.Drawing.Size(498, 357);
+            this.grpExisting.Size = new System.Drawing.Size(265, 462);
             this.grpExisting.TabIndex = 7;
             this.grpExisting.TabStop = false;
             this.grpExisting.Text = "Existing Profiles";
@@ -101,15 +101,15 @@
             // dtpSearch
             // 
             this.dtpSearch.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpSearch.Location = new System.Drawing.Point(284, 37);
+            this.dtpSearch.Location = new System.Drawing.Point(150, 37);
             this.dtpSearch.Name = "dtpSearch";
-            this.dtpSearch.Size = new System.Drawing.Size(107, 23);
+            this.dtpSearch.Size = new System.Drawing.Size(106, 23);
             this.dtpSearch.TabIndex = 12;
             this.dtpSearch.Value = new System.DateTime(2019, 1, 1, 0, 0, 0, 0);
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(396, 33);
+            this.btnSearch.Location = new System.Drawing.Point(164, 66);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(92, 27);
             this.btnSearch.TabIndex = 11;
@@ -120,7 +120,7 @@
             // lblSearchByDate
             // 
             this.lblSearchByDate.AutoSize = true;
-            this.lblSearchByDate.Location = new System.Drawing.Point(281, 19);
+            this.lblSearchByDate.Location = new System.Drawing.Point(146, 19);
             this.lblSearchByDate.Name = "lblSearchByDate";
             this.lblSearchByDate.Size = new System.Drawing.Size(110, 15);
             this.lblSearchByDate.TabIndex = 9;
@@ -130,7 +130,7 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(10, 37);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(246, 23);
+            this.textBox1.Size = new System.Drawing.Size(134, 23);
             this.textBox1.TabIndex = 8;
             // 
             // lblSearchByPatientName
@@ -145,7 +145,7 @@
             // lblPatientList
             // 
             this.lblPatientList.AutoSize = true;
-            this.lblPatientList.Location = new System.Drawing.Point(7, 63);
+            this.lblPatientList.Location = new System.Drawing.Point(6, 89);
             this.lblPatientList.Name = "lblPatientList";
             this.lblPatientList.Size = new System.Drawing.Size(62, 15);
             this.lblPatientList.TabIndex = 5;
@@ -155,35 +155,35 @@
             // 
             this.lstProfiles.FormattingEnabled = true;
             this.lstProfiles.ItemHeight = 15;
-            this.lstProfiles.Location = new System.Drawing.Point(9, 90);
+            this.lstProfiles.Location = new System.Drawing.Point(6, 107);
             this.lstProfiles.Name = "lstProfiles";
-            this.lstProfiles.Size = new System.Drawing.Size(479, 259);
+            this.lstProfiles.Size = new System.Drawing.Size(250, 349);
             this.lstProfiles.TabIndex = 4;
-            // 
-            // tabCalendar
-            // 
-            this.tabCalendar.Location = new System.Drawing.Point(4, 24);
-            this.tabCalendar.Name = "tabCalendar";
-            this.tabCalendar.Size = new System.Drawing.Size(923, 434);
-            this.tabCalendar.TabIndex = 2;
-            this.tabCalendar.Text = "Calendar";
-            this.tabCalendar.UseVisualStyleBackColor = true;
             // 
             // tabReports
             // 
             this.tabReports.Location = new System.Drawing.Point(4, 24);
             this.tabReports.Name = "tabReports";
             this.tabReports.Padding = new System.Windows.Forms.Padding(3);
-            this.tabReports.Size = new System.Drawing.Size(923, 434);
+            this.tabReports.Size = new System.Drawing.Size(974, 480);
             this.tabReports.TabIndex = 1;
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
+            // 
+            // gbCalendar
+            // 
+            this.gbCalendar.Location = new System.Drawing.Point(468, 11);
+            this.gbCalendar.Name = "gbCalendar";
+            this.gbCalendar.Size = new System.Drawing.Size(490, 462);
+            this.gbCalendar.TabIndex = 9;
+            this.gbCalendar.TabStop = false;
+            this.gbCalendar.Text = "Appointment Calendar";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(942, 463);
+            this.ClientSize = new System.Drawing.Size(984, 511);
             this.Controls.Add(this.tabMain);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Name = "frmMain";
@@ -208,8 +208,8 @@
         private System.Windows.Forms.Label lblSearchByPatientName;
         private System.Windows.Forms.Label lblPatientList;
         private System.Windows.Forms.ListBox lstProfiles;
-        private System.Windows.Forms.TabPage tabCalendar;
         private System.Windows.Forms.TabPage tabReports;
         private System.Windows.Forms.DateTimePicker dtpSearch;
+        private System.Windows.Forms.GroupBox gbCalendar;
     }
 }

@@ -20,6 +20,7 @@ namespace SeventyTwoDesktop.Models
         public string ShowOn { get; set; }
         public string Value { get; set; }
         public List<TemplateItem> OptionalFields { get; set; }
+        public JArray Calculation { get; set; }
 
         public TemplateItem( ) {
 
@@ -44,6 +45,7 @@ namespace SeventyTwoDesktop.Models
                     OptionalFields.Add( new TemplateItem( property.Value ) );
                 }
             }
+            Calculation = ti[ "calculation" ] != null ? new JArray( ti[ "dropdown_options" ].ToString( ) ) : new JArray( );
         }
 
         public JObject ToJObject() {
@@ -60,6 +62,7 @@ namespace SeventyTwoDesktop.Models
                 item.Add( "value", Value );
                 item.Add( "dropdown_options", new JArray( DropDownOptions ) );
                 item.Add( "optional_fields", new JObject( OptionalFields ) );
+                item.Add( "calculation", new JArray( Calculation ) );
 
                 retVal.Add( Name, item );
 

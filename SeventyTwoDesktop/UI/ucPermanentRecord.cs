@@ -50,8 +50,9 @@ namespace SeventyTwoDesktop
             ProfileInfo.LoadProfileData("4eea8a97-38bd-478a-9f6b-4b963ee779ce");
             txtName.Text = ProfileInfo.Profile.name;
             txtNumber.Text = ProfileInfo.Profile.number;
-            txtSpouse.Text = ProfileInfo.Profile.spouse;
             txtAddress.Text = ProfileInfo.Profile.address;
+            txtCommunity.Text = ProfileInfo.Profile.community;
+            txtLocation.Text = ProfileInfo.Profile.location;
             txtPhone.Text = ProfileInfo.Profile.phonenumber;
             cbGender.SelectedText = ProfileInfo.Profile.gender;
             dtpBirthDate.Value = ProfileInfo.Profile.birthdate;
@@ -59,8 +60,9 @@ namespace SeventyTwoDesktop
         public void SaveData() {
             ProfileInfo.Profile.name = txtName.Text;
             ProfileInfo.Profile.number = txtNumber.Text;
-            ProfileInfo.Profile.spouse = txtSpouse.Text;
             ProfileInfo.Profile.address = txtAddress.Text;
+            ProfileInfo.Profile.community = txtCommunity.Text;
+            ProfileInfo.Profile.location = txtLocation.Text;
             ProfileInfo.Profile.phonenumber = txtPhone.Text;
             ProfileInfo.Profile.gender = cbGender.ValueMember.ToString();
             ProfileInfo.Profile.birthdate = dtpBirthDate.Value;
@@ -72,8 +74,9 @@ namespace SeventyTwoDesktop
 
             ProfileInfo.Profile.name = "";
             ProfileInfo.Profile.number = "";
-            ProfileInfo.Profile.spouse = "";
             ProfileInfo.Profile.address = "";
+            ProfileInfo.Profile.community = "";
+            ProfileInfo.Profile.location = "";
             ProfileInfo.Profile.phonenumber = "";
             ProfileInfo.Profile.gender = "";
             ProfileInfo.Profile.birthdate = DateTime.Now;
