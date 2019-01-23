@@ -79,7 +79,7 @@
             this.btnNewProfile.TabIndex = 8;
             this.btnNewProfile.Text = "Create &New Profile";
             this.btnNewProfile.UseVisualStyleBackColor = false;
-            this.btnNewProfile.Click += new System.EventHandler(this.btnNewPatient_Click);
+            this.btnNewProfile.Click += new System.EventHandler(this.btnNewProfile_Click);
             // 
             // grpExisting
             // 

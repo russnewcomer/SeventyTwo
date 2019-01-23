@@ -45,7 +45,7 @@ namespace SeventyTwoDesktop.Models
                     OptionalFields.Add( new TemplateItem( property.Value ) );
                 }
             }
-            Calculation = ti[ "calculation" ] != null ? new JArray( ti[ "dropdown_options" ].ToString( ) ) : new JArray( );
+            Calculation = ti[ "calculation" ] != null ? ( JArray ) ti[ "calculation" ] : new JArray( );
         }
 
         public JObject ToJObject() {

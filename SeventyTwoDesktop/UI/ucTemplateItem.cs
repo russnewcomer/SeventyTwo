@@ -16,7 +16,8 @@ namespace SeventyTwoDesktop
 
     public partial class ucTemplateItem : UserControl
     {
-        private TemplateItem ti { get; set; }
+        private TemplateItem _ti { get; set; }
+        private Controllers.RecordController _rc { get; set; }
 
         private Control MainValueControl { get; set; }
         private FlowLayoutPanel OptionalFieldsFlowPanel { get; set; }
@@ -38,7 +39,7 @@ namespace SeventyTwoDesktop
 
         public event EventHandler OutlineModeClick;
         public event EventHandler ItemValueChanged;
-        public event EventHandler OptionalValueChanged;
+       
 
         public ucTemplateItem()
         {
@@ -47,9 +48,9 @@ namespace SeventyTwoDesktop
 
 
         public void LoadTemplateItem( TemplateItem template ) {
-            ti = template;
-            _name = ti.Name;
-            _group = ti.Group;
+            _ti = template;
+            _name = _ti.Name;
+            _group = _ti.Group;
             if ( OutlineMode ) {
                 GenerateOutlineControl( );
             } else {
@@ -59,20 +60,20 @@ namespace SeventyTwoDesktop
 
         private void GenerateOutlineControl( )
         {
-            this.Controls.Add( new Label { Top =4, Left = 4, Text = ti.Title, AutoSize = true } );
+            this.Controls.Add( new Label { Top =4, Left = 4, Text = _ti.Title, AutoSize = true } );
          
-            switch( ti.FieldType ) {
+            switch( _ti.FieldType ) {
                 case "true_false":
                     MainValueControl = new CheckBox {
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Checked = (ti.Value == "true")
+                        Checked = (_ti.Value == "true")
                     };
                     CheckBox cbMVC = ( CheckBox )MainValueControl;
                     cbMVC.CheckStateChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
-                        ti.Value = cbMVC.Checked ? "true" : "false";
+                        _ti.Value = cbMVC.Checked ? "true" : "false";
                         if( this.Focused ) {
                             this.ItemValueChanged( o, e );
                         }
@@ -84,11 +85,11 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = ti.Value
+                        Text = _ti.Value
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
-                        ti.Value = MainValueControl.Text;
+                        _ti.Value = MainValueControl.Text;
                         if( this.Focused ){
                             this.ItemValueChanged( o, e );
                         }
@@ -99,14 +100,14 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = ti.Value,
+                        Text = _ti.Value,
                         Multiline = true,
                         WordWrap = true
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         MainValueControl.Size = MainValueControl.GetPreferredSize( new Size( 192, 300 ) );
                         this.Height = MainValueControl.Height + 20;
-                        ti.Value = MainValueControl.Text;
+                        _ti.Value = MainValueControl.Text;
                         if( this.Focused ) {
                             this.ItemValueChanged( o, e );
                         }
@@ -117,15 +118,15 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = ti.Value
+                        Text = _ti.Value
                     };
                     ComboBox cmbMVC = ( ComboBox )MainValueControl;
-                    for( int i = 0; i < ti.DropDownOptions.Count; i++ ) {
-                        cmbMVC.Items.Add( ti.DropDownOptions[ i ] );
+                    for( int i = 0; i < _ti.DropDownOptions.Count; i++ ) {
+                        cmbMVC.Items.Add( _ti.DropDownOptions[ i ] );
                     }
 
                     cmbMVC.SelectedIndexChanged += delegate ( object o, EventArgs e ) {
-                        ti.Value = cmbMVC.Items[ cmbMVC.SelectedIndex ].ToString();
+                        _ti.Value = cmbMVC.Items[ cmbMVC.SelectedIndex ].ToString();
                         if( this.Focused ) {
                             this.ItemValueChanged( o, e );
                         }
@@ -137,12 +138,12 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = ti.Value,
+                        Text = _ti.Value,
                         Multiline = false
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
-                        ti.Value = MainValueControl.Text;
+                        _ti.Value = MainValueControl.Text;
                         if( this.Focused ) {
                             this.ItemValueChanged( o, e );
                         }
@@ -157,23 +158,23 @@ namespace SeventyTwoDesktop
             }
             Click += delegate ( object o, EventArgs e ) {
                 if( !CanEditInOutlineMode ) {
-                    this.OutlineModeClick( o, new TemplateItemEventArgs( ti.Name, ti.Value ) );
+                    this.OutlineModeClick( o, new TemplateItemEventArgs( _ti.Name, _ti.Value ) );
                 }
             };
 
         }
 
         private void GenerateGuidanceControl( ) {
-            this.Controls.Add( new Label { Top = 4, Left = 4, Width = 500, Text = ti.Title, AutoSize = true, Font = new Font( "Segoe UI", 20 ), TextAlign = ContentAlignment.MiddleCenter } );
+            this.Controls.Add( new Label { Top = 4, Left = 4, Width = 500, Text = _ti.Title, AutoSize = true, Font = new Font( "Segoe UI", 20 ), TextAlign = ContentAlignment.MiddleCenter } );
 
-            switch( ti.FieldType )
+            switch( _ti.FieldType )
             {
                 
                 case "true_false":
                     MainValueControl = new CheckBox {
                         Top = 0,
                         Left = 0,
-                        Checked = ( ti.Value == "true" ),
+                        Checked = ( _ti.Value == "true" ),
                         Visible = false
                     };
                     CheckBox cbMVC = ( CheckBox )MainValueControl;
@@ -181,7 +182,7 @@ namespace SeventyTwoDesktop
                         //Raise the textchanged event.
                         _value = cbMVC.Checked ? "true" : "false";
                         //if( this.Focused ){
-                            this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
+                            this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
                         //}
                     };
                     Button btnYes = new Button { Left = 10, Top = 40, Height = 100, Width = 150, Text = "YES", Font = new Font( "Segoe UI", 20 ) };
@@ -209,7 +210,7 @@ namespace SeventyTwoDesktop
                     this.Controls.Add( btnYes );
                     this.Controls.Add( btnNo );
 
-                    foreach( TemplateItem optVal in ti.OptionalFields ) {
+                    foreach( TemplateItem optVal in _ti.OptionalFields ) {
                         HasOptionalFields = true;
 
                         if( OptionalFieldsFlowPanel == null ) {
@@ -246,7 +247,7 @@ namespace SeventyTwoDesktop
                                 NumericUpDown nudCtl = new NumericUpDown {
                                     Left = 4,
                                     Width = 130,
-                                    Text = ti.Value,
+                                    Text = _ti.Value,
                                     Font = new Font( "Segoe UI", 20 )
                                 };
                                 nudCtl.TextChanged += delegate ( object o, EventArgs e ) {
@@ -268,13 +269,13 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = ti.Value,
+                        Text = _ti.Value,
                         Font = new Font( "Segoe UI", 20 )
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
                         _value = MainValueControl.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
+                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
                     };
                     break;
                 case "notes":
@@ -282,7 +283,7 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = ti.Value,
+                        Text = _ti.Value,
                         Multiline = true,
                         WordWrap = true,
                         
@@ -292,7 +293,7 @@ namespace SeventyTwoDesktop
                         this.Height = MainValueControl.Height + 20;
                         //Raise the textchanged event.
                         _value = MainValueControl.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
+                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
                     };
                     break;
 
@@ -301,12 +302,12 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = ti.Value
+                        Text = _ti.Value
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
                         _value = MainValueControl.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
+                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
                     };
                     break;
                 case "dropdown":
@@ -314,18 +315,18 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = ti.Value,
+                        Text = _ti.Value,
                         Font = new Font( "Segoe UI", 20 )
                     };
                     ComboBox cmbMVC = ( ComboBox )MainValueControl;
-                    for( int i = 0; i < ti.DropDownOptions.Count; i++ )
+                    for( int i = 0; i < _ti.DropDownOptions.Count; i++ )
                     {
-                        cmbMVC.Items.Add( ti.DropDownOptions[ i ] );
+                        cmbMVC.Items.Add( _ti.DropDownOptions[ i ] );
                     }
 
                     cmbMVC.SelectedIndexChanged += delegate ( object o, EventArgs e ) {
                         _value = cmbMVC.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
+                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
                     };
                     break;
                 case "text":
@@ -334,14 +335,14 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = ti.Value,
+                        Text = _ti.Value,
                         Multiline = false,
                         Font = new Font( "Segoe UI", 20 )
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
                         _value = MainValueControl.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( ti.Name, _value ) );
+                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
                     };
                     break;
 

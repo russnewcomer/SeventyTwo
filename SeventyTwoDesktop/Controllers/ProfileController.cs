@@ -12,9 +12,33 @@ namespace SeventyTwoDesktop.Controllers
     class ProfileController
     {
 
+        //Static Methods and Properties
+        private static List<KeyValuePair<string, string>> RecordTypes { get; set; }
+
+        public static List<KeyValuePair<string, string>> GetRecordTypes( bool refreshRecordTypes = false )
+        {
+            if( RecordTypes == null || refreshRecordTypes )
+            {
+                RecordTypes = new List<KeyValuePair<string, string>>( );
+                JArray templates = JArray.Parse( File.ReadAllText( "config/templates.json" ) );
+                foreach( JToken x in templates )
+                {
+                    foreach( KeyValuePair<string, JToken> property in ( JObject )x )
+                    {
+                        RecordTypes.Add( new KeyValuePair<string, string>( property.Key, property.Value.ToString( ) ) );
+                    }
+                }
+            }
+
+            return RecordTypes;
+        }
+
+
+
+
         public ProfileItem Profile { get; set; }
-        private Dictionary<string, RecordController> Records { get; set; }
-        
+        public Dictionary<string, RecordController> Records { get; set; } = new Dictionary<string, RecordController>( );
+       
 
         public ProfileController() {
         }
@@ -30,6 +54,7 @@ namespace SeventyTwoDesktop.Controllers
             string guid = Guid.NewGuid().ToString();
             Profile = new ProfileItem();
             Profile.guid = guid;
+            Profile.name = "New Profile";
    
             return guid;
 
@@ -101,6 +126,7 @@ namespace SeventyTwoDesktop.Controllers
             }
             return recordData;
         }
+
 
     }
 }

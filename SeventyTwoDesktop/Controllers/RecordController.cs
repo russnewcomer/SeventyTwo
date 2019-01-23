@@ -15,9 +15,12 @@ namespace SeventyTwoDesktop.Controllers
     class RecordController {
 
         private TemplateController TC { get; set; }
+        private string TemplateName { get; set; }
         private JObject RecordData { get; set; }
-        public string RecordGUID { get; }
+        private string _RecordGUID { get; set; }
+        public string RecordGUID { get { return _RecordGUID; } }
         public string ProfileGUID { get; set; }
+        public List<string> OrderedTemplateKeys { get { return TC.GetTemplateKeysInOrder( ); } }
 
         //This is a base constructor
         public RecordController() {
@@ -32,6 +35,8 @@ namespace SeventyTwoDesktop.Controllers
             } else {
                 LoadFromFullTemplateRecord( recordData );
             }
+
+            TC = new TemplateController( recordData[ "type" ].ToString( ) );
         }
 
         //This constructor is for loading a JOBject record in and determining if it is the full template, or just the record.
@@ -48,6 +53,9 @@ namespace SeventyTwoDesktop.Controllers
                     //Read a simple record in from the file.
                     LoadFromSimpleRecord( recordJObj );
                 }
+                
+
+                TC = new TemplateController( recordJObj[ "type" ].ToString( ) );
             } catch( Exception errMsg ) {
                 //Log Exception
                 Models.Log.writeToLog( errMsg );
@@ -58,7 +66,8 @@ namespace SeventyTwoDesktop.Controllers
 
         //This constructor is for loading a new object based on template.
         public RecordController( string templateName ) {
-            TemplateController tmpTemplate = new TemplateController( templateName );
+            TC = new TemplateController( templateName );
+            StartNewRecord( );
         }
         
 
@@ -103,6 +112,22 @@ namespace SeventyTwoDesktop.Controllers
 
         public string GetTemplateType() {
             return TC.TemplateType;
+        }
+
+        public Dictionary<string, Models.TemplateItem> GetTemplateItems() {
+            return TC.GetTemplateItems( );
+        }
+
+        public string GetGroupDisplayName( string groupKey ) {
+            return TC.GetGroupDisplayName( groupKey );
+        }
+   
+        public string StartNewRecord() {
+            try {
+                _RecordGUID = Guid.NewGuid( ).ToString( );
+                RecordData = new JObject( );
+            } catch ( Exception er ) { Models.Log.writeToLog( er ); }
+            return _RecordGUID;
         }
 
         public JObject RenderDataToSimpleJSON( ) {
@@ -161,8 +186,56 @@ namespace SeventyTwoDesktop.Controllers
                     JObject calcDef = ( JObject )ti.Calculation[ i ];
                     switch ( calcDef["type"].ToString() ) {
                         case "add":
+                            if ( calcDef["display"].ToString() == "date" ) {
+                                DateTime calcTime = DateTime.Parse( Value );
+                                switch ( calcDef["units"].ToString()) {
+                                    case "s":
+                                        calcTime.AddSeconds( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        break;
+                                    case "m":
+                                        calcTime.AddMinutes( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        break;
+                                    case "h":
+                                        calcTime.AddHours( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        break;
+                                    case "d":
+                                        calcTime.AddDays( double.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        break;
+                                    case "M":
+                                        calcTime.AddMonths( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        break;
+                                    case "y":
+                                        calcTime.AddYears( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        break;
+                                }
+                                RecordData[ calcDef[ "destination_field" ] ] = calcTime.ToString( "dd-MMM-yyyy" );
+                            }
                             break;
                         case "nowdiff":
+                            
+                            TimeSpan diff = ( DateTime.Now - DateTime.Parse( Value ) );
+                           
+                            switch( calcDef[ "units" ].ToString( ) ) {
+                                case "s":
+                                    RecordData[ calcDef[ "destination_field" ].ToString() ] = Math.Floor( diff.TotalSeconds );
+                                    break;
+                                case "m":
+                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Floor( diff.TotalMinutes );
+                                    break;
+                                case "h":
+                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Floor( diff.TotalHours );
+                                    break;
+                                case "d":
+                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Floor( diff.TotalDays );
+                                    break;
+                                case "M":
+                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Ceiling( ( decimal )diff.TotalDays / 30 );
+                                    break;
+                                case "y":
+                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Ceiling( ( decimal )diff.TotalDays / 365 );
+                                    break;
+                            }
+                            
                             break;
                     }
                 }

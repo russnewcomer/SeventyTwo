@@ -13,6 +13,7 @@ namespace SeventyTwoDesktop.Controllers
         private JObject jsonTemplate { get; set; }
         private string _fileName { get; set; }
         private Template TemplateInstance { get; set; }
+        private List<string> OrderedKeys { get; set; }
 
         public TemplateController( JObject _SourceTemplate ) {
             jsonTemplate = _SourceTemplate;
@@ -102,6 +103,23 @@ namespace SeventyTwoDesktop.Controllers
         public TemplateItem GetTemplateItem( string itemName )
         {
             return TemplateInstance.Items[ itemName ];
+        }
+
+        public List<string> GetTemplateKeysInOrder() {
+            if( OrderedKeys == null ) {
+                OrderedKeys = new List<string>( );
+
+                JObject items = ( JObject )jsonTemplate[ "items" ];
+                try
+                {
+                    foreach( KeyValuePair<string, JToken> property in items )
+                    {
+                        OrderedKeys.Add( property.Key );
+                    }
+                } catch( Exception er ) { Log.writeToLog( er ); }
+
+            }
+            return OrderedKeys;
         }
 
         public string GetGroupDisplayName( string groupKey ) {

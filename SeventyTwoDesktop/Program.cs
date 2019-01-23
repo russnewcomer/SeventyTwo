@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 
 namespace SeventyTwoDesktop
 {
@@ -22,7 +23,7 @@ namespace SeventyTwoDesktop
             ConfirmDirectory( "export" );
             ConfirmDirectory( "reconcile" );
 
-
+            GetProfileTypesAndLoadIntoConfigFile( );
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -30,10 +31,39 @@ namespace SeventyTwoDesktop
         }
 
         static void ConfirmDirectory( string directoryName ) {
-            //make sure the 'config' directory exists.
-            if( !System.IO.Directory.Exists( directoryName ) )
+            //make sure the named directory exists.
+            if( !Directory.Exists( directoryName ) )
             {
-                System.IO.Directory.CreateDirectory( directoryName );
+                Directory.CreateDirectory( directoryName );
+            }
+        }
+
+        
+        //Look at the templates directory, and get the list.  Compare it to a file in 'config' and write the new files if necessary.
+        static void GetProfileTypesAndLoadIntoConfigFile() {
+            bool configListDirty = false;
+            JArray configList = File.Exists( "config/templates.json" ) ? JArray.Parse( File.ReadAllText( "config/templates.json" ) ) : new JArray();
+            List<string> profileNamesFromConfigList = new List<string>();
+            foreach( JToken x in configList ) {
+                foreach( KeyValuePair<string, JToken> property in ( JObject )x ) {
+                    profileNamesFromConfigList.Add( property.Key );
+                }
+            }
+
+            IEnumerable<string> ProfileTypes = Directory.EnumerateFiles( "templates" );
+
+            foreach( string profileFileName in ProfileTypes ) {
+                string name = profileFileName.Replace( ".json", "" ).Replace("templates\\", "");
+                if ( !profileNamesFromConfigList.Contains( name ) ) {
+                    JObject template = JObject.Parse( File.ReadAllText( profileFileName ) );
+                    JObject item = JObject.Parse( "{\"" +name + "\":\"" + template[ "title" ].ToString( ) + "\"} " );
+                    configList.Add( item );
+                    configListDirty = true;
+                }
+            }
+            
+            if ( configListDirty ) {
+                File.WriteAllText( "config/templates.json", configList.ToString( ) );
             }
         }
     }
