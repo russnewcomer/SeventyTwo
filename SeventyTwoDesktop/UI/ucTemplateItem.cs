@@ -17,7 +17,7 @@ namespace SeventyTwoDesktop
     public partial class ucTemplateItem : UserControl
     {
         private TemplateItem _ti { get; set; }
-        private Controllers.RecordController _rc { get; set; }
+        public Controllers.RecordController RecordInstance { get; set; }
 
         private Control MainValueControl { get; set; }
         private FlowLayoutPanel OptionalFieldsFlowPanel { get; set; }
@@ -238,7 +238,7 @@ namespace SeventyTwoDesktop
                                 notesCtl.TextChanged += delegate ( object o, EventArgs e ) {
                                     optVal.Value = notesCtl.Text;
                                     if( this.Focused ) {
-                                        this.ItemValueChanged( o, new TemplateItemEventArgs( optVal.Name, notesCtl.Text ) );
+                                        HandleOptionalItemValueChange( optVal, notesCtl.Text );
                                     }
                                 };
                                 OptionalFieldsFlowPanel.Controls.Add( notesCtl );
@@ -252,9 +252,8 @@ namespace SeventyTwoDesktop
                                 };
                                 nudCtl.TextChanged += delegate ( object o, EventArgs e ) {
                                     //Raise the textchanged event.
-                                    optVal.Value = nudCtl.Text;
                                     if( this.Focused ) {
-                                        this.ItemValueChanged( o, new TemplateItemEventArgs( optVal.Name, nudCtl.Text ) );
+                                        HandleOptionalItemValueChange( optVal, nudCtl.Text );
                                     }
                                 };
                                 OptionalFieldsFlowPanel.Controls.Add( nudCtl );
@@ -273,9 +272,7 @@ namespace SeventyTwoDesktop
                         Font = new Font( "Segoe UI", 20 )
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
-                        //Raise the textchanged event.
-                        _value = MainValueControl.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
+                        HandleItemValueChange( MainValueControl.Text );
                     };
                     break;
                 case "notes":
@@ -289,11 +286,7 @@ namespace SeventyTwoDesktop
                         
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
-                        MainValueControl.Size = MainValueControl.GetPreferredSize( new Size( 192, 300 ) );
-                        this.Height = MainValueControl.Height + 20;
-                        //Raise the textchanged event.
-                        _value = MainValueControl.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
+                        HandleItemValueChange( MainValueControl.Text );
                     };
                     break;
 
@@ -302,12 +295,14 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = _ti.Value
+                        Text = _ti.Value,
+                        CustomFormat = "dd-MMM-yyyy",
+                        Format = DateTimePickerFormat.Custom
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
-                        _value = MainValueControl.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
+                        DateTimePicker dtp = ( DateTimePicker )MainValueControl;
+                        HandleItemValueChange( dtp.Value.ToString( "dd-MMM-yyyy" ) );
                     };
                     break;
                 case "dropdown":
@@ -325,8 +320,7 @@ namespace SeventyTwoDesktop
                     }
 
                     cmbMVC.SelectedIndexChanged += delegate ( object o, EventArgs e ) {
-                        _value = cmbMVC.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
+                        HandleItemValueChange( cmbMVC.Text );
                     };
                     break;
                 case "text":
@@ -341,8 +335,8 @@ namespace SeventyTwoDesktop
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
-                        _value = MainValueControl.Text;
-                        this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
+                        HandleItemValueChange( MainValueControl.Text );
+                        
                     };
                     break;
 
@@ -351,17 +345,39 @@ namespace SeventyTwoDesktop
 
         }
 
-
-        private void ucTemplateItem_Load( object sender, EventArgs e )
-        {
-
+        private void HandleItemValueChange( string value ) {
+            _value = value;
+            //Do the update here.
+            Controllers.RecordDataUpdate rdu = RecordInstance.UpdateData( _ti.Name, _value );
+            if( rdu.UpdateSuccess ) {
+                this.ItemValueChanged( this, new TemplateItemEventArgs( _ti.Name, _value ) );
+                //Emit events if we changed more than one value (usually related to calculations)
+                foreach( KeyValuePair<string, string> avi in rdu.AdditionalValuesUpdated ) {
+                    this.ItemValueChanged( this, new TemplateItemEventArgs( avi.Key, avi.Value ) );
+                }
+            }
         }
-        
+        private void HandleOptionalItemValueChange( TemplateItem optItem, string value ) {
+            //Do the update here.
+            this.ItemValueChanged( this, new TemplateItemEventArgs( optItem.Name, value ) );
+        }
+
+        private void ucTemplateItem_Load( object sender, EventArgs e ) {
+            LoadData( );
+        }
+        private void ucTemplateItem_VisibleChanged( object sender, EventArgs e ) {
+            LoadData( );
+        }
+
+        private void LoadData( ) {
+            if( RecordInstance != null && MainValueControl != null) {
+                MainValueControl.Text = RecordInstance.GetData( _ti.Name );
+            }
+        }
     }
 
 
-    public class TemplateItemEventArgs : EventArgs
-    {
+    public class TemplateItemEventArgs : EventArgs {
         public string Key { get; set; }
         public string Value { get; set; }
         public TemplateItemEventArgs( string key, string val )

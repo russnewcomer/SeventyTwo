@@ -142,35 +142,66 @@ namespace SeventyTwoDesktop
 
             btnPreviousGuidanceItem.Click += delegate ( object o, EventArgs e ) {
                 //Go previous
-                int prevIdx = 0;
+                bool hasNode = false;
+                //Check to see if we have a previous node we can go to.
+                if( tvTemplateItems.SelectedNode.PrevNode == null && tvTemplateItems.SelectedNode.Parent.PrevNode != null ) {
+                    tvTemplateItems.SelectedNode = tvTemplateItems.SelectedNode.Parent.PrevNode.LastNode;
+                    hasNode = true;
+                } else if ( tvTemplateItems.SelectedNode.PrevNode != null ) {
+                    tvTemplateItems.SelectedNode = tvTemplateItems.SelectedNode.PrevNode;
+                    hasNode = true;
+                }
+                //If we do have a node, move there.
+                if ( hasNode ) {
+                    EnableGuidanceItem( tvTemplateItems.SelectedNode.Name, pnlGuidanceControls, btnPreviousGuidanceItem, btnNextGuidanceItem );
+                }
+                //Check to see if we should show these.
+                CheckPrevNextButtons( tvTemplateItems, btnNextGuidanceItem, btnPreviousGuidanceItem );
             };
 
             btnNextGuidanceItem.Click += delegate ( object o, EventArgs e ) {
                 //Go Next
+                bool hasNode = false;
+                //Check to see if we have a previous node we can go to.
+                if( tvTemplateItems.SelectedNode.NextNode == null && tvTemplateItems.SelectedNode.Parent.NextNode != null ) {
+                    tvTemplateItems.SelectedNode = tvTemplateItems.SelectedNode.Parent.NextNode.FirstNode;
+                    hasNode = true;
+                } else if( tvTemplateItems.SelectedNode.NextNode != null ) {
+                    tvTemplateItems.SelectedNode = tvTemplateItems.SelectedNode.NextNode;
+                    hasNode = true;
+                }
+                //If we do have a node, move there.
+                if( hasNode ) {
+                    EnableGuidanceItem( tvTemplateItems.SelectedNode.Name, pnlGuidanceControls, btnPreviousGuidanceItem, btnNextGuidanceItem );
+                }
+                //Check to see if we should show these.
+                CheckPrevNextButtons( tvTemplateItems, btnNextGuidanceItem, btnPreviousGuidanceItem );
             };
             
             btnCreateNewRecord.Click += delegate ( object o, EventArgs e ) {
-                string templateType = recordTypes.Find( x => x.Value == cmbNewRecord.SelectedItem.ToString() ).Key;
-                DialogResult result = MessageBox.Show( "Do you want to create a new " + cmbNewRecord.SelectedItem.ToString( ) + " record?", "Confirmation", MessageBoxButtons.YesNo );
-                if( result == DialogResult.Yes )
-                {
-                    //If we confirm we want to create, create a new one
+                try {
+                    string templateType = recordTypes.Find( x => x.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key;
+                    DialogResult result = MessageBox.Show( "Do you want to create a new " + cmbNewRecord.SelectedItem.ToString( ) + " record?", "Confirmation", MessageBoxButtons.YesNo );
+                    if( result == DialogResult.Yes ) {
+                        //If we confirm we want to create, create a new one
 
-                    //First, find the item by the value in the KVPair
-                    CreateNewRecordItem( templateType, tabPageToCreate );
+                        //First, find the item by the value in the KVPair
+                        CreateNewRecordItem( templateType, tabPageToCreate );
 
-                } else {
-                    //Otherwise, put the index back.
-                }
+                    } else {
+                        //Otherwise, put the index back.
+                    }
+                } catch ( Exception exc ) { Log.writeToLog( exc ); }
             };
 
             tvTemplateItems.NodeMouseClick += delegate ( object o, TreeNodeMouseClickEventArgs e ) {
                 if( e.Node.Name != "" ) {
                     //MessageBox.Show( e.Node.Name );
                     EnableGuidanceItem( e.Node.Name, pnlGuidanceControls, btnPreviousGuidanceItem, btnNextGuidanceItem );
+                    CheckPrevNextButtons( tvTemplateItems, btnNextGuidanceItem, btnPreviousGuidanceItem );
                 }
             };
-
+            
 
             //Loading items
             cmbNewRecord.Items.Clear( );
@@ -223,16 +254,21 @@ namespace SeventyTwoDesktop
 
                     ucTemplateItem guidanceItem = new ucTemplateItem {
                         OutlineMode = false,
-                        Visible = false,
-                        Name = "ucti" + ti.Value.Name
+                        Name = "ucti" + ti.Value.Name,
+                        RecordInstance = rc,
+                        Visible = false
                     };
                     guidanceItem.ItemValueChanged += delegate ( object o, EventArgs e ) {
                         //MessageBox.Show( guidanceItem.ItemValue );
-                        string displayText = guidanceItem.ItemValue;
+                        TemplateItemEventArgs tiea = ( TemplateItemEventArgs )e;
+                        string displayText = tiea.Value;
+                        
+                        TemplateItem displayItem = rc.GetTemplateItem( tiea.Key );
+
                         //Terning right around... to show yes/no instead of True/False
-                        displayText = ( displayText == "true" ) ? "Yes" : ( displayText == "False" ) ? "No" : displayText;
-                        tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ guidanceItem.ItemName ].Text = ti.Value.Title + " - " + displayText;
-                        LoadedProfiles[ profileGUID ].Records[ currentRecordGUID ].UpdateData( ti.Value.Name, guidanceItem.ItemValue );
+                        displayText = ( displayText == "true" ) ? "Yes" : ( displayText == "false" ) ? "No" : displayText;
+                        
+                        tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ tiea.Key ].Text =  displayItem.Title + " - " + displayText;
                     };
 
                     guidanceItem.LoadTemplateItem( ti.Value );
@@ -265,6 +301,18 @@ namespace SeventyTwoDesktop
             foreach( ucTemplateItem ctl in CurrentPanel.Controls.Find( "ucti" + ControlKey, false ) ) {
                 ActiveGuidanceItem = ctl;
                 ActiveGuidanceItem.Show( );
+            }
+
+        }
+
+        private void CheckPrevNextButtons( TreeView tv, Button btnN, Button btnP ) {
+            //Check to see if the 'Previous' button should be enabled.
+            if( tv.SelectedNode != null || ( tv.SelectedNode != null && tv.SelectedNode.PrevNode == null && tv.SelectedNode.Parent.PrevNode != null ) ) {
+                btnP.Enabled = true;
+            }
+            //Check to see if the next button should be enabled.
+            if( tv.SelectedNode != null || ( tv.SelectedNode != null &&  tv.SelectedNode.NextNode == null && tv.SelectedNode.Parent.NextNode != null ) ) {
+                btnN.Enabled = true;
             }
         }
 

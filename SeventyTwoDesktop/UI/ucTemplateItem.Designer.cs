@@ -39,6 +39,7 @@
             this.Name = "ucTemplateItem";
             this.Size = new System.Drawing.Size(0, 0);
             this.Load += new System.EventHandler(this.ucTemplateItem_Load);
+            this.VisibleChanged += new System.EventHandler(this.ucTemplateItem_VisibleChanged);
             this.ResumeLayout(false);
 
         }

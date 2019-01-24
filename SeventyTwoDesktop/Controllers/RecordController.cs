@@ -12,7 +12,7 @@ namespace SeventyTwoDesktop.Controllers
 
     public enum RecordStyleEnum { Template, Simple }
 
-    class RecordController {
+    public class RecordController {
 
         private TemplateController TC { get; set; }
         private string TemplateName { get; set; }
@@ -21,6 +21,8 @@ namespace SeventyTwoDesktop.Controllers
         public string RecordGUID { get { return _RecordGUID; } }
         public string ProfileGUID { get; set; }
         public List<string> OrderedTemplateKeys { get { return TC.GetTemplateKeysInOrder( ); } }
+
+        public event EventHandler RecordItemUpdated;
 
         //This is a base constructor
         public RecordController() {
@@ -118,6 +120,10 @@ namespace SeventyTwoDesktop.Controllers
             return TC.GetTemplateItems( );
         }
 
+        public Models.TemplateItem GetTemplateItem( string key ) {
+            return TC.GetTemplateItem( key );
+        }
+
         public string GetGroupDisplayName( string groupKey ) {
             return TC.GetGroupDisplayName( groupKey );
         }
@@ -175,8 +181,23 @@ namespace SeventyTwoDesktop.Controllers
         }
 
 
+        public string GetData( string Key ) {
+            string retVal = "";
+
+            try {
+                if( RecordData.ContainsKey( Key ) ) {
+                    retVal = RecordData[ Key ].ToString( );
+                }
+            } catch ( Exception exc ) {
+                Models.Log.writeToLog( exc );
+            }
+
+            return retVal;
+        }
+
         public RecordDataUpdate UpdateData( string Key, string Value) {
             RecordDataUpdate retVal = new RecordDataUpdate();
+            retVal.AdditionalValuesUpdated = new Dictionary<string, string>( );
             try {
 
                 RecordData[ Key ] = Value;
@@ -190,52 +211,54 @@ namespace SeventyTwoDesktop.Controllers
                                 DateTime calcTime = DateTime.Parse( Value );
                                 switch ( calcDef["units"].ToString()) {
                                     case "s":
-                                        calcTime.AddSeconds( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        calcTime = calcTime.AddSeconds( int.Parse( calcDef[ "value" ].ToString( ) ) );
                                         break;
                                     case "m":
-                                        calcTime.AddMinutes( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        calcTime = calcTime.AddMinutes( int.Parse( calcDef[ "value" ].ToString( ) ) );
                                         break;
                                     case "h":
-                                        calcTime.AddHours( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        calcTime = calcTime.AddHours( int.Parse( calcDef[ "value" ].ToString( ) ) );
                                         break;
                                     case "d":
-                                        calcTime.AddDays( double.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        calcTime = calcTime.AddDays( double.Parse( calcDef[ "value" ].ToString( ) ) );
                                         break;
                                     case "M":
-                                        calcTime.AddMonths( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        calcTime = calcTime.AddMonths( int.Parse( calcDef[ "value" ].ToString( ) ) );
                                         break;
                                     case "y":
-                                        calcTime.AddYears( int.Parse( calcDef[ "value" ].ToString( ) ) );
+                                        calcTime = calcTime.AddYears( int.Parse( calcDef[ "value" ].ToString( ) ) );
                                         break;
                                 }
-                                RecordData[ calcDef[ "destination_field" ] ] = calcTime.ToString( "dd-MMM-yyyy" );
+                                RecordData[ calcDef[ "destination_field" ].ToString() ] = calcTime.ToString( "dd-MMM-yyyy" );
+                                retVal.AdditionalValuesUpdated.Add( calcDef[ "destination_field" ].ToString( ), calcTime.ToString( "dd-MMM-yyyy" ) );
                             }
                             break;
                         case "nowdiff":
                             
                             TimeSpan diff = ( DateTime.Now - DateTime.Parse( Value ) );
-                           
+                            string targetVal = "0";
                             switch( calcDef[ "units" ].ToString( ) ) {
                                 case "s":
-                                    RecordData[ calcDef[ "destination_field" ].ToString() ] = Math.Floor( diff.TotalSeconds );
+                                    targetVal = Math.Floor( diff.TotalSeconds ).ToString();
                                     break;
                                 case "m":
-                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Floor( diff.TotalMinutes );
+                                    targetVal = Math.Floor( diff.TotalMinutes ).ToString( );
                                     break;
                                 case "h":
-                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Floor( diff.TotalHours );
+                                    targetVal = Math.Floor( diff.TotalHours ).ToString( );
                                     break;
                                 case "d":
-                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Floor( diff.TotalDays );
+                                    targetVal = Math.Floor( diff.TotalDays ).ToString( );
                                     break;
                                 case "M":
-                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Ceiling( ( decimal )diff.TotalDays / 30 );
+                                    targetVal = Math.Ceiling( ( decimal )diff.TotalDays / 30 ).ToString( );
                                     break;
                                 case "y":
-                                    RecordData[ calcDef[ "destination_field" ].ToString( ) ] = Math.Ceiling( ( decimal )diff.TotalDays / 365 );
+                                    targetVal = Math.Ceiling( ( decimal )diff.TotalDays / 365 ).ToString( );
                                     break;
                             }
-                            
+                            RecordData[ calcDef[ "destination_field" ].ToString( ) ] = targetVal;
+                            retVal.AdditionalValuesUpdated.Add( calcDef[ "destination_field" ].ToString( ), targetVal );
                             break;
                     }
                 }
