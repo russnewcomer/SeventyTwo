@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 namespace SeventyTwoDesktop
 {
 
-    public partial class ucTemplateItem : UserControl
+    public partial class CtlTemplateItem : UserControl
     {
         private TemplateItem _ti { get; set; }
         public Controllers.RecordController RecordInstance { get; set; }
@@ -41,7 +41,7 @@ namespace SeventyTwoDesktop
         public event EventHandler ItemValueChanged;
        
 
-        public ucTemplateItem()
+        public CtlTemplateItem()
         {
             InitializeComponent();
         }
@@ -362,10 +362,10 @@ namespace SeventyTwoDesktop
             this.ItemValueChanged( this, new TemplateItemEventArgs( optItem.Name, value ) );
         }
 
-        private void ucTemplateItem_Load( object sender, EventArgs e ) {
+        private void CtlTemplateItem_Load( object sender, EventArgs e ) {
             LoadData( );
         }
-        private void ucTemplateItem_VisibleChanged( object sender, EventArgs e ) {
+        private void CtlTemplateItem_VisibleChanged( object sender, EventArgs e ) {
             LoadData( );
         }
 

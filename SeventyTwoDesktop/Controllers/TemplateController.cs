@@ -10,13 +10,13 @@ namespace SeventyTwoDesktop.Controllers
 {
     class TemplateController {
         public string TemplateType { get; set; }
-        private JObject jsonTemplate { get; set; }
+        private JObject JsonTemplate { get; set; }
         private string _fileName { get; set; }
         private Template TemplateInstance { get; set; }
         private List<string> OrderedKeys { get; set; }
 
         public TemplateController( JObject _SourceTemplate ) {
-            jsonTemplate = _SourceTemplate;
+            JsonTemplate = _SourceTemplate;
         }
 
         public TemplateController( string templateTypeName ) {
@@ -35,7 +35,7 @@ namespace SeventyTwoDesktop.Controllers
             }
 
             string templateRawString = File.ReadAllText( _fileName );
-            jsonTemplate = JObject.Parse( templateRawString );
+            JsonTemplate = JObject.Parse( templateRawString );
 
             TemplateInstance = new Template( templateRawString );
 
@@ -44,11 +44,11 @@ namespace SeventyTwoDesktop.Controllers
         public bool ExportTemplateToFullRecordObject( ) {
             bool retVal = false;
             try {
-                string fileName = "export/" + jsonTemplate[ "template_guid" ].ToString( ) + ".json";
-                File.WriteAllText( fileName, JsonConvert.SerializeObject( jsonTemplate ) );
+                string fileName = "export/" + JsonTemplate[ "template_guid" ].ToString( ) + ".json";
+                File.WriteAllText( fileName, JsonConvert.SerializeObject( JsonTemplate ) );
                 retVal = true;
             } catch ( Exception err ) {
-                Models.Log.writeToLog( err );
+                Models.Log.WriteToLog( err );
             }
             return retVal;
         }
@@ -59,25 +59,26 @@ namespace SeventyTwoDesktop.Controllers
                 File.WriteAllText( fileNameToSaveFileTo, JsonConvert.SerializeObject( TemplateToSimpleRecordObject() ) );
                 retVal = true;
             } catch( Exception err ) {
-                Models.Log.writeToLog( err );
+                Models.Log.WriteToLog( err );
             }
             return retVal;
         }
 
         public JObject TemplateToSimpleRecordObject( ) {
-            JObject recordData = new JObject( );
-            
-            //This is the basic stuff
-            recordData[ "type" ]= jsonTemplate[ "type" ];
-            recordData[ "profile_guid" ] = jsonTemplate[ "profile_guid" ];
-            recordData[ "template_guid" ] = jsonTemplate[ "template_guid" ];
-            recordData[ "record_guid" ] = Guid.NewGuid( ).ToString( );
-            recordData[ "date_entered" ] = jsonTemplate[ "date_entered" ];
-            recordData[ "notes" ] = jsonTemplate[ "notes" ];
-            recordData[ "record_attachment" ] = jsonTemplate[ "record_attachment" ];
+            JObject recordData = new JObject {
+
+                //This is the basic stuff
+                [ "type" ] = JsonTemplate[ "type" ],
+                [ "profile_guid" ] = JsonTemplate[ "profile_guid" ],
+                [ "template_guid" ] = JsonTemplate[ "template_guid" ],
+                [ "record_guid" ] = Guid.NewGuid( ).ToString( ),
+                [ "date_entered" ] = JsonTemplate[ "date_entered" ],
+                [ "notes" ] = JsonTemplate[ "notes" ],
+                [ "record_attachment" ] = JsonTemplate[ "record_attachment" ]
+            };
 
 
-            JObject items = ( JObject )jsonTemplate[ "items" ];
+            JObject items = ( JObject )JsonTemplate[ "items" ];
             foreach( KeyValuePair<string, JToken> property in items ) {
                 //Write the record data
                 string groupName = items[ property.Key ][ "group" ].ToString();
@@ -109,14 +110,14 @@ namespace SeventyTwoDesktop.Controllers
             if( OrderedKeys == null ) {
                 OrderedKeys = new List<string>( );
 
-                JObject items = ( JObject )jsonTemplate[ "items" ];
+                JObject items = ( JObject )JsonTemplate[ "items" ];
                 try
                 {
                     foreach( KeyValuePair<string, JToken> property in items )
                     {
                         OrderedKeys.Add( property.Key );
                     }
-                } catch( Exception er ) { Log.writeToLog( er ); }
+                } catch( Exception er ) { Log.WriteToLog( er ); }
 
             }
             return OrderedKeys;

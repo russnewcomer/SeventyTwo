@@ -1,6 +1,6 @@
 ﻿namespace SeventyTwoDesktop
 {
-    partial class frmMain
+    partial class FrmMain
     {
         /// <summary>
         /// Required designer variable.
@@ -79,7 +79,7 @@
             this.btnNewProfile.TabIndex = 8;
             this.btnNewProfile.Text = "Create &New Profile";
             this.btnNewProfile.UseVisualStyleBackColor = false;
-            this.btnNewProfile.Click += new System.EventHandler(this.btnNewProfile_Click);
+            this.btnNewProfile.Click += new System.EventHandler(this.BtnNewProfile_Click);
             // 
             // grpExisting
             // 
@@ -115,7 +115,7 @@
             this.btnSearch.TabIndex = 11;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
             // 
             // lblSearchByDate
             // 

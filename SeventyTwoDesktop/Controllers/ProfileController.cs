@@ -52,9 +52,10 @@ namespace SeventyTwoDesktop.Controllers
         {
             //Set the guid
             string guid = Guid.NewGuid().ToString();
-            Profile = new ProfileItem();
-            Profile.guid = guid;
-            Profile.name = "New Profile";
+            Profile = new ProfileItem {
+                guid = guid,
+                name = "New Profile"
+            };
    
             return guid;
 
@@ -81,12 +82,12 @@ namespace SeventyTwoDesktop.Controllers
             catch (Exception errMsg)
             {
                 //Figure out how to log these somewhere.
-                Log.writeToLog(errMsg);
+                Log.WriteToLog(errMsg);
                 Profile.guid = "";
             }
         }
 
-        public void saveProfileData()
+        public void SaveProfileData()
         {
             try
             {
@@ -103,7 +104,7 @@ namespace SeventyTwoDesktop.Controllers
             catch (Exception errMsg)
             {
                 //Figure out how to log these somewhere.
-                Log.writeToLog(errMsg);
+                Log.WriteToLog(errMsg);
             }
         }
 
@@ -122,7 +123,7 @@ namespace SeventyTwoDesktop.Controllers
                 }
             } catch( Exception errMsg ) {
                 //Figure out how to log these somewhere.
-                Log.writeToLog( errMsg );
+                Log.WriteToLog( errMsg );
             }
             return recordData;
         }

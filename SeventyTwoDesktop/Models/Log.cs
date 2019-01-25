@@ -9,7 +9,7 @@ namespace SeventyTwoDesktop.Models
 {
     public static class Log
     {
-        public static void writeToLog( Exception exc )
+        public static void WriteToLog( Exception exc )
         {
             try
             {

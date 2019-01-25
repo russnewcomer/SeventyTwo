@@ -27,7 +27,7 @@ namespace SeventyTwoDesktop
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+            Application.Run(new FrmMain());
         }
 
         static void ConfirmDirectory( string directoryName ) {

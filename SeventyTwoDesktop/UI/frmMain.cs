@@ -12,22 +12,22 @@ using SeventyTwoDesktop.Models;
 
 namespace SeventyTwoDesktop
 {
-    public partial class frmMain : Form
+    public partial class FrmMain : Form
     {
 
-        private ucTemplateItem ActiveGuidanceItem { get; set; }
+        private CtlTemplateItem ActiveGuidanceItem { get; set; }
         private Dictionary<string, ProfileController> LoadedProfiles { get; set; } = new Dictionary<string, ProfileController>( );
         private List<KeyValuePair<string, string>> recordTypes = ProfileController.GetRecordTypes( );
-        public frmMain() {
+        public FrmMain() {
             InitializeComponent();
         }
 
 
-        private void btnSearch_Click(object sender, EventArgs e) {
+        private void BtnSearch_Click(object sender, EventArgs e) {
            
         }
 
-        private void btnNewProfile_Click( object sender, EventArgs e ) {
+        private void BtnNewProfile_Click( object sender, EventArgs e ) {
             string guidToLoad = CreateNewProfile( );
             tabMain.TabPages.Add( CreateProfileTab( guidToLoad ) );
         }
@@ -40,7 +40,7 @@ namespace SeventyTwoDesktop
                 currentGUID = np.InitializeProfile( );
                 LoadedProfiles.Add( currentGUID, np );
 
-            } catch ( Exception exc ) { Log.writeToLog( exc ); }
+            } catch ( Exception exc ) { Log.WriteToLog( exc ); }
             return currentGUID;
         }
 
@@ -191,7 +191,7 @@ namespace SeventyTwoDesktop
                     } else {
                         //Otherwise, put the index back.
                     }
-                } catch ( Exception exc ) { Log.writeToLog( exc ); }
+                } catch ( Exception exc ) { Log.WriteToLog( exc ); }
             };
 
             tvTemplateItems.NodeMouseClick += delegate ( object o, TreeNodeMouseClickEventArgs e ) {
@@ -252,7 +252,7 @@ namespace SeventyTwoDesktop
                 foreach( KeyValuePair<string, TemplateItem> ti in tilist )
                 {
 
-                    ucTemplateItem guidanceItem = new ucTemplateItem {
+                    CtlTemplateItem guidanceItem = new CtlTemplateItem {
                         OutlineMode = false,
                         Name = "ucti" + ti.Value.Name,
                         RecordInstance = rc,
@@ -288,7 +288,7 @@ namespace SeventyTwoDesktop
                 }
 
 
-            } catch ( Exception exc ) { Models.Log.writeToLog( exc ); }
+            } catch ( Exception exc ) { Models.Log.WriteToLog( exc ); }
         }
 
 
@@ -298,7 +298,7 @@ namespace SeventyTwoDesktop
             Previous.Show( );
             Next.Show( );
 
-            foreach( ucTemplateItem ctl in CurrentPanel.Controls.Find( "ucti" + ControlKey, false ) ) {
+            foreach( CtlTemplateItem ctl in CurrentPanel.Controls.Find( "ucti" + ControlKey, false ) ) {
                 ActiveGuidanceItem = ctl;
                 ActiveGuidanceItem.Show( );
             }

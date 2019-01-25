@@ -22,8 +22,6 @@ namespace SeventyTwoDesktop.Controllers
         public string ProfileGUID { get; set; }
         public List<string> OrderedTemplateKeys { get { return TC.GetTemplateKeysInOrder( ); } }
 
-        public event EventHandler RecordItemUpdated;
-
         //This is a base constructor
         public RecordController() {
 
@@ -60,7 +58,7 @@ namespace SeventyTwoDesktop.Controllers
                 TC = new TemplateController( recordJObj[ "type" ].ToString( ) );
             } catch( Exception errMsg ) {
                 //Log Exception
-                Models.Log.writeToLog( errMsg );
+                Models.Log.WriteToLog( errMsg );
                 //Throw it up to the constructor;
                 throw errMsg;
             }
@@ -87,7 +85,7 @@ namespace SeventyTwoDesktop.Controllers
                 retVal = true;
             } catch( Exception errMsg ) {
                 //Log Exception;
-                Models.Log.writeToLog( errMsg );
+                Models.Log.WriteToLog( errMsg );
             }
             return retVal;
         }
@@ -107,7 +105,7 @@ namespace SeventyTwoDesktop.Controllers
             } catch( Exception errMsg )
             {
                 //Log Exception;
-                Models.Log.writeToLog( errMsg );
+                Models.Log.WriteToLog( errMsg );
             }
             return retVal;
         }
@@ -132,7 +130,7 @@ namespace SeventyTwoDesktop.Controllers
             try {
                 _RecordGUID = Guid.NewGuid( ).ToString( );
                 RecordData = new JObject( );
-            } catch ( Exception er ) { Models.Log.writeToLog( er ); }
+            } catch ( Exception er ) { Models.Log.WriteToLog( er ); }
             return _RecordGUID;
         }
 
@@ -175,7 +173,7 @@ namespace SeventyTwoDesktop.Controllers
            
             } catch(Exception errMsg ) {
                 //Figure out how to log these somewhere.
-                Models.Log.writeToLog(errMsg );
+                Models.Log.WriteToLog(errMsg );
             }
             */
         }
@@ -189,15 +187,17 @@ namespace SeventyTwoDesktop.Controllers
                     retVal = RecordData[ Key ].ToString( );
                 }
             } catch ( Exception exc ) {
-                Models.Log.writeToLog( exc );
+                Models.Log.WriteToLog( exc );
             }
 
             return retVal;
         }
 
         public RecordDataUpdate UpdateData( string Key, string Value) {
-            RecordDataUpdate retVal = new RecordDataUpdate();
-            retVal.AdditionalValuesUpdated = new Dictionary<string, string>( );
+            RecordDataUpdate retVal = new RecordDataUpdate {
+                AdditionalValuesUpdated = new Dictionary<string, string>( )
+            };
+
             try {
 
                 RecordData[ Key ] = Value;
@@ -265,7 +265,7 @@ namespace SeventyTwoDesktop.Controllers
 
                
                 retVal.UpdateSuccess = true;
-            } catch ( Exception er ) { Models.Log.writeToLog( er ); }
+            } catch ( Exception er ) { Models.Log.WriteToLog( er ); }
             return retVal;
         }
     }

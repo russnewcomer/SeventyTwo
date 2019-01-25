@@ -67,7 +67,7 @@ namespace SeventyTwoDesktop.Models
                 retVal.Add( Name, item );
 
             } catch (Exception errMsg) {
-                Models.Log.writeToLog( errMsg );
+                Models.Log.WriteToLog( errMsg );
             }
             return retVal;
         }

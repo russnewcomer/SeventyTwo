@@ -55,11 +55,11 @@
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TemplateItem.cs" />
-    <Compile Include="UI\frmMain.cs">
+    <Compile Include="UI\FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
+    <Compile Include="UI\FrmMain.Designer.cs">
+      <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Log.cs" />
     <Compile Include="Models\ProfileItem.cs" />
@@ -67,20 +67,20 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Search.cs" />
-    <Compile Include="UI\ucPermanentRecord.cs">
+    <Compile Include="UI\CtlPermanentRecord.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\ucPermanentRecord.Designer.cs">
-      <DependentUpon>ucPermanentRecord.cs</DependentUpon>
+    <Compile Include="UI\CtlPermanentRecord.Designer.cs">
+      <DependentUpon>CtlPermanentRecord.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ucTemplateItem.cs">
+    <Compile Include="UI\CtlTemplateItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\ucTemplateItem.Designer.cs">
-      <DependentUpon>ucTemplateItem.cs</DependentUpon>
+    <Compile Include="UI\CtlTemplateItem.Designer.cs">
+      <DependentUpon>CtlTemplateItem.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\frmMain.resx">
-      <DependentUpon>frmMain.cs</DependentUpon>
+    <EmbeddedResource Include="UI\FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -91,11 +91,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\ucPermanentRecord.resx">
-      <DependentUpon>ucPermanentRecord.cs</DependentUpon>
+    <EmbeddedResource Include="UI\CtlPermanentRecord.resx">
+      <DependentUpon>CtlPermanentRecord.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\ucTemplateItem.resx">
-      <DependentUpon>ucTemplateItem.cs</DependentUpon>
+    <EmbeddedResource Include="UI\CtlTemplateItem.resx">
+      <DependentUpon>CtlTemplateItem.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

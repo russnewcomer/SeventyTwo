@@ -1,6 +1,6 @@
 ﻿namespace SeventyTwoDesktop
 {
-    partial class ucTemplateItem
+    partial class CtlTemplateItem
     {
         /// <summary> 
         /// Required designer variable.
@@ -38,8 +38,8 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Name = "ucTemplateItem";
             this.Size = new System.Drawing.Size(0, 0);
-            this.Load += new System.EventHandler(this.ucTemplateItem_Load);
-            this.VisibleChanged += new System.EventHandler(this.ucTemplateItem_VisibleChanged);
+            this.Load += new System.EventHandler(this.CtlTemplateItem_Load);
+            this.VisibleChanged += new System.EventHandler(this.CtlTemplateItem_VisibleChanged);
             this.ResumeLayout(false);
 
         }

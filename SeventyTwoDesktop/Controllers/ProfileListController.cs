@@ -22,7 +22,7 @@ namespace SeventyTwoDesktop.Controllers
             }
             catch (Exception errMsg)
             {
-                Log.writeToLog(errMsg);
+                Log.WriteToLog(errMsg);
                 ProfileList = new List<ProfileListItem>();
             }
             return retVal;
@@ -48,7 +48,7 @@ namespace SeventyTwoDesktop.Controllers
             catch (Exception errMsg)
             {
                 //Figure out how to log these somewhere.
-                Log.writeToLog(errMsg);
+                Log.WriteToLog(errMsg);
             }
             return retVal;
         }
@@ -63,7 +63,7 @@ namespace SeventyTwoDesktop.Controllers
             catch (Exception errMsg)
             {
                 //Figure out how to log these somewhere.
-                Log.writeToLog(errMsg);
+                Log.WriteToLog(errMsg);
             }
             return retVal;
         }
@@ -84,7 +84,7 @@ namespace SeventyTwoDesktop.Controllers
             catch (Exception errMsg)
             {
                 //Figure out how to log these somewhere.
-                Log.writeToLog(errMsg);
+                Log.WriteToLog(errMsg);
             }
             return retVal;
         }
