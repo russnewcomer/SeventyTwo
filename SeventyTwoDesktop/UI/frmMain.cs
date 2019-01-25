@@ -63,7 +63,7 @@ namespace SeventyTwoDesktop
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            ucPermanentRecord permRecordControl = new ucPermanentRecord {
+            CtlPermanentRecord permRecordControl = new CtlPermanentRecord {
                 Name = "permRecordControl",
                 Top = 5,
                 Left = 5,
@@ -229,7 +229,7 @@ namespace SeventyTwoDesktop
             try {
 
                 //Get references to the controls.
-                ucPermanentRecord permRecordControl = ( ucPermanentRecord )curTabPage.Controls.Find( "permRecordControl", false ).First<Control>( x=> true );
+                CtlPermanentRecord permRecordControl = ( CtlPermanentRecord )curTabPage.Controls.Find( "permRecordControl", false ).First<Control>( x=> true );
                 TreeView tvTemplateItems = ( TreeView )curTabPage.Controls.Find( "tvTemplateItems", false ).First<Control>( x => true );
                 Panel pnlGuidanceControls = ( Panel )curTabPage.Controls.Find( "pnlGuidanceControls", false ).First<Control>( x => true );
 
@@ -249,49 +249,48 @@ namespace SeventyTwoDesktop
 
                 Dictionary<string, int> dStrIntNodeIndex = new Dictionary<string, int>( );
 
-                foreach( KeyValuePair<string, TemplateItem> ti in tilist )
-                {
+                foreach( KeyValuePair<string, TemplateItem> ti in tilist ) {
+                    if( ti.Value.SubrecordItems.Count == 0 ) {
+                        CtlTemplateItem guidanceItem = new CtlTemplateItem {
+                            OutlineMode = false,
+                            Name = "ucti" + ti.Value.Name,
+                            RecordInstance = rc,
+                            Visible = false
+                        };
+                        guidanceItem.ItemValueChanged += delegate ( object o, EventArgs e ) {
+                            //MessageBox.Show( guidanceItem.ItemValue );
+                            TemplateItemEventArgs tiea = ( TemplateItemEventArgs )e;
+                            string displayText = tiea.Value;
 
-                    CtlTemplateItem guidanceItem = new CtlTemplateItem {
-                        OutlineMode = false,
-                        Name = "ucti" + ti.Value.Name,
-                        RecordInstance = rc,
-                        Visible = false
-                    };
-                    guidanceItem.ItemValueChanged += delegate ( object o, EventArgs e ) {
-                        //MessageBox.Show( guidanceItem.ItemValue );
-                        TemplateItemEventArgs tiea = ( TemplateItemEventArgs )e;
-                        string displayText = tiea.Value;
-                        
-                        TemplateItem displayItem = rc.GetTemplateItem( tiea.Key );
+                            TemplateItem displayItem = rc.GetTemplateItem( tiea.Key );
 
-                        //Terning right around... to show yes/no instead of True/False
-                        displayText = ( displayText == "true" ) ? "Yes" : ( displayText == "false" ) ? "No" : displayText;
-                        
-                        tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ tiea.Key ].Text =  displayItem.Title + " - " + displayText;
-                    };
+                            //Terning right around... to show yes/no instead of True/False
+                            displayText = ( displayText == "true" ) ? "Yes" : ( displayText == "false" ) ? "No" : displayText;
 
-                    guidanceItem.LoadTemplateItem( ti.Value );
+                            tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ tiea.Key ].Text = displayItem.Title + " - " + displayText;
+                        };
 
-                    pnlGuidanceControls.Controls.Add( guidanceItem );
+                        guidanceItem.LoadTemplateItem( ti.Value );
 
+                        pnlGuidanceControls.Controls.Add( guidanceItem );
+                    } else {
+                        //This should probably create a new form and pop it up.  There's certainly a better way, but I'm not thinking of it right now.
 
-                    if( !dStrIntNodeIndex.ContainsKey( ti.Value.Group ) )
-                    {
+                    }
+
+                    if( !dStrIntNodeIndex.ContainsKey( ti.Value.Group ) ) {
                         tvTemplateItems.Nodes.Add( rc.GetGroupDisplayName( ti.Value.Group ) );
                         dStrIntNodeIndex.Add( ti.Value.Group, tvTemplateItems.Nodes.Count - 1 );
                     }
                     tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes.Add( ti.Value.Name, ti.Value.Title );
-
-
-
+                    
                 }
 
 
             } catch ( Exception exc ) { Models.Log.WriteToLog( exc ); }
         }
 
-
+        
         private void EnableGuidanceItem( string ControlKey, Panel CurrentPanel, Button Next, Button Previous ) {
             
             ActiveGuidanceItem?.Hide( );

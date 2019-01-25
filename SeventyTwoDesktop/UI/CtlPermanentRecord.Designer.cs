@@ -1,6 +1,6 @@
 ﻿namespace SeventyTwoDesktop
 {
-    partial class ucPermanentRecord
+    partial class CtlPermanentRecord
     {
         /// <summary> 
         /// Required designer variable.
@@ -75,7 +75,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(270, 23);
             this.txtName.TabIndex = 1;
-            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
+            this.txtName.TextChanged += new System.EventHandler(this.TxtName_TextChanged);
             // 
             // txtAddress
             // 
@@ -181,7 +181,7 @@
             this.btnSaveChanges.TabIndex = 8;
             this.btnSaveChanges.Text = "Save Changes";
             this.btnSaveChanges.UseVisualStyleBackColor = true;
-            this.btnSaveChanges.Click += new System.EventHandler(this.btnSaveChanges_Click);
+            this.btnSaveChanges.Click += new System.EventHandler(this.BtnSaveChanges_Click);
             // 
             // txtNumber
             // 
@@ -243,7 +243,7 @@
             this.Controls.Add(this.lblPermRecord);
             this.Name = "ucPermanentRecord";
             this.Size = new System.Drawing.Size(400, 275);
-            this.Load += new System.EventHandler(this.ucPermanentRecord_Load);
+            this.Load += new System.EventHandler(this.CtlPermanentRecord_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

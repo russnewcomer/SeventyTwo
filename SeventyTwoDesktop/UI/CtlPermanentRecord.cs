@@ -11,12 +11,12 @@ using SeventyTwoDesktop.Controllers;
 
 namespace SeventyTwoDesktop
 {
-    public partial class ucPermanentRecord : UserControl
+    public partial class CtlPermanentRecord : UserControl
     {
 
         private ProfileController ProfileInfo { get; set; } = new ProfileController();
 
-        public ucPermanentRecord()
+        public CtlPermanentRecord()
         {
             InitializeComponent();
             ClearData();
@@ -26,18 +26,18 @@ namespace SeventyTwoDesktop
 
         public event EventHandler ProfileSaved;
 
-        private void txtName_TextChanged(object sender, EventArgs e)
+        private void TxtName_TextChanged(object sender, EventArgs e)
         {
             ProfileInfo.Profile.name = txtName.Text;
             this.ProfileNameChange?.Invoke( this, e );
         }
 
-        private void ucPermanentRecord_Load(object sender, EventArgs e)
+        private void CtlPermanentRecord_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void btnSaveChanges_Click(object sender, EventArgs e)
+        private void BtnSaveChanges_Click(object sender, EventArgs e)
         {
             //Naive update.
             SaveData();
@@ -66,7 +66,7 @@ namespace SeventyTwoDesktop
             ProfileInfo.Profile.phonenumber = txtPhone.Text;
             ProfileInfo.Profile.gender = cbGender.ValueMember.ToString();
             ProfileInfo.Profile.birthdate = dtpBirthDate.Value;
-            ProfileInfo.saveProfileData();
+            ProfileInfo.SaveProfileData();
         }
         public void ClearData()
         {

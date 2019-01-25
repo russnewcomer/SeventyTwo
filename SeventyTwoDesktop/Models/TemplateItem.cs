@@ -20,6 +20,9 @@ namespace SeventyTwoDesktop.Models
         public string ShowOn { get; set; }
         public string Value { get; set; }
         public List<TemplateItem> OptionalFields { get; set; }
+        public string Nature { get; set; }
+        public Dictionary<string, TemplateItem> SubrecordItems{ get; set; }
+        public JArray Subrecords { get; set; }
         public JArray Calculation { get; set; }
 
         public TemplateItem( ) {
@@ -45,6 +48,14 @@ namespace SeventyTwoDesktop.Models
                     OptionalFields.Add( new TemplateItem( property.Value ) );
                 }
             }
+            Nature = ti[ "nature" ] != null ? ti[ "nature" ].ToString( ) : "";
+            Subrecords = ti[ "subrecords" ] != null ? ( JArray )ti[ "subrecords" ] : new JArray( );
+            SubrecordItems = new Dictionary<string,TemplateItem>( );
+            if( ti[ "subrecord_items" ] != null ) {
+                foreach( KeyValuePair<string, JToken> property in ( JObject )ti[ "subrecord_items" ] ) {
+                    SubrecordItems.Add( property.Key, new TemplateItem( property.Value ) );
+                }
+            }
             Calculation = ti[ "calculation" ] != null ? ( JArray ) ti[ "calculation" ] : new JArray( );
         }
 
@@ -62,6 +73,9 @@ namespace SeventyTwoDesktop.Models
                 item.Add( "value", Value );
                 item.Add( "dropdown_options", new JArray( DropDownOptions ) );
                 item.Add( "optional_fields", new JObject( OptionalFields ) );
+                item.Add( "value", Value );
+                item.Add( "subrecords", new JArray( Subrecords ) );
+                item.Add( "subrecord_items", new JObject( SubrecordItems ) );
                 item.Add( "calculation", new JArray( Calculation ) );
 
                 retVal.Add( Name, item );
