@@ -15,17 +15,13 @@ namespace SeventyTwoDesktop.Controllers
         //Static Methods and Properties
         private static List<KeyValuePair<string, string>> RecordTypes { get; set; }
 
-        public static List<KeyValuePair<string, string>> GetRecordTypes( bool refreshRecordTypes = false )
-        {
-            if( RecordTypes == null || refreshRecordTypes )
-            {
+        public static List<KeyValuePair<string, string>> GetRecordTypes( bool refreshRecordTypes = false ) {
+            if( RecordTypes == null || refreshRecordTypes ) {
                 RecordTypes = new List<KeyValuePair<string, string>>( );
                 JArray templates = JArray.Parse( File.ReadAllText( "config/templates.json" ) );
-                foreach( JToken x in templates )
-                {
-                    foreach( KeyValuePair<string, JToken> property in ( JObject )x )
-                    {
-                        RecordTypes.Add( new KeyValuePair<string, string>( property.Key, property.Value.ToString( ) ) );
+                foreach( JToken x in templates ) {
+                    foreach( KeyValuePair<string, JToken> property in ( JObject )x ) {
+                        RecordTypes.Add (new KeyValuePair<string, string>( property.Key, property.Value.ToString( ) ) );
                     }
                 }
             }

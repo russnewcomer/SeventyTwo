@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SeventyTwoDesktop.Controllers;
 using SeventyTwoDesktop.Models;
+using Newtonsoft.Json.Linq;
 
 namespace SeventyTwoDesktop
 {
@@ -17,7 +18,10 @@ namespace SeventyTwoDesktop
 
         private CtlTemplateItem ActiveGuidanceItem { get; set; }
         private Dictionary<string, ProfileController> LoadedProfiles { get; set; } = new Dictionary<string, ProfileController>( );
-        private List<KeyValuePair<string, string>> recordTypes = ProfileController.GetRecordTypes( );
+        private List<KeyValuePair<string, string>> RecordTypes = ProfileController.GetRecordTypes( );
+        private Dictionary< string, Dictionary< string, TemplateItem > > SubrecordTemplates { get; set; }
+
+
         public FrmMain() {
             InitializeComponent();
         }
@@ -180,7 +184,7 @@ namespace SeventyTwoDesktop
             
             btnCreateNewRecord.Click += delegate ( object o, EventArgs e ) {
                 try {
-                    string templateType = recordTypes.Find( x => x.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key;
+                    string templateType = RecordTypes.Find( x => x.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key;
                     DialogResult result = MessageBox.Show( "Do you want to create a new " + cmbNewRecord.SelectedItem.ToString( ) + " record?", "Confirmation", MessageBoxButtons.YesNo );
                     if( result == DialogResult.Yes ) {
                         //If we confirm we want to create, create a new one
@@ -195,17 +199,23 @@ namespace SeventyTwoDesktop
             };
 
             tvTemplateItems.NodeMouseClick += delegate ( object o, TreeNodeMouseClickEventArgs e ) {
-                if( e.Node.Name != "" ) {
+                if( e.Node.Name != "" && !e.Node.Name.Contains( "tv_subrecord_add_" ) ) {
                     //MessageBox.Show( e.Node.Name );
                     EnableGuidanceItem( e.Node.Name, pnlGuidanceControls, btnPreviousGuidanceItem, btnNextGuidanceItem );
                     CheckPrevNextButtons( tvTemplateItems, btnNextGuidanceItem, btnPreviousGuidanceItem );
+                } else if( e.Node.Name != "" && e.Node.Name.Contains( "tv_subrecord_add_" ) ) {
+                    //Pop up FrmSubRecord instance with this in it.
+                    UI.FrmSubRecord frmSub = new UI.FrmSubRecord( );
+                    string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
+                    frmSub.LoadTemplate( SubrecordTemplates[e.Node.Name], LoadedProfiles[ tabPageToCreate.Name].Records[ curRecordGuid ]   );
+                    frmSub.ShowDialog( );
                 }
             };
             
 
             //Loading items
             cmbNewRecord.Items.Clear( );
-            foreach( KeyValuePair<string, string> record in recordTypes ) {
+            foreach( KeyValuePair<string, string> record in RecordTypes ) {
                 cmbNewRecord.Items.Add( record.Value );
             };
 
@@ -229,7 +239,7 @@ namespace SeventyTwoDesktop
             try {
 
                 //Get references to the controls.
-                CtlPermanentRecord permRecordControl = ( CtlPermanentRecord )curTabPage.Controls.Find( "permRecordControl", false ).First<Control>( x=> true );
+                CtlPermanentRecord permRecordControl = ( CtlPermanentRecord )curTabPage.Controls.Find( "permRecordControl", false ).First<Control>( x => true );
                 TreeView tvTemplateItems = ( TreeView )curTabPage.Controls.Find( "tvTemplateItems", false ).First<Control>( x => true );
                 Panel pnlGuidanceControls = ( Panel )curTabPage.Controls.Find( "pnlGuidanceControls", false ).First<Control>( x => true );
 
@@ -238,8 +248,8 @@ namespace SeventyTwoDesktop
 
 
 
-                RecordController rc = new RecordController( "pregnancy_permanent" );
-
+                //RecordController rc = new RecordController( "pregnancy_permanent" );
+                RecordController rc = new RecordController( recordType );
 
                 string currentRecordGUID = rc.RecordGUID;
                 rc.ProfileGUID = profileGUID;
@@ -249,7 +259,24 @@ namespace SeventyTwoDesktop
 
                 Dictionary<string, int> dStrIntNodeIndex = new Dictionary<string, int>( );
 
+                //Clear out the subrecord templates.
+                SubrecordTemplates = new Dictionary<string, Dictionary<string, TemplateItem>>();
+                tvTemplateItems.Nodes.Clear( );
+
+                TreeNode rootNode = new TreeNode( RecordTypes.Find( x => x.Key == recordType ).Value ) {
+                    Name = currentRecordGUID
+                };
+                tvTemplateItems.Nodes.Add( rootNode );
+
                 foreach( KeyValuePair<string, TemplateItem> ti in tilist ) {
+
+                    //Create the node first.
+                    if( !dStrIntNodeIndex.ContainsKey( ti.Value.Group ) ) {
+                        rootNode.Nodes.Add( rc.GetGroupDisplayName( ti.Value.Group ) );
+                        dStrIntNodeIndex.Add( ti.Value.Group, rootNode.Nodes.Count - 1 );
+                    }
+                    rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes.Add( ti.Value.Name, ti.Value.Title );
+
                     if( ti.Value.SubrecordItems.Count == 0 ) {
                         CtlTemplateItem guidanceItem = new CtlTemplateItem {
                             OutlineMode = false,
@@ -267,7 +294,7 @@ namespace SeventyTwoDesktop
                             //Terning right around... to show yes/no instead of True/False
                             displayText = ( displayText == "true" ) ? "Yes" : ( displayText == "false" ) ? "No" : displayText;
 
-                            tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ tiea.Key ].Text = displayItem.Title + " - " + displayText;
+                            rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ tiea.Key ].Text = displayItem.Title + " - " + displayText;
                         };
 
                         guidanceItem.LoadTemplateItem( ti.Value );
@@ -276,14 +303,17 @@ namespace SeventyTwoDesktop
                     } else {
                         //This should probably create a new form and pop it up.  There's certainly a better way, but I'm not thinking of it right now.
 
-                    }
+                        SubrecordTemplates.Add( "tv_subrecord_add_" + ti.Key, ti.Value.SubrecordItems );
+                        rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ ti.Value.Name ].Nodes.Add( "tv_subrecord_add_" + ti.Key, "Add " + ti.Value.Title );
 
-                    if( !dStrIntNodeIndex.ContainsKey( ti.Value.Group ) ) {
-                        tvTemplateItems.Nodes.Add( rc.GetGroupDisplayName( ti.Value.Group ) );
-                        dStrIntNodeIndex.Add( ti.Value.Group, tvTemplateItems.Nodes.Count - 1 );
+                        int i = 0;
+                        foreach( JObject record in ti.Value.Subrecords ) {
+                            rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ ti.Value.Name ].Nodes.Add( i.ToString( ), record[ "name" ].ToString() );
+                            i++;
+                        }
+
                     }
-                    tvTemplateItems.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes.Add( ti.Value.Name, ti.Value.Title );
-                    
+                   
                 }
 
 

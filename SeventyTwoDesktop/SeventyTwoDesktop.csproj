@@ -55,6 +55,12 @@
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TemplateItem.cs" />
+    <Compile Include="UI\FrmSubRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FrmSubRecord.Designer.cs">
+      <DependentUpon>FrmSubRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\CtlTemplateItem.resx">
       <DependentUpon>CtlTemplateItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FrmSubRecord.resx">
+      <DependentUpon>FrmSubRecord.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

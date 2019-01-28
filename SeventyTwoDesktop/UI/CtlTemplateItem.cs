@@ -36,6 +36,7 @@ namespace SeventyTwoDesktop
         public string ItemGroup { get { return _group; } }
 
         private bool HasOptionalFields { get; set; } = false;
+        public bool HandleRecordDataUpdate { get; set; } = true;
 
         public event EventHandler OutlineModeClick;
         public event EventHandler ItemValueChanged;
@@ -75,7 +76,7 @@ namespace SeventyTwoDesktop
                         //Raise the textchanged event.
                         _ti.Value = cbMVC.Checked ? "true" : "false";
                         if( this.Focused ) {
-                            this.ItemValueChanged( o, e );
+                            HandleItemValueChange( _ti.Value );
                         }
                     };
                     
@@ -90,8 +91,8 @@ namespace SeventyTwoDesktop
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
                         _ti.Value = MainValueControl.Text;
-                        if( this.Focused ){
-                            this.ItemValueChanged( o, e );
+                        if( this.Focused ) {
+                            HandleItemValueChange( _ti.Value );
                         }
                     };
                     break;
@@ -109,7 +110,7 @@ namespace SeventyTwoDesktop
                         this.Height = MainValueControl.Height + 20;
                         _ti.Value = MainValueControl.Text;
                         if( this.Focused ) {
-                            this.ItemValueChanged( o, e );
+                            HandleItemValueChange( _ti.Value );
                         }
                     };
                     break;
@@ -128,7 +129,7 @@ namespace SeventyTwoDesktop
                     cmbMVC.SelectedIndexChanged += delegate ( object o, EventArgs e ) {
                         _ti.Value = cmbMVC.Items[ cmbMVC.SelectedIndex ].ToString();
                         if( this.Focused ) {
-                            this.ItemValueChanged( o, e );
+                            HandleItemValueChange( _ti.Value );
                         }
                     };
                     break;
@@ -145,7 +146,7 @@ namespace SeventyTwoDesktop
                         //Raise the textchanged event.
                         _ti.Value = MainValueControl.Text;
                         if( this.Focused ) {
-                            this.ItemValueChanged( o, e );
+                            HandleItemValueChange( _ti.Value );
                         }
                     };
                     break;
@@ -182,7 +183,7 @@ namespace SeventyTwoDesktop
                         //Raise the textchanged event.
                         _value = cbMVC.Checked ? "true" : "false";
                         //if( this.Focused ){
-                            this.ItemValueChanged( o, new TemplateItemEventArgs( _ti.Name, _value ) );
+                            HandleItemValueChange( _value );
                         //}
                     };
                     Button btnYes = new Button { Left = 10, Top = 40, Height = 100, Width = 150, Text = "YES", Font = new Font( "Segoe UI", 20 ) };
@@ -347,13 +348,15 @@ namespace SeventyTwoDesktop
 
         private void HandleItemValueChange( string value ) {
             _value = value;
-            //Do the update here.
-            Controllers.RecordDataUpdate rdu = RecordInstance.UpdateData( _ti.Name, _value );
-            if( rdu.UpdateSuccess ) {
-                this.ItemValueChanged( this, new TemplateItemEventArgs( _ti.Name, _value ) );
-                //Emit events if we changed more than one value (usually related to calculations)
-                foreach( KeyValuePair<string, string> avi in rdu.AdditionalValuesUpdated ) {
-                    this.ItemValueChanged( this, new TemplateItemEventArgs( avi.Key, avi.Value ) );
+            if( HandleRecordDataUpdate ) {
+                //Do the update here.
+                Controllers.RecordDataUpdate rdu = RecordInstance.UpdateData( _ti.Name, _value );
+                if( rdu.UpdateSuccess ) {
+                    this.ItemValueChanged( this, new TemplateItemEventArgs( _ti.Name, _value ) );
+                    //Emit events if we changed more than one value (usually related to calculations)
+                    foreach( KeyValuePair<string, string> avi in rdu.AdditionalValuesUpdated ) {
+                        this.ItemValueChanged( this, new TemplateItemEventArgs( avi.Key, avi.Value ) );
+                    }
                 }
             }
         }
