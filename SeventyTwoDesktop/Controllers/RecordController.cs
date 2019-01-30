@@ -135,7 +135,7 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         public JObject RenderDataToSimpleJSON( ) {
-            return RecordData;
+            return TC.TemplateToSimpleRecordObject();
             /*
               try {
 
@@ -183,14 +183,17 @@ namespace SeventyTwoDesktop.Controllers
             string retVal = "";
 
             try {
-                if( RecordData.ContainsKey( Key ) ) {
-                    retVal = RecordData[ Key ].ToString( );
-                }
+                retVal = TC.GetTemplateItemValue( Key );
             } catch ( Exception exc ) {
                 Models.Log.WriteToLog( exc );
             }
 
             return retVal;
+        }
+
+        public int UpdateSubRecord( string Key, JObject Value, int Index = -1 ) {
+            return TC.UpdateTemplateItemSubRecord( Key, Value, Index );
+
         }
 
         public RecordDataUpdate UpdateData( string Key, string Value) {
@@ -200,7 +203,9 @@ namespace SeventyTwoDesktop.Controllers
 
             try {
 
-                RecordData[ Key ] = Value;
+                TC.UpdateTemplateItemValue( Key, Value );
+
+
                 //Check to see if I need to do a calculation
                 Models.TemplateItem ti = TC.GetTemplateItem( Key );
                 for( int i = 0; i < ti.Calculation.Count; i++ ) {

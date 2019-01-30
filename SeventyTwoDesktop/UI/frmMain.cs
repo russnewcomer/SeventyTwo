@@ -208,7 +208,10 @@ namespace SeventyTwoDesktop
                     UI.FrmSubRecord frmSub = new UI.FrmSubRecord( );
                     string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
                     frmSub.LoadTemplate( SubrecordTemplates[e.Node.Name], LoadedProfiles[ tabPageToCreate.Name].Records[ curRecordGuid ]   );
-                    frmSub.ShowDialog( );
+                    frmSub.RecordChanged += delegate ( object snd, EventArgs snde ) {
+                        frmSub.GetRecordResults( );
+                    };
+                    frmSub.ShowDialog( );                    
                 }
             };
             
@@ -245,7 +248,7 @@ namespace SeventyTwoDesktop
 
                 //Get the GUID for the profile
                 string profileGUID = curTabPage.Name;
-
+                
 
 
                 //RecordController rc = new RecordController( "pregnancy_permanent" );
@@ -316,6 +319,10 @@ namespace SeventyTwoDesktop
                    
                 }
 
+                //Expand all items
+                rootNode.ExpandAll( );
+                //Select the first node.
+                tvTemplateItems.SelectedNode = tvTemplateItems.Nodes[ 0 ].Nodes[ 0 ];
 
             } catch ( Exception exc ) { Models.Log.WriteToLog( exc ); }
         }

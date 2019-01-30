@@ -358,6 +358,9 @@ namespace SeventyTwoDesktop
                         this.ItemValueChanged( this, new TemplateItemEventArgs( avi.Key, avi.Value ) );
                     }
                 }
+            } else {
+                //Just fire the event, don't save it.
+                this.ItemValueChanged( this, new TemplateItemEventArgs( _ti.Name, _value ) );
             }
         }
         private void HandleOptionalItemValueChange( TemplateItem optItem, string value ) {
@@ -373,7 +376,7 @@ namespace SeventyTwoDesktop
         }
 
         private void LoadData( ) {
-            if( RecordInstance != null && MainValueControl != null) {
+            if( RecordInstance != null && MainValueControl != null && HandleRecordDataUpdate ) {
                 MainValueControl.Text = RecordInstance.GetData( _ti.Name );
             }
         }

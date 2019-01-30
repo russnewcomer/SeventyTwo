@@ -12,12 +12,16 @@ using Newtonsoft.Json.Linq;
 
 namespace SeventyTwoDesktop.UI
 {
+
     public partial class FrmSubRecord : Form
     {
         
         private CtlTemplateItem ActiveGuidanceItem { get; set; }
         private JObject Record { get; set; } = new JObject( );
         private Dictionary<string, TemplateItem> SubrecordItems { get; set; }
+        
+
+        public event EventHandler RecordChanged;
 
         public FrmSubRecord( )
         {
@@ -69,6 +73,10 @@ namespace SeventyTwoDesktop.UI
 
                             TvViewNodes.Nodes[ tiea.Key ].Text = displayItem.Title + " - " + displayText;
                             Record[ tiea.Key ] = tiea.Value;
+
+                            //Send the event that the record changed.
+                            this.RecordChanged?.Invoke( this, e );
+
                         };
 
                         guidanceItem.LoadTemplateItem( ti.Value );
@@ -82,7 +90,13 @@ namespace SeventyTwoDesktop.UI
                     TvViewNodes.Nodes.Add( ti.Value.Name, ti.Value.Title );
 
                 }
+
+                //Select the first node.
+                TvViewNodes.SelectedNode = TvViewNodes.Nodes[ 0 ];
+                EnableGuidanceItem( TvViewNodes.Nodes[ 0 ].Name );
+
             } catch ( Exception exc ) { Models.Log.WriteToLog( exc ); }
+
 
             return retVal;
         }
@@ -102,6 +116,14 @@ namespace SeventyTwoDesktop.UI
                 ActiveGuidanceItem.Show( );
             }
             
+        }
+
+        private void BtnFinished_Click( object sender, EventArgs e ) {
+
+            //Fire the form that the record changed.
+            this.RecordChanged?.Invoke( this, e );
+            //Close the form
+            Close( );
         }
     }
 }

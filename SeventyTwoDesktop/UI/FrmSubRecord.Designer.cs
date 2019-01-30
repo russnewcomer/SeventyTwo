@@ -32,6 +32,7 @@
             this.TvViewNodes = new System.Windows.Forms.TreeView();
             this.BtnPrevious = new System.Windows.Forms.Button();
             this.BtnNext = new System.Windows.Forms.Button();
+            this.BtnFinished = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // LblRecordTitle
@@ -60,9 +61,10 @@
             // 
             // BtnPrevious
             // 
+            this.BtnPrevious.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnPrevious.Location = new System.Drawing.Point(18, 240);
             this.BtnPrevious.Name = "BtnPrevious";
-            this.BtnPrevious.Size = new System.Drawing.Size(263, 51);
+            this.BtnPrevious.Size = new System.Drawing.Size(278, 89);
             this.BtnPrevious.TabIndex = 3;
             this.BtnPrevious.Text = "Previous";
             this.BtnPrevious.UseVisualStyleBackColor = true;
@@ -70,19 +72,31 @@
             // 
             // BtnNext
             // 
-            this.BtnNext.Location = new System.Drawing.Point(305, 240);
+            this.BtnNext.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnNext.Location = new System.Drawing.Point(302, 240);
             this.BtnNext.Name = "BtnNext";
-            this.BtnNext.Size = new System.Drawing.Size(263, 51);
+            this.BtnNext.Size = new System.Drawing.Size(266, 89);
             this.BtnNext.TabIndex = 4;
             this.BtnNext.Text = "Next";
             this.BtnNext.UseVisualStyleBackColor = true;
             this.BtnNext.Click += new System.EventHandler(this.BtnNext_Click);
             // 
+            // BtnFinished
+            // 
+            this.BtnFinished.Location = new System.Drawing.Point(575, 297);
+            this.BtnFinished.Name = "BtnFinished";
+            this.BtnFinished.Size = new System.Drawing.Size(262, 32);
+            this.BtnFinished.TabIndex = 6;
+            this.BtnFinished.Text = "Finished";
+            this.BtnFinished.UseVisualStyleBackColor = true;
+            this.BtnFinished.Click += new System.EventHandler(this.BtnFinished_Click);
+            // 
             // FrmSubRecord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(849, 303);
+            this.ClientSize = new System.Drawing.Size(849, 341);
+            this.Controls.Add(this.BtnFinished);
             this.Controls.Add(this.BtnNext);
             this.Controls.Add(this.BtnPrevious);
             this.Controls.Add(this.TvViewNodes);
@@ -107,5 +121,6 @@
         private System.Windows.Forms.TreeView TvViewNodes;
         private System.Windows.Forms.Button BtnPrevious;
         private System.Windows.Forms.Button BtnNext;
+        private System.Windows.Forms.Button BtnFinished;
     }
 }

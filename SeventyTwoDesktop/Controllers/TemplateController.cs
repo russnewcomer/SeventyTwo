@@ -65,45 +65,77 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         public JObject TemplateToSimpleRecordObject( ) {
+
             JObject recordData = new JObject {
 
                 //This is the basic stuff
-                [ "type" ] = JsonTemplate[ "type" ],
-                [ "profile_guid" ] = JsonTemplate[ "profile_guid" ],
-                [ "template_guid" ] = JsonTemplate[ "template_guid" ],
-                [ "record_guid" ] = Guid.NewGuid( ).ToString( ),
-                [ "date_entered" ] = JsonTemplate[ "date_entered" ],
-                [ "notes" ] = JsonTemplate[ "notes" ],
-                [ "record_attachment" ] = JsonTemplate[ "record_attachment" ]
+                [ "type" ] = TemplateInstance.Type,
+                [ "profile_guid" ] = TemplateInstance.ProfileGUID,
+                [ "template_guid" ] = TemplateInstance.TemplateGUID,
+                [ "record_guid" ] = TemplateInstance.RecordGUID,
+                [ "date_entered" ] = TemplateInstance.DateEntered.ToString( "dd-MMM-yyyy" ),
+                [ "notes" ] = TemplateInstance.Notes,
+                [ "record_attachment" ] = TemplateInstance.RecordAttachmentGUID
             };
 
-
-            JObject items = ( JObject )JsonTemplate[ "items" ];
-            foreach( KeyValuePair<string, JToken> property in items ) {
-                //Write the record data
-                string groupName = items[ property.Key ][ "group" ].ToString();
-                if ( !recordData.ContainsKey( groupName ) ) {
+            foreach( KeyValuePair<string, TemplateItem> kvp in TemplateInstance.Items ) {
+                string groupName = kvp.Value.Group;
+                if( !recordData.ContainsKey( groupName ) ) {
                     recordData[ groupName ] = new JObject( );
                 }
-                recordData[ groupName ][ property.Key ] = items[ property.Key ][ "value" ];
-                JObject optionalFields = ( JObject )items[ property.Key ][ "optional_fields" ];
-                foreach( KeyValuePair<string, JToken> optField in optionalFields ) {
-                    recordData[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value" ];
+                recordData[ groupName ][ kvp.Value.Name ] = kvp.Value.Value;
+                foreach( TemplateItem optField in kvp.Value.OptionalFields ) {
+                    recordData[ groupName ][ optField.Name ] = optField.Value;
                 }
-                //Console.WriteLine( property.Key + " - " + property.Value );
             }
 
             return recordData;
+
+            //JObject recordData = new JObject {
+
+            //    //This is the basic stuff
+            //    [ "type" ] = JsonTemplate[ "type" ],
+            //    [ "profile_guid" ] = JsonTemplate[ "profile_guid" ],
+            //    [ "template_guid" ] = JsonTemplate[ "template_guid" ],
+            //    [ "record_guid" ] = Guid.NewGuid( ).ToString( ),
+            //    [ "date_entered" ] = JsonTemplate[ "date_entered" ],
+            //    [ "notes" ] = JsonTemplate[ "notes" ],
+            //    [ "record_attachment" ] = JsonTemplate[ "record_attachment" ]
+            //};
+
+
+            //JObject items = ( JObject )JsonTemplate[ "items" ];
+            //foreach( KeyValuePair<string, JToken> property in items ) {
+            //    //Write the record data
+            //    string groupName = items[ property.Key ][ "group" ].ToString();
+            //    if ( !recordData.ContainsKey( groupName ) ) {
+            //        recordData[ groupName ] = new JObject( );
+            //    }
+            //    recordData[ groupName ][ property.Key ] = items[ property.Key ][ "value" ];
+            //    JObject optionalFields = ( JObject )items[ property.Key ][ "optional_fields" ];
+            //    foreach( KeyValuePair<string, JToken> optField in optionalFields ) {
+            //        recordData[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value" ];
+            //    }
+            //    //Console.WriteLine( property.Key + " - " + property.Value );
+            //}
+
+            //return recordData;
         }
 
-        public Dictionary<string, TemplateItem> GetTemplateItems(  )
-        {
+        public Dictionary<string, TemplateItem> GetTemplateItems(  ) {
             return TemplateInstance.Items;
         }
 
-        public TemplateItem GetTemplateItem( string itemName )
-        {
-            return TemplateInstance.Items[ itemName ];
+        public TemplateItem GetTemplateItem( string itemName ) {
+
+   
+            TemplateItem retVal = new TemplateItem();
+
+            try {
+                retVal = TemplateInstance.Items[ itemName ]; ;
+            } catch( Exception exc ) { Log.WriteToLog( exc ); }
+
+            return retVal;
         }
 
         public List<string> GetTemplateKeysInOrder() {
@@ -111,10 +143,8 @@ namespace SeventyTwoDesktop.Controllers
                 OrderedKeys = new List<string>( );
 
                 JObject items = ( JObject )JsonTemplate[ "items" ];
-                try
-                {
-                    foreach( KeyValuePair<string, JToken> property in items )
-                    {
+                try {
+                    foreach( KeyValuePair<string, JToken> property in items ) {
                         OrderedKeys.Add( property.Key );
                     }
                 } catch( Exception er ) { Log.WriteToLog( er ); }
@@ -124,9 +154,58 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         public string GetGroupDisplayName( string groupKey ) {
-            return TemplateInstance.Groups[ groupKey ].ToString( );
+            string retVal = "";
+
+            try {
+                retVal = TemplateInstance.Groups[ groupKey ].ToString( );
+            } catch( Exception exc ) { Log.WriteToLog( exc ); }
+
+            return retVal;
         }
 
+        public string GetTemplateItemValue( string Key )
+        {
+            string retVal = "";
+
+            try {
+                retVal = TemplateInstance.Items[ Key ].Value;
+            } catch( Exception exc ) { Log.WriteToLog( exc ); }
+
+            return retVal;
+        }
+
+
+        public bool UpdateTemplateItemValue( string Key, string Value ) {
+            bool retVal = false;
+
+            try {
+                TemplateInstance.Items[ Key ].Value = Value;
+                retVal = true;
+            } catch( Exception exc ) { Log.WriteToLog( exc ); }
+
+            return retVal;
+        }
+
+        public int UpdateTemplateItemSubRecord( string Key, JObject SubRecord, int Index = -1) {
+            int retVal = Index;
+
+            try {
+                try {
+                    if( Index == -1 ) {
+                        TemplateInstance.Items[ Key ].Subrecords.Add( SubRecord );
+                        retVal = TemplateInstance.Items[ Key ].Subrecords.Count - 1;
+                    } else {
+                        TemplateInstance.Items[ Key ].Subrecords[ Index ] = SubRecord;
+                    }
+                } catch( Exception exc ) {
+                    Models.Log.WriteToLog( exc );
+                }
+
+            } catch( Exception exc ) { Log.WriteToLog( exc ); }
+
+            return retVal;
+
+        }
 
     }
 }
