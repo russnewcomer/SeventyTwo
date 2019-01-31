@@ -15,8 +15,8 @@ namespace SeventyTwoDesktop.Controllers
         //Static Methods and Properties
         private static List<KeyValuePair<string, string>> RecordTypes { get; set; }
 
-        public static List<KeyValuePair<string, string>> GetRecordTypes( bool refreshRecordTypes = false ) {
-            if( RecordTypes == null || refreshRecordTypes ) {
+        public static List<KeyValuePair<string, string>> GetRecordTypes( bool RefreshRecordTypes = false ) {
+            if( RecordTypes == null || RefreshRecordTypes ) {
                 RecordTypes = new List<KeyValuePair<string, string>>( );
                 JArray templates = JArray.Parse( File.ReadAllText( "config/templates.json" ) );
                 foreach( JToken x in templates ) {
@@ -30,6 +30,7 @@ namespace SeventyTwoDesktop.Controllers
         }
 
 
+        //Non-Static Methods and Properties
 
 
         public ProfileItem Profile { get; set; }
@@ -44,8 +45,7 @@ namespace SeventyTwoDesktop.Controllers
             LoadProfileData( guid );
         }
         
-        public string InitializeProfile()
-        {
+        public string InitializeProfile() {
             //Set the guid
             string guid = Guid.NewGuid().ToString();
             Profile = new ProfileItem {
@@ -57,10 +57,8 @@ namespace SeventyTwoDesktop.Controllers
 
         }
 
-        public void LoadProfileData(string guid)
-        {
-            try
-            {
+        public void LoadProfileData( string guid ) {
+            try {
                 //Read and load the permanent JSON item.
                 Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( "Profiles/" + guid + "/permanent.json" ) );
 
@@ -74,34 +72,20 @@ namespace SeventyTwoDesktop.Controllers
 
                 }
 
-            }
-            catch (Exception errMsg)
-            {
-                //Figure out how to log these somewhere.
-                Log.WriteToLog(errMsg);
-                Profile.guid = "";
-            }
+            } catch( Exception exc ) { Log.WriteToLog( exc ); }
         }
 
-        public void SaveProfileData()
-        {
-            try
-            {
+        public void SaveProfileData() {
+            try {
 
-                if( !System.IO.Directory.Exists( "profiles/" + Profile.guid ) )
-                {
+                if( !System.IO.Directory.Exists( "profiles/" + Profile.guid ) ) {
                     System.IO.Directory.CreateDirectory( "profiles/" + Profile.guid );
                 }
 
                 //Overwrites existing changes
                 File.WriteAllText("profiles/" + Profile.guid + "/permanent.json", JsonConvert.SerializeObject(Profile));
                 
-            }
-            catch (Exception errMsg)
-            {
-                //Figure out how to log these somewhere.
-                Log.WriteToLog(errMsg);
-            }
+            } catch ( Exception exc ) { Log.WriteToLog( exc ); }
         }
 
         public JObject ProfileDataToSimpleRecord( ) {
