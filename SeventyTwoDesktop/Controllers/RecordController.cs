@@ -191,9 +191,12 @@ namespace SeventyTwoDesktop.Controllers
             return retVal;
         }
 
-        public int UpdateSubRecord( string Key, JObject Value, int Index = -1 ) {
+        public int UpdateTemplateItemSubRecord( string Key, JObject Value, int Index = -1 ) {
             return TC.UpdateTemplateItemSubRecord( Key, Value, Index );
+        }
 
+        public JObject GetTemplateItemSubRecord( string Key, int Index ) {
+            return TC.GetTemplateItemSubRecord( Key, Index );
         }
 
         public RecordDataUpdate UpdateData( string Key, string Value) {

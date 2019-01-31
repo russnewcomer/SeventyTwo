@@ -380,6 +380,14 @@ namespace SeventyTwoDesktop
                 MainValueControl.Text = RecordInstance.GetData( _ti.Name );
             }
         }
+
+        public void LoadData( string ValToLoad ) {
+            MainValueControl.Text = ValToLoad;
+        }
+
+        public void FocusMVC() {
+            MainValueControl.Focus( );
+        }
     }
 
 

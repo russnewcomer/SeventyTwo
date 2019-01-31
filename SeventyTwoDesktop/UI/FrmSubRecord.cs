@@ -47,6 +47,10 @@ namespace SeventyTwoDesktop.UI
             return Record;
         }
 
+        public void SetTitleText( string TitleToSet ) {
+            LblRecordTitle.Text = TitleToSet;
+        }
+
         public bool LoadTemplate( Dictionary<string, Models.TemplateItem> sri, Controllers.RecordController rc ){
             bool retVal = false;
 
@@ -101,19 +105,32 @@ namespace SeventyTwoDesktop.UI
             return retVal;
         }
 
+        public void LoadTemplateData( JObject RecordData ) {
+            Record = RecordData;
+            foreach( KeyValuePair<string, JToken> kvp in RecordData ) {
+                string valueToDisplay = kvp.Value.ToString( );
+                TvViewNodes.Nodes[ kvp.Key ].Text = SubrecordItems[kvp.Key].Title + " - " + valueToDisplay;
+            } 
+        }
+
         private void TvViewNodes_NodeMouseClick( object sender, TreeNodeMouseClickEventArgs e ) {
             if( e.Node.Name != "" ) {
                 EnableGuidanceItem( e.Node.Name );
             }
         }
 
-        private void EnableGuidanceItem( string key ) {
+        private void EnableGuidanceItem( string Key ) {
 
             ActiveGuidanceItem?.Hide( );
 
-            foreach( CtlTemplateItem ctl in PnlControls.Controls.Find( "ucti" + key, false ) ) {
+            foreach( CtlTemplateItem ctl in PnlControls.Controls.Find( "ucti" + Key, false ) ) {
                 ActiveGuidanceItem = ctl;
+                //Load the record data
+                if( Record.ContainsKey( Key ) ) {
+                    ActiveGuidanceItem.LoadData( Record[ Key ].ToString( ) );
+                }
                 ActiveGuidanceItem.Show( );
+                ActiveGuidanceItem.FocusMVC( );
             }
             
         }

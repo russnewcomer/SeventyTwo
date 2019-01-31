@@ -207,5 +207,22 @@ namespace SeventyTwoDesktop.Controllers
 
         }
 
+        public JObject GetTemplateItemSubRecord( string Key, int Index ) {
+            JObject retVal = new JObject();
+
+            try {
+                try {
+                    //Get the object for this key
+                    retVal = ( JObject ) TemplateInstance.Items[ Key ].Subrecords[ Index ];
+                } catch( Exception exc ) {
+                    Models.Log.WriteToLog( exc );
+                }
+
+            } catch( Exception exc ) { Log.WriteToLog( exc ); }
+
+            return retVal;
+
+        }
+
     }
 }

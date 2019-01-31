@@ -20,12 +20,18 @@ namespace SeventyTwoDesktop
         private Dictionary<string, ProfileController> LoadedProfiles { get; set; } = new Dictionary<string, ProfileController>( );
         private List<KeyValuePair<string, string>> RecordTypes = ProfileController.GetRecordTypes( );
         private Dictionary< string, Dictionary< string, TemplateItem > > SubrecordTemplates { get; set; }
-
+        
 
         public FrmMain() {
             InitializeComponent();
+
+            LoadAllProfiles( );
         }
 
+        private void LoadAllProfiles() {
+            //First, we need to get the profiles
+           // ProfileListController.ProfileList
+        }
 
         private void BtnSearch_Click(object sender, EventArgs e) {
            
@@ -34,6 +40,8 @@ namespace SeventyTwoDesktop
         private void BtnNewProfile_Click( object sender, EventArgs e ) {
             string guidToLoad = CreateNewProfile( );
             tabMain.TabPages.Add( CreateProfileTab( guidToLoad ) );
+            tabMain.SelectTab( guidToLoad );
+            
         }
 
         private string CreateNewProfile( ) {
@@ -53,6 +61,9 @@ namespace SeventyTwoDesktop
         }
 
         private TabPage CreateProfileTab( string guidToLoad ) {
+
+            bool hasProfileBeenInitiallySaved = false;
+            ProfileListItem curProfile = new ProfileListItem { Name = "New Profile", Number = "", GUID = guidToLoad };
 
             //Controls
             TabPage tabPageToCreate = new TabPage { Name = guidToLoad, Text = LoadedProfiles[ guidToLoad ].Profile.name };
@@ -110,8 +121,8 @@ namespace SeventyTwoDesktop
 
 
             Button btnEditProfile = new Button { Left = 400, Top = 4, Height = 30, Width = 150, Text = "Edit Profile" };
-            Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 30, Width = 150, Text = "Previous", Visible = false };
-            Button btnNextGuidanceItem = new Button { Left = 225, Top = 250, Height = 30, Width = 150, Text = "Next", Visible = false };
+            Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 30, Width = 150, Text = "&Previous", Visible = false };
+            Button btnNextGuidanceItem = new Button { Left = 225, Top = 250, Height = 30, Width = 150, Text = "&Next", Visible = false };
 
 
             //Event Handlers
@@ -130,6 +141,15 @@ namespace SeventyTwoDesktop
                 lblProfileName.Text = profileName;
                 permRecordControl.Hide( );
                 pnlGuidanceControls.Show( );
+
+                curProfile.Name = profileName;
+                curProfile.Number = permRecordControl.GetProfileNumber( );
+
+                if( !hasProfileBeenInitiallySaved ) {
+                    ProfileListController.AddItemToList( curProfile );
+                } else {
+                    ProfileListController.AlterExistingItem( curProfile );
+                }
             };
 
 
@@ -199,19 +219,39 @@ namespace SeventyTwoDesktop
             };
 
             tvTemplateItems.NodeMouseClick += delegate ( object o, TreeNodeMouseClickEventArgs e ) {
-                if( e.Node.Name != "" && !e.Node.Name.Contains( "tv_subrecord_add_" ) ) {
+                if( e.Node.Name != "" && !e.Node.Name.Contains( "tv_subrecord_" ) ) {
                     //MessageBox.Show( e.Node.Name );
                     EnableGuidanceItem( e.Node.Name, pnlGuidanceControls, btnPreviousGuidanceItem, btnNextGuidanceItem );
                     CheckPrevNextButtons( tvTemplateItems, btnNextGuidanceItem, btnPreviousGuidanceItem );
-                } else if( e.Node.Name != "" && e.Node.Name.Contains( "tv_subrecord_add_" ) ) {
+                } else if( e.Node.Name != "" && e.Node.Name.Contains( "tv_subrecord_" ) ) {
                     //Pop up FrmSubRecord instance with this in it.
                     UI.FrmSubRecord frmSub = new UI.FrmSubRecord( );
+                    frmSub.SetTitleText( e.Node.Parent.Text );
                     string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
-                    frmSub.LoadTemplate( SubrecordTemplates[e.Node.Name], LoadedProfiles[ tabPageToCreate.Name].Records[ curRecordGuid ]   );
+                    TreeNode curNode = e.Node;
+                    int idx = e.Node.Index - 1;
                     frmSub.RecordChanged += delegate ( object snd, EventArgs snde ) {
-                        frmSub.GetRecordResults( );
+                        //e.Node.Index - 1 works because -1 is defined as a new record, and everything else should update automatically without promblems.
+                        JObject subRec = frmSub.GetRecordResults( );
+                        int newIdx = LoadedProfiles[ guidToLoad ].Records[ curRecordGuid ].UpdateTemplateItemSubRecord( e.Node.Parent.Name, subRec, idx );
+                        if( idx != newIdx ) {
+                            string NodeName = ( subRec.ContainsKey( "name" ) ? subRec[ "name" ].ToString( ) : "New Record");
+                            curNode = e.Node.Parent.Nodes.Add( "tv_subrecord_" + e.Node.Parent.Name + newIdx.ToString( ), NodeName );
+                            idx = newIdx;
+                        } else {
+                            curNode.Text = ( subRec.ContainsKey( "name" ) ? subRec[ "name" ].ToString( ) : "New Record" );
+                        }
                     };
-                    frmSub.ShowDialog( );                    
+
+                    //Load the template
+                    frmSub.LoadTemplate( SubrecordTemplates[ e.Node.Parent.Name ], LoadedProfiles[ tabPageToCreate.Name ].Records[ curRecordGuid ] );
+
+                    //If we are loading items that already exist (they don't have the _add_ in their name)
+                    if ( !e.Node.Name.Contains("tv_subrecord_add_") ) {
+                        frmSub.LoadTemplateData( LoadedProfiles[ guidToLoad ].Records[ curRecordGuid ].GetTemplateItemSubRecord( e.Node.Parent.Name, idx ) );
+                    }
+
+                    frmSub.ShowDialog( );
                 }
             };
             
@@ -306,12 +346,12 @@ namespace SeventyTwoDesktop
                     } else {
                         //This should probably create a new form and pop it up.  There's certainly a better way, but I'm not thinking of it right now.
 
-                        SubrecordTemplates.Add( "tv_subrecord_add_" + ti.Key, ti.Value.SubrecordItems );
+                        SubrecordTemplates.Add( ti.Key, ti.Value.SubrecordItems );
                         rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ ti.Value.Name ].Nodes.Add( "tv_subrecord_add_" + ti.Key, "Add " + ti.Value.Title );
 
                         int i = 0;
                         foreach( JObject record in ti.Value.Subrecords ) {
-                            rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ ti.Value.Name ].Nodes.Add( i.ToString( ), record[ "name" ].ToString() );
+                            rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.Group ] ].Nodes[ ti.Value.Name ].Nodes.Add( "tv_subrecord_" + ti.Key + i.ToString( ), record[ "name" ].ToString() );
                             i++;
                         }
 
@@ -337,6 +377,7 @@ namespace SeventyTwoDesktop
             foreach( CtlTemplateItem ctl in CurrentPanel.Controls.Find( "ucti" + ControlKey, false ) ) {
                 ActiveGuidanceItem = ctl;
                 ActiveGuidanceItem.Show( );
+                ActiveGuidanceItem.FocusMVC( );
             }
 
         }

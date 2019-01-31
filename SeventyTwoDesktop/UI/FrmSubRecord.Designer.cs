@@ -66,7 +66,7 @@
             this.BtnPrevious.Name = "BtnPrevious";
             this.BtnPrevious.Size = new System.Drawing.Size(278, 89);
             this.BtnPrevious.TabIndex = 3;
-            this.BtnPrevious.Text = "Previous";
+            this.BtnPrevious.Text = "&Previous";
             this.BtnPrevious.UseVisualStyleBackColor = true;
             this.BtnPrevious.Click += new System.EventHandler(this.BtnPrevious_Click);
             // 
@@ -77,7 +77,7 @@
             this.BtnNext.Name = "BtnNext";
             this.BtnNext.Size = new System.Drawing.Size(266, 89);
             this.BtnNext.TabIndex = 4;
-            this.BtnNext.Text = "Next";
+            this.BtnNext.Text = "&Next";
             this.BtnNext.UseVisualStyleBackColor = true;
             this.BtnNext.Click += new System.EventHandler(this.BtnNext_Click);
             // 
@@ -87,7 +87,7 @@
             this.BtnFinished.Name = "BtnFinished";
             this.BtnFinished.Size = new System.Drawing.Size(262, 32);
             this.BtnFinished.TabIndex = 6;
-            this.BtnFinished.Text = "Finished";
+            this.BtnFinished.Text = "&Finished";
             this.BtnFinished.UseVisualStyleBackColor = true;
             this.BtnFinished.Click += new System.EventHandler(this.BtnFinished_Click);
             // 

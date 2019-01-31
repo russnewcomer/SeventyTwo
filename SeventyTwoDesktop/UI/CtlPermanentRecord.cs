@@ -81,9 +81,14 @@ namespace SeventyTwoDesktop
             ProfileInfo.Profile.gender = "";
             ProfileInfo.Profile.birthdate = DateTime.Now;
         }
-        public string GetProfileName( )
-        {
+
+        public string GetProfileName( ) {
             return ProfileInfo.Profile.name;
-        } 
+        }
+
+        public string GetProfileNumber( )
+        {
+            return ProfileInfo.Profile.number;
+        }
     }
 }
