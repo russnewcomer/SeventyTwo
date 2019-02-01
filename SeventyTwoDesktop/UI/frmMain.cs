@@ -30,7 +30,9 @@ namespace SeventyTwoDesktop
 
         private void LoadAllProfiles() {
             //First, we need to get the profiles
-           // ProfileListController.ProfileList
+            foreach ( ProfileListItem pli in ProfileListController.ProfileList ) {
+                LstProfiles.Items.Add( pli );
+            }
         }
 
         private void BtnSearch_Click(object sender, EventArgs e) {
@@ -42,6 +44,21 @@ namespace SeventyTwoDesktop
             tabMain.TabPages.Add( CreateProfileTab( guidToLoad ) );
             tabMain.SelectTab( guidToLoad );
             
+        }
+
+        private void LstProfiles_DoubleClick( object sender, EventArgs e ) {
+            LoadProfileSelectedByListBox( );
+        }
+
+        private void BtnLoadSelectedProfile_Click( object sender, EventArgs e ) {
+            LoadProfileSelectedByListBox( );
+        }
+
+        private void LoadProfileSelectedByListBox() {
+            string guidToLoad = ProfileListController.ProfileList[ LstProfiles.SelectedIndex ].GUID;
+            LoadProfile( guidToLoad );
+            tabMain.TabPages.Add( CreateProfileTab( guidToLoad ) );
+            tabMain.SelectTab( guidToLoad );
         }
 
         private string CreateNewProfile( ) {

@@ -7,11 +7,14 @@ using SeventyTwoDesktop.Models;
 namespace SeventyTwoDesktop.Controllers
 {
     static class ProfileListController {
-        
+
+        const string LIST_FILE_PATH = "profiles/list.json";
+        const string LIST_DUPLICATE_FILE_PATH = "profiles/list.json";
+
         public static List<ProfileListItem> ProfileList {get; set;} = new List<ProfileListItem>();
         private static DateTime TimeSinceLastWrite { get; set; } = DateTime.Now;
         private static bool RequestedWrite { get; set; } = false;
-
+        private static FileReadWriteController FileController { get; set; } = new FileReadWriteController( LIST_FILE_PATH, LIST_DUPLICATE_FILE_PATH );
 
         static ProfileListController( ) {
             LoadList( );
@@ -21,40 +24,26 @@ namespace SeventyTwoDesktop.Controllers
             bool retVal = false;
             try {
                 //Open the list and deserialize it
-                string json = File.ReadAllText( "profiles/list.json" );
-                ProfileList = JsonConvert.DeserializeObject<List<ProfileListItem>>(json);
+                string JSON = FileController.FileContents;
+                if( string.IsNullOrEmpty( JSON ) ) {
+                    ProfileList = new List<ProfileListItem>( );
+                } else {
+                    ProfileList = JsonConvert.DeserializeObject<List<ProfileListItem>>( JSON );
+                }
                 retVal = true;
             } catch (Exception exc) {
                 Log.WriteToLog(exc);
-                ProfileList = new List<ProfileListItem>();
+                ProfileList = new List<ProfileListItem>( );
             }
             return retVal;
         }
 
-        public static bool RequestSave() {
-            bool retVal = false;
-            try {
-                //Do the saving of profiles here, only writing at a max once every 5 seconds.
-            } catch( Exception exc ) { Log.WriteToLog( exc ); }
-            return retVal;
-        }
-
-        public static bool SaveList() {
-            bool retVal = false;
+        public static void SaveList() {
             try { 
                 if ( ProfileList.Count > 0 ) {
-                    //Make a quick copy of the old list
-                    if (File.Exists( "profiles/old-list.json" ) ) {
-                        File.Delete( "profiles/old-list.json" );
-                    }
-                    //Make a quick copy of the old list
-                    File.Copy( "profiles/list.json", "profiles/old-list.json" );
-                    File.WriteAllText( "profiles/list.json", JsonConvert.SerializeObject(ProfileList));
-                    TimeSinceLastWrite = DateTime.Now;
-                    retVal = true;
+                    FileController.WriteDataToFile( JsonConvert.SerializeObject( ProfileList ) );
                 }
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
-            return retVal;
         }
 
         public static bool AddItemToList( ProfileListItem newItem ) {
@@ -62,6 +51,7 @@ namespace SeventyTwoDesktop.Controllers
             try {
                 ProfileList.Add( newItem );
                 SaveList();
+                retVal = true;
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
             return retVal;
         }

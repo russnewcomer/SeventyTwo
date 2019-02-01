@@ -30,6 +30,7 @@
         {
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabProfiles = new System.Windows.Forms.TabPage();
+            this.gbCalendar = new System.Windows.Forms.GroupBox();
             this.btnNewProfile = new System.Windows.Forms.Button();
             this.grpExisting = new System.Windows.Forms.GroupBox();
             this.dtpSearch = new System.Windows.Forms.DateTimePicker();
@@ -38,9 +39,9 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lblSearchByPatientName = new System.Windows.Forms.Label();
             this.lblPatientList = new System.Windows.Forms.Label();
-            this.lstProfiles = new System.Windows.Forms.ListBox();
+            this.LstProfiles = new System.Windows.Forms.ListBox();
             this.tabReports = new System.Windows.Forms.TabPage();
-            this.gbCalendar = new System.Windows.Forms.GroupBox();
+            this.BtnLoadSelectedProfile = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProfiles.SuspendLayout();
             this.grpExisting.SuspendLayout();
@@ -70,6 +71,15 @@
             this.tabProfiles.Text = "Profiles";
             this.tabProfiles.UseVisualStyleBackColor = true;
             // 
+            // gbCalendar
+            // 
+            this.gbCalendar.Location = new System.Drawing.Point(468, 11);
+            this.gbCalendar.Name = "gbCalendar";
+            this.gbCalendar.Size = new System.Drawing.Size(490, 462);
+            this.gbCalendar.TabIndex = 9;
+            this.gbCalendar.TabStop = false;
+            this.gbCalendar.Text = "Appointment Calendar";
+            // 
             // btnNewProfile
             // 
             this.btnNewProfile.BackColor = System.Drawing.Color.Transparent;
@@ -83,13 +93,14 @@
             // 
             // grpExisting
             // 
+            this.grpExisting.Controls.Add(this.BtnLoadSelectedProfile);
             this.grpExisting.Controls.Add(this.dtpSearch);
             this.grpExisting.Controls.Add(this.btnSearch);
             this.grpExisting.Controls.Add(this.lblSearchByDate);
             this.grpExisting.Controls.Add(this.textBox1);
             this.grpExisting.Controls.Add(this.lblSearchByPatientName);
             this.grpExisting.Controls.Add(this.lblPatientList);
-            this.grpExisting.Controls.Add(this.lstProfiles);
+            this.grpExisting.Controls.Add(this.LstProfiles);
             this.grpExisting.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.grpExisting.Location = new System.Drawing.Point(181, 11);
             this.grpExisting.Name = "grpExisting";
@@ -151,14 +162,15 @@
             this.lblPatientList.TabIndex = 5;
             this.lblPatientList.Text = "Profile List";
             // 
-            // lstProfiles
+            // LstProfiles
             // 
-            this.lstProfiles.FormattingEnabled = true;
-            this.lstProfiles.ItemHeight = 15;
-            this.lstProfiles.Location = new System.Drawing.Point(6, 107);
-            this.lstProfiles.Name = "lstProfiles";
-            this.lstProfiles.Size = new System.Drawing.Size(250, 349);
-            this.lstProfiles.TabIndex = 4;
+            this.LstProfiles.FormattingEnabled = true;
+            this.LstProfiles.ItemHeight = 15;
+            this.LstProfiles.Location = new System.Drawing.Point(6, 107);
+            this.LstProfiles.Name = "LstProfiles";
+            this.LstProfiles.Size = new System.Drawing.Size(250, 319);
+            this.LstProfiles.TabIndex = 4;
+            this.LstProfiles.DoubleClick += new System.EventHandler(this.LstProfiles_DoubleClick);
             // 
             // tabReports
             // 
@@ -170,23 +182,24 @@
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
             // 
-            // gbCalendar
+            // BtnLoadSelectedProfile
             // 
-            this.gbCalendar.Location = new System.Drawing.Point(468, 11);
-            this.gbCalendar.Name = "gbCalendar";
-            this.gbCalendar.Size = new System.Drawing.Size(490, 462);
-            this.gbCalendar.TabIndex = 9;
-            this.gbCalendar.TabStop = false;
-            this.gbCalendar.Text = "Appointment Calendar";
+            this.BtnLoadSelectedProfile.Location = new System.Drawing.Point(6, 429);
+            this.BtnLoadSelectedProfile.Name = "BtnLoadSelectedProfile";
+            this.BtnLoadSelectedProfile.Size = new System.Drawing.Size(250, 27);
+            this.BtnLoadSelectedProfile.TabIndex = 13;
+            this.BtnLoadSelectedProfile.Text = "Load Selected Profile";
+            this.BtnLoadSelectedProfile.UseVisualStyleBackColor = true;
+            this.BtnLoadSelectedProfile.Click += new System.EventHandler(this.BtnLoadSelectedProfile_Click);
             // 
-            // frmMain
+            // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 511);
             this.Controls.Add(this.tabMain);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Name = "frmMain";
+            this.Name = "FrmMain";
             this.Text = "SeventyTwo";
             this.tabMain.ResumeLayout(false);
             this.tabProfiles.ResumeLayout(false);
@@ -207,9 +220,10 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label lblSearchByPatientName;
         private System.Windows.Forms.Label lblPatientList;
-        private System.Windows.Forms.ListBox lstProfiles;
+        private System.Windows.Forms.ListBox LstProfiles;
         private System.Windows.Forms.TabPage tabReports;
         private System.Windows.Forms.DateTimePicker dtpSearch;
         private System.Windows.Forms.GroupBox gbCalendar;
+        private System.Windows.Forms.Button BtnLoadSelectedProfile;
     }
 }

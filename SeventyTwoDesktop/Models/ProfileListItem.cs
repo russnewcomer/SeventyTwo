@@ -11,35 +11,28 @@ namespace SeventyTwoDesktop.Models
         public string Name { get; set; } = "";
         public string Number { get; set; } = "";
 
-        public string DisplayText
-        {
+        public string DisplayText {
             get { return Name + " - " + Number; }
         }
         public string GUID { get; set; } = "";
 
-        public ProfileListItem()
-        {
+        public ProfileListItem() {
 
         }
 
-        public ProfileListItem( string name, string number, string itemGUID )
-        {
+        public ProfileListItem( string name, string number, string itemGUID ) {
             Name = name;
             Number = number;
             GUID = itemGUID;
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return DisplayText;
         }
 
-        public int CompareTo(Object o)
-        {
-            ProfileListItem pli = o as ProfileListItem;
-            if ( pli == null )
-            {
-                throw new Exception("Object is not a ProfileListItem");
+        public int CompareTo(object o) {
+            if( !( o is ProfileListItem pli ) ) {
+                throw new Exception( "Object is not a ProfileListItem" );
             }
             return GUID.CompareTo(pli.GUID);
         }

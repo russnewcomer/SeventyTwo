@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\FileReadWriteController.cs" />
     <Compile Include="Controllers\RecordController.cs" />
     <Compile Include="Controllers\ProfileListController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
