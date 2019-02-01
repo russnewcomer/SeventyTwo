@@ -60,10 +60,10 @@ namespace SeventyTwoDesktop.Controllers
         public void LoadProfileData( string guid ) {
             try {
                 //Read and load the permanent JSON item.
-                Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( "Profiles/" + guid + "/permanent.json" ) );
+                Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( "profiles/" + guid + "/permanent.json" ) );
 
                 //Read and load all other JSON templates.
-                IEnumerable<string> records = Directory.EnumerateFiles( "Profiles/guid" );
+                IEnumerable<string> records = Directory.EnumerateFiles( "profiles/" + guid );
 
                 foreach ( string filename in records) {
                     string record_guid = filename.Replace( ".json", "" );
