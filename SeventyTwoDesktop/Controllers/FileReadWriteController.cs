@@ -31,6 +31,7 @@ namespace SeventyTwoDesktop.Controllers
         private int IntervalsSinceLastWrite { get; set; }
         public bool LastWriteSucceeded { get { return WriteSuccess; } }
         public string FileContents { get { return FileContentsToWrite; } }
+        public string TargetFile { get { return FileName; } }
         
         private void InitTimer() {
             //If we don't have a timer, start one.
@@ -94,6 +95,12 @@ namespace SeventyTwoDesktop.Controllers
             WriteSuccess = false;
             FileContentsToWrite = dataToWrite;
             PerformWrite( );
+        }
+
+        public void ForceRead() {
+            if( File.Exists( FileName ) ) {
+                FileContentsToWrite = File.ReadAllText( FileName );
+            }
         }
     }
 }

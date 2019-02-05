@@ -86,7 +86,9 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = _ti.Value
+                        Text = _ti.Value,
+                        Maximum = 10000,
+                        Minimum = -10000
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
@@ -249,7 +251,9 @@ namespace SeventyTwoDesktop
                                     Left = 4,
                                     Width = 130,
                                     Text = _ti.Value,
-                                    Font = new Font( "Segoe UI", 20 )
+                                    Font = new Font( "Segoe UI", 20 ),
+                                    Maximum = 10000,
+                                    Minimum = -10000
                                 };
                                 nudCtl.TextChanged += delegate ( object o, EventArgs e ) {
                                     //Raise the textchanged event.
@@ -270,7 +274,9 @@ namespace SeventyTwoDesktop
                         Left = 4,
                         Width = 300,
                         Text = _ti.Value,
-                        Font = new Font( "Segoe UI", 20 )
+                        Font = new Font( "Segoe UI", 20 ),
+                        Maximum = 10000,
+                        Minimum = -10000
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         HandleItemValueChange( MainValueControl.Text );

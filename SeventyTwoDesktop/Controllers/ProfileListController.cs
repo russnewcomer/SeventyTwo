@@ -24,6 +24,7 @@ namespace SeventyTwoDesktop.Controllers
             bool retVal = false;
             try {
                 //Open the list and deserialize it
+                FileController.ForceRead( );
                 string JSON = FileController.FileContents;
                 if( string.IsNullOrEmpty( JSON ) ) {
                     ProfileList = new List<ProfileListItem>( );

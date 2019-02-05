@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SeventyTwoDesktop.Models
 {
-    class ProfileItem
+    public class ProfileItem
     {
         public string type = "permanent";
         public string title = "Profile Permanent Record";
@@ -14,7 +14,7 @@ namespace SeventyTwoDesktop.Models
         public string community { get; set; }
         public string location { get; set; }
         public string gender { get; set; }
-        public DateTime birthdate { get; set; }
+        public DateTime birthdate { get; set; } = new DateTime( 2000, 1, 1 );
         public string phonenumber { get; set; }
         public List<string> recordArray { get; set; }
 

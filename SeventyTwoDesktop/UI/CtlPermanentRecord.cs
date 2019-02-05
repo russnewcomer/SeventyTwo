@@ -14,7 +14,7 @@ namespace SeventyTwoDesktop
     public partial class CtlPermanentRecord : UserControl
     {
 
-        private ProfileController ProfileInfo { get; set; } = new ProfileController();
+        public ProfileController Profile { get; set; } = new ProfileController();
 
         public CtlPermanentRecord()
         {
@@ -28,7 +28,7 @@ namespace SeventyTwoDesktop
 
         private void TxtName_TextChanged(object sender, EventArgs e)
         {
-            ProfileInfo.Profile.name = txtName.Text;
+            Profile.Profile.name = txtName.Text;
             this.ProfileNameChange?.Invoke( this, e );
         }
 
@@ -46,49 +46,50 @@ namespace SeventyTwoDesktop
         }
 
         public void LoadData( string guid ) {
-            //ProfileInfo.loadProfileData(guid);
-            ProfileInfo.LoadProfileData("4eea8a97-38bd-478a-9f6b-4b963ee779ce");
-            txtName.Text = ProfileInfo.Profile.name;
-            txtNumber.Text = ProfileInfo.Profile.number;
-            txtAddress.Text = ProfileInfo.Profile.address;
-            txtCommunity.Text = ProfileInfo.Profile.community;
-            txtLocation.Text = ProfileInfo.Profile.location;
-            txtPhone.Text = ProfileInfo.Profile.phonenumber;
-            cbGender.SelectedText = ProfileInfo.Profile.gender;
-            dtpBirthDate.Value = ProfileInfo.Profile.birthdate;
+            if( Profile == null ) {
+                Profile.LoadProfileData( guid );
+            }
+            txtName.Text = Profile.Profile.name;
+            txtNumber.Text = Profile.Profile.number;
+            txtAddress.Text = Profile.Profile.address;
+            txtCommunity.Text = Profile.Profile.community;
+            txtLocation.Text = Profile.Profile.location;
+            txtPhone.Text = Profile.Profile.phonenumber;
+            cbGender.ValueMember = Profile.Profile.gender;
+            dtpBirthDate.Value = Profile.Profile.birthdate;
         }
         public void SaveData() {
-            ProfileInfo.Profile.name = txtName.Text;
-            ProfileInfo.Profile.number = txtNumber.Text;
-            ProfileInfo.Profile.address = txtAddress.Text;
-            ProfileInfo.Profile.community = txtCommunity.Text;
-            ProfileInfo.Profile.location = txtLocation.Text;
-            ProfileInfo.Profile.phonenumber = txtPhone.Text;
-            ProfileInfo.Profile.gender = cbGender.ValueMember.ToString();
-            ProfileInfo.Profile.birthdate = dtpBirthDate.Value;
-            ProfileInfo.SaveProfileData();
+            Profile.Profile.name = txtName.Text;
+            Profile.Profile.number = txtNumber.Text;
+            Profile.Profile.address = txtAddress.Text;
+            Profile.Profile.community = txtCommunity.Text;
+            Profile.Profile.location = txtLocation.Text;
+            Profile.Profile.phonenumber = txtPhone.Text;
+            Profile.Profile.gender = cbGender.ValueMember.ToString();
+            Profile.Profile.birthdate = dtpBirthDate.Value;
+            Profile.SaveProfileData();
         }
         public void ClearData()
         {
-            ProfileInfo.InitializeProfile();
+            Profile.InitializeProfile();
 
-            ProfileInfo.Profile.name = "";
-            ProfileInfo.Profile.number = "";
-            ProfileInfo.Profile.address = "";
-            ProfileInfo.Profile.community = "";
-            ProfileInfo.Profile.location = "";
-            ProfileInfo.Profile.phonenumber = "";
-            ProfileInfo.Profile.gender = "";
-            ProfileInfo.Profile.birthdate = DateTime.Now;
+            Profile.Profile.name = "";
+            Profile.Profile.number = "";
+            Profile.Profile.address = "";
+            Profile.Profile.community = "";
+            Profile.Profile.location = "";
+            Profile.Profile.phonenumber = "";
+            Profile.Profile.gender = "";
+            Profile.Profile.birthdate = DateTime.Now;
         }
 
         public string GetProfileName( ) {
-            return ProfileInfo.Profile.name;
+            return Profile.Profile.name;
         }
 
         public string GetProfileNumber( )
         {
-            return ProfileInfo.Profile.number;
+            return Profile.Profile.number;
         }
     }
 }

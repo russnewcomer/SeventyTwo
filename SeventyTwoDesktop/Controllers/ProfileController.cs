@@ -9,32 +9,14 @@ using SeventyTwoDesktop.Models;
 
 namespace SeventyTwoDesktop.Controllers
 {
-    class ProfileController
+    public class ProfileController
     {
-
-        //Static Methods and Properties
-        private static List<KeyValuePair<string, string>> RecordTypes { get; set; }
-
-        public static List<KeyValuePair<string, string>> GetRecordTypes( bool RefreshRecordTypes = false ) {
-            if( RecordTypes == null || RefreshRecordTypes ) {
-                RecordTypes = new List<KeyValuePair<string, string>>( );
-                JArray templates = JArray.Parse( File.ReadAllText( "config/templates.json" ) );
-                foreach( JToken x in templates ) {
-                    foreach( KeyValuePair<string, JToken> property in ( JObject )x ) {
-                        RecordTypes.Add (new KeyValuePair<string, string>( property.Key, property.Value.ToString( ) ) );
-                    }
-                }
-            }
-
-            return RecordTypes;
-        }
-
 
         //Non-Static Methods and Properties
 
 
         public ProfileItem Profile { get; set; }
-        public Dictionary<string, RecordController> Records { get; set; } = new Dictionary<string, RecordController>( );
+        public Dictionary< string, RecordController > Records { get; set; } = new Dictionary< string, RecordController >( );
        
 
         public ProfileController() {
@@ -60,17 +42,27 @@ namespace SeventyTwoDesktop.Controllers
         public void LoadProfileData( string guid ) {
             try {
                 //Read and load the permanent JSON item.
-                Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( "profiles/" + guid + "/permanent.json" ) );
+                if( Directory.Exists( "profiles/" + guid ) ) {
+                    Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( "profiles/" + guid + "/permanent.json" ) );
+                    
+                    //Read and load all other JSON templates.
+                    IEnumerable<string> records = Directory.EnumerateFiles( "profiles/" + guid );
 
-                //Read and load all other JSON templates.
-                IEnumerable<string> records = Directory.EnumerateFiles( "profiles/" + guid );
+                    foreach ( string filename in records) {
 
-                foreach ( string filename in records) {
-                    string record_guid = filename.Replace( ".json", "" );
-                       
+                        //We don't want to try to load permanent.json
+                        if( !filename.Contains( "\\permanent.json" ) && filename.Contains(".json" ) ) {
+                            //Get the record contents
+                            RecordController rc = new RecordController( filename, Profile.guid );
+                            Records.Add( rc.RecordGUID, rc );
+                        }
 
+                    }
 
+                } else {
+                    Profile = new ProfileItem( );
                 }
+
 
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
         }
@@ -94,12 +86,8 @@ namespace SeventyTwoDesktop.Controllers
 
             try {
 
-                foreach( KeyValuePair<string, RecordController> Record in Records )
-                {
-
-                    RecordController curRecord = Record.Value;
-
-                    curRecord.RenderDataToSimpleJSON( );
+                foreach( KeyValuePair<string, RecordController> Record in Records ) {
+                    Record.Value.RenderDataToSimpleJSON( );
                 }
             } catch( Exception errMsg ) {
                 //Figure out how to log these somewhere.

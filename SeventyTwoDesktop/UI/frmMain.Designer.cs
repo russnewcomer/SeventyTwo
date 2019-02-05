@@ -33,6 +33,7 @@
             this.gbCalendar = new System.Windows.Forms.GroupBox();
             this.btnNewProfile = new System.Windows.Forms.Button();
             this.grpExisting = new System.Windows.Forms.GroupBox();
+            this.BtnLoadSelectedProfile = new System.Windows.Forms.Button();
             this.dtpSearch = new System.Windows.Forms.DateTimePicker();
             this.btnSearch = new System.Windows.Forms.Button();
             this.lblSearchByDate = new System.Windows.Forms.Label();
@@ -41,7 +42,7 @@
             this.lblPatientList = new System.Windows.Forms.Label();
             this.LstProfiles = new System.Windows.Forms.ListBox();
             this.tabReports = new System.Windows.Forms.TabPage();
-            this.BtnLoadSelectedProfile = new System.Windows.Forms.Button();
+            this.BtnCloseAllOpenProfiles = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProfiles.SuspendLayout();
             this.grpExisting.SuspendLayout();
@@ -60,6 +61,7 @@
             // 
             // tabProfiles
             // 
+            this.tabProfiles.Controls.Add(this.BtnCloseAllOpenProfiles);
             this.tabProfiles.Controls.Add(this.gbCalendar);
             this.tabProfiles.Controls.Add(this.btnNewProfile);
             this.tabProfiles.Controls.Add(this.grpExisting);
@@ -109,6 +111,16 @@
             this.grpExisting.TabStop = false;
             this.grpExisting.Text = "Existing Profiles";
             // 
+            // BtnLoadSelectedProfile
+            // 
+            this.BtnLoadSelectedProfile.Location = new System.Drawing.Point(6, 429);
+            this.BtnLoadSelectedProfile.Name = "BtnLoadSelectedProfile";
+            this.BtnLoadSelectedProfile.Size = new System.Drawing.Size(250, 27);
+            this.BtnLoadSelectedProfile.TabIndex = 13;
+            this.BtnLoadSelectedProfile.Text = "Load Selected Profile";
+            this.BtnLoadSelectedProfile.UseVisualStyleBackColor = true;
+            this.BtnLoadSelectedProfile.Click += new System.EventHandler(this.BtnLoadSelectedProfile_Click);
+            // 
             // dtpSearch
             // 
             this.dtpSearch.Format = System.Windows.Forms.DateTimePickerFormat.Short;
@@ -127,6 +139,7 @@
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
+            this.btnSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.btnSearch_KeyDown);
             // 
             // lblSearchByDate
             // 
@@ -182,15 +195,16 @@
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
             // 
-            // BtnLoadSelectedProfile
+            // BtnCloseAllOpenProfiles
             // 
-            this.BtnLoadSelectedProfile.Location = new System.Drawing.Point(6, 429);
-            this.BtnLoadSelectedProfile.Name = "BtnLoadSelectedProfile";
-            this.BtnLoadSelectedProfile.Size = new System.Drawing.Size(250, 27);
-            this.BtnLoadSelectedProfile.TabIndex = 13;
-            this.BtnLoadSelectedProfile.Text = "Load Selected Profile";
-            this.BtnLoadSelectedProfile.UseVisualStyleBackColor = true;
-            this.BtnLoadSelectedProfile.Click += new System.EventHandler(this.BtnLoadSelectedProfile_Click);
+            this.BtnCloseAllOpenProfiles.BackColor = System.Drawing.Color.Transparent;
+            this.BtnCloseAllOpenProfiles.Location = new System.Drawing.Point(20, 77);
+            this.BtnCloseAllOpenProfiles.Name = "BtnCloseAllOpenProfiles";
+            this.BtnCloseAllOpenProfiles.Size = new System.Drawing.Size(140, 43);
+            this.BtnCloseAllOpenProfiles.TabIndex = 10;
+            this.BtnCloseAllOpenProfiles.Text = "Close All Open Profiles";
+            this.BtnCloseAllOpenProfiles.UseVisualStyleBackColor = false;
+            this.BtnCloseAllOpenProfiles.Click += new System.EventHandler(this.BtnCloseAllOpenProfiles_Click);
             // 
             // FrmMain
             // 
@@ -225,5 +239,6 @@
         private System.Windows.Forms.DateTimePicker dtpSearch;
         private System.Windows.Forms.GroupBox gbCalendar;
         private System.Windows.Forms.Button BtnLoadSelectedProfile;
+        private System.Windows.Forms.Button BtnCloseAllOpenProfiles;
     }
 }

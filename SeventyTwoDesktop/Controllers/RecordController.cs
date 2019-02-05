@@ -20,7 +20,8 @@ namespace SeventyTwoDesktop.Controllers
         private string _RecordGUID { get; set; }
         public string RecordGUID { get { return _RecordGUID; } }
         public string ProfileGUID { get; set; }
-        public List<string> OrderedTemplateKeys { get { return TC.GetTemplateKeysInOrder( ); } }
+        
+        private FileReadWriteController FileController { get; set; }
 
         //This is a base constructor
         public RecordController() {
@@ -28,34 +29,25 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         //This constructor is for loading a JOBject record in and determining if it is the full template, or just the record.
-        public RecordController( JObject recordData, RecordStyleEnum recordStyle = RecordStyleEnum.Template ) {
-            //If this record is just the simple record, we can write it into this. 
-            if ( recordStyle == RecordStyleEnum.Simple) {
-                RecordData = recordData;
-            } else {
-                LoadFromFullTemplateRecord( recordData );
-            }
+        public RecordController( string fileName, string profileGUID ) {
+            try {
+                ProfileGUID = profileGUID;
+ 
 
-            TC = new TemplateController( recordData[ "type" ].ToString( ) );
-        }
+                //Create a new template based on the type the record.
+                JObject template = JsonConvert.DeserializeObject<JObject>( File.ReadAllText( fileName ) );
+                _RecordGUID = template[ "record_guid" ].ToString( );
+                ProfileGUID = template[ "profile_guid" ].ToString( );
 
-        //This constructor is for loading a JOBject record in and determining if it is the full template, or just the record.
-        public RecordController( string fileName, RecordStyleEnum recordStyle = RecordStyleEnum.Template )
-        {
-            try
-            {
-                JObject recordJObj = JsonConvert.DeserializeObject<JObject>( File.ReadAllText( fileName ) );
-                //If this record is just the simple record, we can write it into this. 
-                if( recordStyle == RecordStyleEnum.Template ) {
-                    //Read a full record in from the file.;
-                    LoadFromFullTemplateRecord( recordJObj );
-                } else {
-                    //Read a simple record in from the file.
-                    LoadFromSimpleRecord( recordJObj );
-                }
-                
+                //Create a new template instance from here.
+                TC = new TemplateController( File.ReadAllText( fileName ), TemplateStyle.HasValues );
+                    
+                //Now get the simple record object.
+                RecordData = TC.TemplateToSimpleRecordObject( );
 
-                TC = new TemplateController( recordJObj[ "type" ].ToString( ) );
+
+              
+              
             } catch( Exception errMsg ) {
                 //Log Exception
                 Models.Log.WriteToLog( errMsg );
@@ -66,52 +58,19 @@ namespace SeventyTwoDesktop.Controllers
 
         //This constructor is for loading a new object based on template.
         public RecordController( string templateName ) {
-            TC = new TemplateController( templateName );
+            TC = new TemplateController( templateName, TemplateStyle.Blank );
             StartNewRecord( );
         }
         
 
-        //Load a record from a full template record.
-        public bool LoadFromFullTemplateRecord( JObject fullRecordData ) {
-            bool retVal = false;
-            try {
-
-                //Create a new template based on the type from the record.
-                TC = new TemplateController( fullRecordData );
-
-                //Now get the simple record object.
-                RecordData = TC.TemplateToSimpleRecordObject( );
-
-                retVal = true;
-            } catch( Exception errMsg ) {
-                //Log Exception;
-                Models.Log.WriteToLog( errMsg );
-            }
-            return retVal;
-        }
-
-        //Load a record from a full template record.
-        public bool LoadFromSimpleRecord( JObject simpleData ) {
-            bool retVal = false;
-            try {
-
-                //Now get the simple record object.
-                RecordData = simpleData;
-
-                //Create a new template based on the type from the record.
-                TC = new TemplateController( simpleData["type"].ToString() );
-
-                retVal = true;
-            } catch( Exception errMsg )
-            {
-                //Log Exception;
-                Models.Log.WriteToLog( errMsg );
-            }
-            return retVal;
-        }
-
         public string GetTemplateType() {
             return TC.TemplateType;
+        }
+
+        public string GetRecordDisplayText( ) {
+            string title = TemplateController.GetTemplateTypes( ).Where( T => T.Key == TC.TemplateType ).First( ).Value;
+            string suffix = RecordData.ContainsKey( "date_entered" ) ? " - " + RecordData[ "date_entered" ].ToString( ) : "";
+            return title + suffix;
         }
 
         public Dictionary<string, Models.TemplateItem> GetTemplateItems() {
@@ -129,9 +88,18 @@ namespace SeventyTwoDesktop.Controllers
         public string StartNewRecord() {
             try {
                 _RecordGUID = Guid.NewGuid( ).ToString( );
-                RecordData = new JObject( );
+                RecordData = new JObject {
+                    [ "record_guid" ] = _RecordGUID,
+                    [ "type" ] = TC.TemplateType,
+                    [ "title" ] = TemplateController.GetTemplateTypes( ).Where( T => T.Key == TC.TemplateType ).First( ).Value,
+                    [ "date_entered" ] = DateTime.Now.ToString( "dd-MMM-yyyy" )
+                };
             } catch ( Exception er ) { Models.Log.WriteToLog( er ); }
             return _RecordGUID;
+        }
+
+        public JObject RenderDataToFullTemplateJSON () {
+            return TC.TemplateToFullJSONObject( );
         }
 
         public JObject RenderDataToSimpleJSON( ) {
@@ -207,12 +175,14 @@ namespace SeventyTwoDesktop.Controllers
             try {
 
                 TC.UpdateTemplateItemValue( Key, Value );
+                RecordData[ Key ] = Value;
 
 
                 //Check to see if I need to do a calculation
                 Models.TemplateItem ti = TC.GetTemplateItem( Key );
                 for( int i = 0; i < ti.Calculation.Count; i++ ) {
                     JObject calcDef = ( JObject )ti.Calculation[ i ];
+                    string destField = calcDef[ "destination_field" ].ToString( );
                     switch ( calcDef["type"].ToString() ) {
                         case "add":
                             if ( calcDef["display"].ToString() == "date" ) {
@@ -237,45 +207,77 @@ namespace SeventyTwoDesktop.Controllers
                                         calcTime = calcTime.AddYears( int.Parse( calcDef[ "value" ].ToString( ) ) );
                                         break;
                                 }
-                                RecordData[ calcDef[ "destination_field" ].ToString() ] = calcTime.ToString( "dd-MMM-yyyy" );
-                                retVal.AdditionalValuesUpdated.Add( calcDef[ "destination_field" ].ToString( ), calcTime.ToString( "dd-MMM-yyyy" ) );
+                                string addValToUpdate = calcTime.ToString( "dd-MMM-yyyy" );
+                                TC.UpdateTemplateItemValue( destField, addValToUpdate );
+                                RecordData[ destField ] = addValToUpdate;
+                                retVal.AdditionalValuesUpdated.Add( destField, addValToUpdate );
                             }
                             break;
                         case "nowdiff":
                             
                             TimeSpan diff = ( DateTime.Now - DateTime.Parse( Value ) );
-                            string targetVal = "0";
+                            string nowDiffTargetValue = "0";
                             switch( calcDef[ "units" ].ToString( ) ) {
                                 case "s":
-                                    targetVal = Math.Floor( diff.TotalSeconds ).ToString();
+                                    nowDiffTargetValue = Math.Floor( diff.TotalSeconds ).ToString();
                                     break;
                                 case "m":
-                                    targetVal = Math.Floor( diff.TotalMinutes ).ToString( );
+                                    nowDiffTargetValue = Math.Floor( diff.TotalMinutes ).ToString( );
                                     break;
                                 case "h":
-                                    targetVal = Math.Floor( diff.TotalHours ).ToString( );
+                                    nowDiffTargetValue = Math.Floor( diff.TotalHours ).ToString( );
                                     break;
                                 case "d":
-                                    targetVal = Math.Floor( diff.TotalDays ).ToString( );
+                                    nowDiffTargetValue = Math.Floor( diff.TotalDays ).ToString( );
                                     break;
                                 case "M":
-                                    targetVal = Math.Ceiling( ( decimal )diff.TotalDays / 30 ).ToString( );
+                                    nowDiffTargetValue = Math.Ceiling( ( decimal )diff.TotalDays / 30 ).ToString( );
                                     break;
                                 case "y":
-                                    targetVal = Math.Ceiling( ( decimal )diff.TotalDays / 365 ).ToString( );
+                                    nowDiffTargetValue = Math.Ceiling( ( decimal )diff.TotalDays / 365 ).ToString( );
                                     break;
                             }
-                            RecordData[ calcDef[ "destination_field" ].ToString( ) ] = targetVal;
-                            retVal.AdditionalValuesUpdated.Add( calcDef[ "destination_field" ].ToString( ), targetVal );
+                            
+                            TC.UpdateTemplateItemValue( destField, nowDiffTargetValue );
+                            RecordData[ destField ] = nowDiffTargetValue;
+                            retVal.AdditionalValuesUpdated.Add( destField, nowDiffTargetValue );
+                           
                             break;
                     }
                 }
 
                
+                WriteRecord( );
                 retVal.UpdateSuccess = true;
             } catch ( Exception er ) { Models.Log.WriteToLog( er ); }
             return retVal;
         }
+
+        private void WriteRecord() {
+            
+            if( !string.IsNullOrEmpty( ProfileGUID ) && !string.IsNullOrEmpty( RecordGUID ) ) {
+                SaveFullRecordObject( "profiles/" + ProfileGUID + "/" + RecordGUID + ".json"  );
+            }
+        }
+
+        public bool SaveFullRecordObject( string fileNameToSaveFileTo )
+        {
+            bool retVal = false;
+            try {
+                if( FileController == null || ( FileController != null && ( FileController.TargetFile == fileNameToSaveFileTo ) ) ) {
+                    FileController = new FileReadWriteController( fileNameToSaveFileTo );
+                }
+                JObject templateData =  TC.TemplateToFullJSONObject( );
+                templateData[ "record_guid" ] = _RecordGUID;
+                templateData[ "profile_guid" ] = ProfileGUID;
+                FileController.WriteDataToFile( JsonConvert.SerializeObject( templateData ) );
+                retVal = true;
+            } catch( Exception err ) {
+                Models.Log.WriteToLog( err );
+            }
+            return retVal;
+        }
+
     }
 
     public struct RecordDataUpdate {

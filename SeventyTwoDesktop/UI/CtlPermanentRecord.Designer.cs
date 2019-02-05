@@ -83,7 +83,7 @@
             this.txtAddress.Location = new System.Drawing.Point(115, 120);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(270, 23);
-            this.txtAddress.TabIndex = 4;
+            this.txtAddress.TabIndex = 3;
             // 
             // lblAddress
             // 
@@ -101,7 +101,7 @@
             this.txtPhone.Location = new System.Drawing.Point(115, 207);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(270, 23);
-            this.txtPhone.TabIndex = 5;
+            this.txtPhone.TabIndex = 6;
             // 
             // lblPhone
             // 
@@ -119,7 +119,7 @@
             this.txtCommunity.Location = new System.Drawing.Point(115, 149);
             this.txtCommunity.Name = "txtCommunity";
             this.txtCommunity.Size = new System.Drawing.Size(270, 23);
-            this.txtCommunity.TabIndex = 3;
+            this.txtCommunity.TabIndex = 4;
             // 
             // lblCommunity
             // 
@@ -141,7 +141,7 @@
             this.cbGender.Location = new System.Drawing.Point(115, 234);
             this.cbGender.Name = "cbGender";
             this.cbGender.Size = new System.Drawing.Size(93, 23);
-            this.cbGender.TabIndex = 6;
+            this.cbGender.TabIndex = 7;
             // 
             // lblGender
             // 
@@ -170,7 +170,7 @@
             this.dtpBirthDate.Location = new System.Drawing.Point(275, 234);
             this.dtpBirthDate.Name = "dtpBirthDate";
             this.dtpBirthDate.Size = new System.Drawing.Size(110, 23);
-            this.dtpBirthDate.TabIndex = 7;
+            this.dtpBirthDate.TabIndex = 8;
             // 
             // btnSaveChanges
             // 
@@ -178,7 +178,7 @@
             this.btnSaveChanges.Location = new System.Drawing.Point(295, 12);
             this.btnSaveChanges.Name = "btnSaveChanges";
             this.btnSaveChanges.Size = new System.Drawing.Size(90, 26);
-            this.btnSaveChanges.TabIndex = 8;
+            this.btnSaveChanges.TabIndex = 9;
             this.btnSaveChanges.Text = "Save Changes";
             this.btnSaveChanges.UseVisualStyleBackColor = true;
             this.btnSaveChanges.Click += new System.EventHandler(this.BtnSaveChanges_Click);
@@ -207,7 +207,7 @@
             this.txtLocation.Location = new System.Drawing.Point(115, 178);
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.Size = new System.Drawing.Size(270, 23);
-            this.txtLocation.TabIndex = 16;
+            this.txtLocation.TabIndex = 5;
             // 
             // lblLocation
             // 
@@ -219,7 +219,7 @@
             this.lblLocation.TabIndex = 17;
             this.lblLocation.Text = "Location";
             // 
-            // ucPermanentRecord
+            // CtlPermanentRecord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -241,7 +241,7 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblPermRecord);
-            this.Name = "ucPermanentRecord";
+            this.Name = "CtlPermanentRecord";
             this.Size = new System.Drawing.Size(400, 275);
             this.Load += new System.EventHandler(this.CtlPermanentRecord_Load);
             this.ResumeLayout(false);
