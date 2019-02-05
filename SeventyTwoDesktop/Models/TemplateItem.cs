@@ -11,19 +11,19 @@ namespace SeventyTwoDesktop.Models
     public class TemplateItem
     {
 
-        public string Name { get; set; }
-        public string FieldType { get; set; }
-        public string Group { get; set; }
-        public string Title { get; set; }
-        public int Order { get; set; }
-        public JArray DropDownOptions{ get; set; }
-        public string ShowOn { get; set; }
-        public string Value { get; set; }
-        public List<TemplateItem> OptionalFields { get; set; }
-        public string Nature { get; set; }
-        public Dictionary<string, TemplateItem> SubrecordItems{ get; set; }
-        public JArray Subrecords { get; set; }
-        public JArray Calculation { get; set; }
+        public string name { get; set; }
+        public string field_type { get; set; }
+        public string group { get; set; }
+        public string title { get; set; }
+        public int order { get; set; }
+        public JArray dropdown_options{ get; set; }
+        public string show_on { get; set; }
+        public string value { get; set; }
+        public KeyValuePair<string,TemplateItem> optional_fields { get; set; }
+        public string nature { get; set; }
+        public Dictionary<string, TemplateItem> subrecord_items{ get; set; }
+        public JArray subrecords { get; set; }
+        public JArray calculation { get; set; }
 
         public TemplateItem( ) {
 
@@ -32,31 +32,34 @@ namespace SeventyTwoDesktop.Models
         public TemplateItem( JToken ti ){
 
             string[ ] pathSplit = ti.Path.Split( '.' );
-            Name = pathSplit[ pathSplit.Length - 1 ];
+            name = pathSplit[ pathSplit.Length - 1 ];
 
-            FieldType = ti[ "field_type" ] != null ? ti[ "field_type" ].ToString( ) : "";
-            Group = ti[ "group" ] != null ? ti[ "group" ].ToString( ) : "";
-            Title = ti[ "title" ] != null ? ti[ "title" ].ToString( ) : "";
-            Order = ti[ "order" ] != null ? int.Parse( ti[ "order" ].ToString( ) ) : 0;
-            ShowOn = ti[ "show_on" ] != null ? ti[ "show_on" ].ToString( ) : "";
-            Value = ti[ "value" ] != null ? ti[ "value" ].ToString( ) : ""; 
-            DropDownOptions = ti[ "dropdown_options" ] != null ? new JArray( ti[ "dropdown_options" ].ToString( ) ) : new JArray( );
-            OptionalFields = new List<TemplateItem>( );
+            field_type = ti[ "field_type" ] != null ? ti[ "field_type" ].ToString( ) : "";
+            group = ti[ "group" ] != null ? ti[ "group" ].ToString( ) : "";
+            title = ti[ "title" ] != null ? ti[ "title" ].ToString( ) : "";
+            order = ti[ "order" ] != null ? int.Parse( ti[ "order" ].ToString( ) ) : 0;
+            show_on = ti[ "show_on" ] != null ? ti[ "show_on" ].ToString( ) : "";
+            value = ti[ "value" ] != null ? ti[ "value" ].ToString( ) : ""; 
+            dropdown_options = ti[ "dropdown_options" ] != null ? new JArray( ti[ "dropdown_options" ].ToString( ) ) : new JArray( );
+            
             if( ti[ "optional_fields" ] != null ) {
-                foreach( KeyValuePair<string, JToken> property in (JObject)ti[ "optional_fields" ] )
-                {
-                    OptionalFields.Add( new TemplateItem( property.Value ) );
+                foreach( KeyValuePair<string, JToken> property in ( JObject )ti[ "optional_fields" ] ) {
+                    if( property.Key == "name" ) {
+                        optional_fields = new KeyValuePair<string, TemplateItem>( property.Value.ToString( ), new TemplateItem( ti[ "optional_fields" ] ) );
+                    }
                 }
+            } else {
+                optional_fields = new KeyValuePair<string, TemplateItem>();
             }
-            Nature = ti[ "nature" ] != null ? ti[ "nature" ].ToString( ) : "";
-            Subrecords = ti[ "subrecords" ] != null ? ( JArray )ti[ "subrecords" ] : new JArray( );
-            SubrecordItems = new Dictionary<string,TemplateItem>( );
+            nature = ti[ "nature" ] != null ? ti[ "nature" ].ToString( ) : "";
+            subrecords = ti[ "subrecords" ] != null ? ( JArray )ti[ "subrecords" ] : new JArray( );
+            subrecord_items = new Dictionary<string,TemplateItem>( );
             if( ti[ "subrecord_items" ] != null ) {
                 foreach( KeyValuePair<string, JToken> property in ( JObject )ti[ "subrecord_items" ] ) {
-                    SubrecordItems.Add( property.Key, new TemplateItem( property.Value ) );
+                    subrecord_items.Add( property.Key, new TemplateItem( property.Value ) );
                 }
             }
-            Calculation = ti[ "calculation" ] != null ? ( JArray ) ti[ "calculation" ] : new JArray( );
+            calculation = ti[ "calculation" ] != null ? ( JArray ) ti[ "calculation" ] : new JArray( );
         }
 
         public JObject ToJObject() {
@@ -65,20 +68,20 @@ namespace SeventyTwoDesktop.Models
             try {
 
                 //retVal.Add()
-                item.Add( "group", Group );
-                item.Add( "field_type", FieldType );
-                item.Add( "title", Title );
-                item.Add( "order", Order );
-                item.Add( "show_on", ShowOn );
-                item.Add( "value", Value );
-                item.Add( "dropdown_options", new JArray( DropDownOptions ) );
-                item.Add( "optional_fields", new JObject( OptionalFields ) );
-                item.Add( "value", Value );
-                item.Add( "subrecords", new JArray( Subrecords ) );
-                item.Add( "subrecord_items", new JObject( SubrecordItems ) );
-                item.Add( "calculation", new JArray( Calculation ) );
+                item.Add( "group", group );
+                item.Add( "field_type", field_type );
+                item.Add( "title", title );
+                item.Add( "order", order );
+                item.Add( "show_on", show_on );
+                item.Add( "value", value );
+                item.Add( "dropdown_options", new JArray( dropdown_options ) );
+                item.Add( "optional_fields", new JObject( optional_fields ) );
+                item.Add( "value", value );
+                item.Add( "subrecords", new JArray( subrecords ) );
+                item.Add( "subrecord_items", new JObject( subrecord_items ) );
+                item.Add( "calculation", new JArray( calculation ) );
 
-                retVal.Add( Name, item );
+                retVal.Add( name, item );
 
             } catch (Exception errMsg) {
                 Models.Log.WriteToLog( errMsg );

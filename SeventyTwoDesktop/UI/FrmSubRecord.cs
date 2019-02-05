@@ -57,10 +57,10 @@ namespace SeventyTwoDesktop.UI
             try {
                 SubrecordItems = sri;
                 foreach( KeyValuePair<string, Models.TemplateItem> ti in SubrecordItems ) {
-                    if( ti.Value.SubrecordItems.Count == 0 ) {
+                    if( ti.Value.subrecord_items.Count == 0 ) {
                         CtlTemplateItem guidanceItem = new CtlTemplateItem {
                             OutlineMode = false,
-                            Name = "ucti" + ti.Value.Name,
+                            Name = "ucti" + ti.Value.name,
                             RecordInstance = rc,
                             HandleRecordDataUpdate = false,
                             Visible = false
@@ -75,7 +75,7 @@ namespace SeventyTwoDesktop.UI
                             //Terning right around... to show yes/no instead of True/False
                             displayText = ( displayText == "true" ) ? "Yes" : ( displayText == "false" ) ? "No" : displayText;
 
-                            TvViewNodes.Nodes[ tiea.Key ].Text = displayItem.Title + " - " + displayText;
+                            TvViewNodes.Nodes[ tiea.Key ].Text = displayItem.title + " - " + displayText;
                             Record[ tiea.Key ] = tiea.Value;
 
                             //Send the event that the record changed.
@@ -91,7 +91,7 @@ namespace SeventyTwoDesktop.UI
 
                     }
                     
-                    TvViewNodes.Nodes.Add( ti.Value.Name, ti.Value.Title );
+                    TvViewNodes.Nodes.Add( ti.Value.name, ti.Value.title );
 
                 }
 
@@ -109,7 +109,7 @@ namespace SeventyTwoDesktop.UI
             Record = RecordData;
             foreach( KeyValuePair<string, JToken> kvp in RecordData ) {
                 string valueToDisplay = kvp.Value.ToString( );
-                TvViewNodes.Nodes[ kvp.Key ].Text = SubrecordItems[kvp.Key].Title + " - " + valueToDisplay;
+                TvViewNodes.Nodes[ kvp.Key ].Text = SubrecordItems[kvp.Key].title + " - " + valueToDisplay;
             } 
         }
 

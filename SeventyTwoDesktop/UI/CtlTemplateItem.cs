@@ -50,8 +50,8 @@ namespace SeventyTwoDesktop
 
         public void LoadTemplateItem( TemplateItem template ) {
             _ti = template;
-            _name = _ti.Name;
-            _group = _ti.Group;
+            _name = _ti.name;
+            _group = _ti.group;
             if ( OutlineMode ) {
                 GenerateOutlineControl( );
             } else {
@@ -61,22 +61,22 @@ namespace SeventyTwoDesktop
 
         private void GenerateOutlineControl( )
         {
-            this.Controls.Add( new Label { Top =4, Left = 4, Text = _ti.Title, AutoSize = true } );
+            this.Controls.Add( new Label { Top =4, Left = 4, Text = _ti.title, AutoSize = true } );
          
-            switch( _ti.FieldType ) {
+            switch( _ti.field_type ) {
                 case "true_false":
                     MainValueControl = new CheckBox {
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Checked = (_ti.Value == "true")
+                        Checked = (_ti.value == "true")
                     };
                     CheckBox cbMVC = ( CheckBox )MainValueControl;
                     cbMVC.CheckStateChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
-                        _ti.Value = cbMVC.Checked ? "true" : "false";
+                        _ti.value = cbMVC.Checked ? "true" : "false";
                         if( this.Focused ) {
-                            HandleItemValueChange( _ti.Value );
+                            HandleItemValueChange( _ti.value );
                         }
                     };
                     
@@ -86,15 +86,15 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = _ti.Value,
+                        Text = _ti.value,
                         Maximum = 10000,
                         Minimum = -10000
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
-                        _ti.Value = MainValueControl.Text;
+                        _ti.value = MainValueControl.Text;
                         if( this.Focused ) {
-                            HandleItemValueChange( _ti.Value );
+                            HandleItemValueChange( _ti.value );
                         }
                     };
                     break;
@@ -103,16 +103,16 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = _ti.Value,
+                        Text = _ti.value,
                         Multiline = true,
                         WordWrap = true
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         MainValueControl.Size = MainValueControl.GetPreferredSize( new Size( 192, 300 ) );
                         this.Height = MainValueControl.Height + 20;
-                        _ti.Value = MainValueControl.Text;
+                        _ti.value = MainValueControl.Text;
                         if( this.Focused ) {
-                            HandleItemValueChange( _ti.Value );
+                            HandleItemValueChange( _ti.value );
                         }
                     };
                     break;
@@ -121,17 +121,17 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = _ti.Value
+                        Text = _ti.value
                     };
                     ComboBox cmbMVC = ( ComboBox )MainValueControl;
-                    for( int i = 0; i < _ti.DropDownOptions.Count; i++ ) {
-                        cmbMVC.Items.Add( _ti.DropDownOptions[ i ] );
+                    for( int i = 0; i < _ti.dropdown_options.Count; i++ ) {
+                        cmbMVC.Items.Add( _ti.dropdown_options[ i ] );
                     }
 
                     cmbMVC.SelectedIndexChanged += delegate ( object o, EventArgs e ) {
-                        _ti.Value = cmbMVC.Items[ cmbMVC.SelectedIndex ].ToString();
+                        _ti.value = cmbMVC.Items[ cmbMVC.SelectedIndex ].ToString();
                         if( this.Focused ) {
-                            HandleItemValueChange( _ti.Value );
+                            HandleItemValueChange( _ti.value );
                         }
                     };
                     break;
@@ -141,14 +141,14 @@ namespace SeventyTwoDesktop
                         Top = 20,
                         Left = 4,
                         Width = 192,
-                        Text = _ti.Value,
+                        Text = _ti.value,
                         Multiline = false
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         //Raise the textchanged event.
-                        _ti.Value = MainValueControl.Text;
+                        _ti.value = MainValueControl.Text;
                         if( this.Focused ) {
-                            HandleItemValueChange( _ti.Value );
+                            HandleItemValueChange( _ti.value );
                         }
                     };
                     break;
@@ -161,35 +161,29 @@ namespace SeventyTwoDesktop
             }
             Click += delegate ( object o, EventArgs e ) {
                 if( !CanEditInOutlineMode ) {
-                    this.OutlineModeClick( o, new TemplateItemEventArgs( _ti.Name, _ti.Value ) );
+                    this.OutlineModeClick( o, new TemplateItemEventArgs( _ti.name, _ti.value ) );
                 }
             };
 
         }
 
         private void GenerateGuidanceControl( ) {
-            this.Controls.Add( new Label { Top = 4, Left = 4, Width = 500, Text = _ti.Title, AutoSize = true, Font = new Font( "Segoe UI", 20 ), TextAlign = ContentAlignment.MiddleCenter } );
+            this.Controls.Add( new Label { Top = 4, Left = 4, Width = 500, Text = _ti.title, AutoSize = true, Font = new Font( "Segoe UI", 20 ), TextAlign = ContentAlignment.MiddleCenter } );
 
-            switch( _ti.FieldType )
+            switch( _ti.field_type )
             {
                 
                 case "true_false":
                     MainValueControl = new CheckBox {
                         Top = 0,
                         Left = 0,
-                        Checked = ( _ti.Value == "true" ),
+                        Checked = ( _ti.value == "true" ),
                         Visible = false
                     };
                     CheckBox cbMVC = ( CheckBox )MainValueControl;
-                    cbMVC.CheckedChanged += delegate ( object o, EventArgs e ) {
-                        //Raise the textchanged event.
-                        _value = cbMVC.Checked ? "true" : "false";
-                        //if( this.Focused ){
-                            HandleItemValueChange( _value );
-                        //}
-                    };
-                    Button btnYes = new Button { Left = 10, Top = 40, Height = 100, Width = 150, Text = "YES", Font = new Font( "Segoe UI", 20 ) };
-                    Button btnNo = new Button { Left = 170, Top = 40, Height = 100, Width = 150, Text = "NO", Font = new Font( "Segoe UI", 20 ) };
+                    
+                    Button btnYes = new Button { Name="BtnYes", Left = 10, Top = 40, Height = 100, Width = 150, Text = "YES", Font = new Font( "Segoe UI", 20 ) };
+                    Button btnNo = new Button { Name = "BtnNo", Left = 170, Top = 40, Height = 100, Width = 150, Text = "NO", Font = new Font( "Segoe UI", 20 ) };
 
                     btnYes.Click += delegate ( object o, EventArgs e ) {
                         cbMVC.Checked = true;
@@ -198,22 +192,26 @@ namespace SeventyTwoDesktop
                         if( HasOptionalFields ) {
                             OptionalFieldsFlowPanel.Show( );
                         }
+                        HandleItemValueChange( "true" );
                     };
 
                     btnNo.Click += delegate ( object o, EventArgs e ) {
+                        
                         cbMVC.Checked = false;
                         btnYes.BackColor = Color.Transparent;
                         btnNo.BackColor = Color.Red;
                         if( HasOptionalFields ) {
                             OptionalFieldsFlowPanel.Hide( );
                         }
+
+                        HandleItemValueChange( "false" );
                     };
 
                     
                     this.Controls.Add( btnYes );
                     this.Controls.Add( btnNo );
 
-                    foreach( TemplateItem optVal in _ti.OptionalFields ) {
+                    if( _ti.optional_fields.Value != null ) {
                         HasOptionalFields = true;
 
                         if( OptionalFieldsFlowPanel == null ) {
@@ -224,24 +222,24 @@ namespace SeventyTwoDesktop
                             OptionalFieldsFlowPanel.BringToFront( );
                         }
 
-                        OptionalFieldsFlowPanel.Controls.Add( new Label { Top = 4, Left = 4, Text = optVal.Title, AutoSize = true } );
+                        OptionalFieldsFlowPanel.Controls.Add( new Label { Top = 4, Left = 4, Text = _ti.optional_fields.Value.title, AutoSize = true } );
 
-                        switch ( optVal.FieldType ) {
+                        switch ( _ti.optional_fields.Value.field_type ) {
                             case "notes":
 
                                 RichTextBox notesCtl = new RichTextBox {
                                     Left = 4,
                                     Width = 130,
                                     Height = 75,
-                                    Text = optVal.Value,
+                                    Text = _ti.optional_fields.Value.value,
                                     Multiline = true,
                                     WordWrap = true,
                                     ScrollBars = RichTextBoxScrollBars.Vertical
                                 };
                                 notesCtl.TextChanged += delegate ( object o, EventArgs e ) {
-                                    optVal.Value = notesCtl.Text;
+                                    _ti.optional_fields.Value.value = notesCtl.Text;
                                     if( this.Focused ) {
-                                        HandleOptionalItemValueChange( optVal, notesCtl.Text );
+                                        HandleOptionalItemValueChange( _ti.optional_fields.Value, notesCtl.Text );
                                     }
                                 };
                                 OptionalFieldsFlowPanel.Controls.Add( notesCtl );
@@ -250,7 +248,7 @@ namespace SeventyTwoDesktop
                                 NumericUpDown nudCtl = new NumericUpDown {
                                     Left = 4,
                                     Width = 130,
-                                    Text = _ti.Value,
+                                    Text = _ti.value,
                                     Font = new Font( "Segoe UI", 20 ),
                                     Maximum = 10000,
                                     Minimum = -10000
@@ -258,7 +256,7 @@ namespace SeventyTwoDesktop
                                 nudCtl.TextChanged += delegate ( object o, EventArgs e ) {
                                     //Raise the textchanged event.
                                     if( this.Focused ) {
-                                        HandleOptionalItemValueChange( optVal, nudCtl.Text );
+                                        HandleOptionalItemValueChange( _ti.optional_fields.Value, nudCtl.Text );
                                     }
                                 };
                                 OptionalFieldsFlowPanel.Controls.Add( nudCtl );
@@ -273,10 +271,11 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = _ti.Value,
+                        Text = _ti.value,
                         Font = new Font( "Segoe UI", 20 ),
                         Maximum = 10000,
-                        Minimum = -10000
+                        Minimum = -10000,
+                        DecimalPlaces = 2,
                     };
                     MainValueControl.TextChanged += delegate ( object o, EventArgs e ) {
                         HandleItemValueChange( MainValueControl.Text );
@@ -287,7 +286,7 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = _ti.Value,
+                        Text = _ti.value,
                         Multiline = true,
                         WordWrap = true,
                         
@@ -302,7 +301,7 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = _ti.Value,
+                        Text = _ti.value,
                         CustomFormat = "dd-MMM-yyyy",
                         Format = DateTimePickerFormat.Custom
                     };
@@ -317,13 +316,13 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = _ti.Value,
+                        Text = _ti.value,
                         Font = new Font( "Segoe UI", 20 )
                     };
                     ComboBox cmbMVC = ( ComboBox )MainValueControl;
-                    for( int i = 0; i < _ti.DropDownOptions.Count; i++ )
+                    for( int i = 0; i < _ti.dropdown_options.Count; i++ )
                     {
-                        cmbMVC.Items.Add( _ti.DropDownOptions[ i ] );
+                        cmbMVC.Items.Add( _ti.dropdown_options[ i ] );
                     }
 
                     cmbMVC.SelectedIndexChanged += delegate ( object o, EventArgs e ) {
@@ -336,7 +335,7 @@ namespace SeventyTwoDesktop
                         Top = 50,
                         Left = 4,
                         Width = 300,
-                        Text = _ti.Value,
+                        Text = _ti.value,
                         Multiline = false,
                         Font = new Font( "Segoe UI", 20 )
                     };
@@ -356,9 +355,9 @@ namespace SeventyTwoDesktop
             _value = value;
             if( HandleRecordDataUpdate ) {
                 //Do the update here.
-                Controllers.RecordDataUpdate rdu = RecordInstance.UpdateData( _ti.Name, _value );
+                Controllers.RecordDataUpdate rdu = RecordInstance.UpdateData( _ti.name, _value );
                 if( rdu.UpdateSuccess ) {
-                    this.ItemValueChanged( this, new TemplateItemEventArgs( _ti.Name, _value ) );
+                    this.ItemValueChanged( this, new TemplateItemEventArgs( _ti.name, _value ) );
                     //Emit events if we changed more than one value (usually related to calculations)
                     foreach( KeyValuePair<string, string> avi in rdu.AdditionalValuesUpdated ) {
                         this.ItemValueChanged( this, new TemplateItemEventArgs( avi.Key, avi.Value ) );
@@ -366,12 +365,12 @@ namespace SeventyTwoDesktop
                 }
             } else {
                 //Just fire the event, don't save it.
-                this.ItemValueChanged( this, new TemplateItemEventArgs( _ti.Name, _value ) );
+                this.ItemValueChanged( this, new TemplateItemEventArgs( _ti.name, _value ) );
             }
         }
         private void HandleOptionalItemValueChange( TemplateItem optItem, string value ) {
             //Do the update here.
-            this.ItemValueChanged( this, new TemplateItemEventArgs( optItem.Name, value ) );
+            this.ItemValueChanged( this, new TemplateItemEventArgs( optItem.name, value ) );
         }
 
         private void CtlTemplateItem_Load( object sender, EventArgs e ) {
@@ -383,12 +382,27 @@ namespace SeventyTwoDesktop
 
         private void LoadData( ) {
             if( RecordInstance != null && MainValueControl != null && HandleRecordDataUpdate ) {
-                MainValueControl.Text = RecordInstance.GetData( _ti.Name );
+                _value = RecordInstance.GetData( _ti.name );
+                PopulateControls( );
             }
         }
 
         public void LoadData( string ValToLoad ) {
-            MainValueControl.Text = ValToLoad;
+            _value = ValToLoad;
+            PopulateControls( );
+        }
+
+        public void PopulateControls() {
+            MainValueControl.Text = _value;
+            if ( _ti.field_type == "true_false" ) {
+                if ( _value == "true" ) {
+                    Controls.Find( "BtnYes", true ).First().BackColor = Color.Green;
+                    Controls.Find( "BtnNo", true ).First( ).BackColor = Color.Transparent;
+                } else if ( _value == "false" ) {
+                    Controls.Find( "BtnYes", true ).First( ).BackColor = Color.Transparent;
+                    Controls.Find( "BtnNo", true ).First( ).BackColor = Color.Red;
+                }
+            } 
         }
 
         public void FocusMVC() {

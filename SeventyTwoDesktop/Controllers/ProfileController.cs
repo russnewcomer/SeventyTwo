@@ -53,7 +53,7 @@ namespace SeventyTwoDesktop.Controllers
                         //We don't want to try to load permanent.json
                         if( !filename.Contains( "\\permanent.json" ) && filename.Contains(".json" ) ) {
                             //Get the record contents
-                            RecordController rc = new RecordController( filename, Profile.guid );
+                            RecordController rc = new RecordController( filename, Profile.guid, TemplateStyle.HasValues );
                             Records.Add( rc.RecordGUID, rc );
                         }
 
@@ -80,21 +80,21 @@ namespace SeventyTwoDesktop.Controllers
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
         }
 
-        public JObject ProfileDataToSimpleRecord( ) {
+        //public JObject ProfileDataToSimpleRecord( ) {
 
-            JObject recordData = new JObject( );
+        //    JObject recordData = new JObject( );
 
-            try {
+        //    try {
 
-                foreach( KeyValuePair<string, RecordController> Record in Records ) {
-                    Record.Value.RenderDataToSimpleJSON( );
-                }
-            } catch( Exception errMsg ) {
-                //Figure out how to log these somewhere.
-                Log.WriteToLog( errMsg );
-            }
-            return recordData;
-        }
+        //        foreach( KeyValuePair<string, RecordController> Record in Records ) {
+        //            Record.Value.RenderDataToSimpleJSON( );
+        //        }
+        //    } catch( Exception errMsg ) {
+        //        //Figure out how to log these somewhere.
+        //        Log.WriteToLog( errMsg );
+        //    }
+        //    return recordData;
+        //}
 
 
     }

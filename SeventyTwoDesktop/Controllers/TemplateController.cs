@@ -48,10 +48,13 @@ namespace SeventyTwoDesktop.Controllers
                 if ( style == TemplateStyle.Blank ) {
                     //If this is a simple record, we first need to set the 
                     TemplateType = RawData;
-                    TemplateInstance = new Template( File.ReadAllText( "templates/" + TemplateType + ".json" ) );
+                    TemplateInstance = new Template( File.ReadAllText( "templates/" + TemplateType + ".json" ) ) {
+                        date_entered = DateTime.Now //Set the date to the current date.
+                    };
                 } else {
+                    //JObject templateData = 
                     TemplateInstance = new Template( RawData );
-                    TemplateType = TemplateInstance.Type;
+                    TemplateType = TemplateInstance.type;
                 }
                 
 
@@ -60,111 +63,78 @@ namespace SeventyTwoDesktop.Controllers
             }
         }
 
-        public void BaseConstructor( string templateTypeName ) {
-            
 
-
-
-        }
-
-        public void LoadTemplateFromJSONString( string RawData ) {
-
-            
-
+        public string TemplateToFullJSONString( ) {
+          
+            return JsonConvert.SerializeObject( TemplateInstance, Formatting.Indented );
         }
 
 
+        //public bool SaveSimpleRecordObject( string fileNameToSaveFileTo ) {
+        //    bool retVal = false;
+        //    try {
+        //        if ( FileController == null || ( FileController != null && (FileController.TargetFile == fileNameToSaveFileTo) ) ) {
+        //            FileController = new FileReadWriteController( fileNameToSaveFileTo );
+        //        }
+        //        FileController.WriteDataToFile( JsonConvert.SerializeObject( TemplateToSimpleRecordObject( ) ) );
+        //        retVal = true;
+        //    } catch( Exception err ) {
+        //        Models.Log.WriteToLog( err );
+        //    }
+        //    return retVal;
+        //}
 
-        public JObject TemplateToFullJSONObject( )
-        {
+        //public JObject TemplateToSimpleRecordObject( ) {
 
-            JObject _groups = ( JObject ) JToken.FromObject( TemplateInstance.Groups );
-            JObject _items = ( JObject )JToken.FromObject( TemplateInstance.Items );
+        //    JObject recordData = new JObject {
 
+        //        //This is the basic stuff
+        //        [ "type" ] = TemplateInstance.type,
+        //        [ "profile_guid" ] = TemplateInstance.profile_guid,
+        //        [ "template_guid" ] = TemplateInstance.template_guid,
+        //        [ "record_guid" ] = TemplateInstance.record_guid,
+        //        [ "date_entered" ] = TemplateInstance.date_entered.ToString( "dd-MMM-yyyy" ),
+        //        [ "notes" ] = TemplateInstance.notes,
+        //        [ "record_attachment" ] = TemplateInstance.record_attachment
+        //    };
 
-            JObject jsonTemplate = new JObject {
-                [ "type" ] = TemplateInstance.Type,
-                [ "nature" ] = TemplateInstance.Nature,
-                [ "template_guid" ] = TemplateInstance.TemplateGUID,
-                [ "title" ] = TemplateInstance.Title,
+        //    foreach( KeyValuePair<string, TemplateItem> kvp in TemplateInstance.items ) {
+        //        string groupName = kvp.Value.group;
+        //        if( !recordData.ContainsKey( groupName ) ) {
+        //            recordData[ groupName ] = new JObject( );
+        //        }
+        //        recordData[ groupName ][ kvp.Value.name ] = kvp.Value.value;
+        //        if ( kvp.Value.optional_fields.Value != null ) { 
+        //            recordData[ groupName ][ kvp.Value.optional_fields.Key ] = kvp.Value.optional_fields.Value.ToString();
+        //        }
+        //    }
 
-                [ "profile_guid" ] = TemplateInstance.ProfileGUID,
-                [ "record_guid" ] = TemplateInstance.RecordGUID,
-                [ "date_entered" ] = TemplateInstance.DateEntered.ToString( "dd-MMM-yyyy" ),
-                [ "notes" ] = TemplateInstance.Notes,
-                [ "record_attachment" ] = TemplateInstance.RecordAttachmentGUID,
-                [ "groups" ] = _groups,
-                [ "items" ] = _items
-            };
-
-            return jsonTemplate;
-        }
-
-
-        public bool SaveSimpleRecordObject( string fileNameToSaveFileTo ) {
-            bool retVal = false;
-            try {
-                if ( FileController == null || ( FileController != null && (FileController.TargetFile == fileNameToSaveFileTo) ) ) {
-                    FileController = new FileReadWriteController( fileNameToSaveFileTo );
-                }
-                FileController.WriteDataToFile( JsonConvert.SerializeObject( TemplateToSimpleRecordObject( ) ) );
-                retVal = true;
-            } catch( Exception err ) {
-                Models.Log.WriteToLog( err );
-            }
-            return retVal;
-        }
-
-        
-
-
-        public JObject TemplateToSimpleRecordObject( ) {
-
-            JObject recordData = new JObject {
-
-                //This is the basic stuff
-                [ "type" ] = TemplateInstance.Type,
-                [ "profile_guid" ] = TemplateInstance.ProfileGUID,
-                [ "template_guid" ] = TemplateInstance.TemplateGUID,
-                [ "record_guid" ] = TemplateInstance.RecordGUID,
-                [ "date_entered" ] = TemplateInstance.DateEntered.ToString( "dd-MMM-yyyy" ),
-                [ "notes" ] = TemplateInstance.Notes,
-                [ "record_attachment" ] = TemplateInstance.RecordAttachmentGUID
-            };
-
-            foreach( KeyValuePair<string, TemplateItem> kvp in TemplateInstance.Items ) {
-                string groupName = kvp.Value.Group;
-                if( !recordData.ContainsKey( groupName ) ) {
-                    recordData[ groupName ] = new JObject( );
-                }
-                recordData[ groupName ][ kvp.Value.Name ] = kvp.Value.Value;
-                foreach( TemplateItem optField in kvp.Value.OptionalFields ) {
-                    recordData[ groupName ][ optField.Name ] = optField.Value;
-                }
-            }
-
-            return recordData;
-        }
+        //    return recordData;
+        //}
 
         public Dictionary<string, TemplateItem> GetTemplateItems(  ) {
-            return TemplateInstance.Items;
+            return TemplateInstance.items;
         }
 
         public string GetRecordGUID() {
-            return TemplateInstance.RecordGUID;
+            return TemplateInstance.record_guid;
         }
 
         public void SetRecordGUID( string RecordGUID ) {
-            TemplateInstance.RecordGUID = RecordGUID;
+            TemplateInstance.record_guid = RecordGUID;
         }
 
 
         public string GetProfileGUID( ) {
-            return TemplateInstance.ProfileGUID;
+            return TemplateInstance.profile_guid;
         }
 
         public void SetProfileGUID( string ProfileGUID ) {
-            TemplateInstance.ProfileGUID = ProfileGUID;
+            TemplateInstance.profile_guid = ProfileGUID;
+        }
+
+        public DateTime GetTemplateDateEntered() {
+            return TemplateInstance.date_entered;
         }
 
         public TemplateItem GetTemplateItem( string itemName ) {
@@ -173,7 +143,7 @@ namespace SeventyTwoDesktop.Controllers
             TemplateItem retVal = new TemplateItem();
 
             try {
-                retVal = TemplateInstance.Items[ itemName ]; ;
+                retVal = TemplateInstance.items[ itemName ]; ;
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
 
             return retVal;
@@ -184,7 +154,7 @@ namespace SeventyTwoDesktop.Controllers
             string retVal = "";
 
             try {
-                retVal = TemplateInstance.Groups[ groupKey ].ToString( );
+                retVal = TemplateInstance.groups[ groupKey ].ToString( );
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
 
             return retVal;
@@ -195,7 +165,7 @@ namespace SeventyTwoDesktop.Controllers
             string retVal = "";
 
             try {
-                retVal = TemplateInstance.Items[ Key ].Value;
+                retVal = TemplateInstance.items[ Key ].value;
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
 
             return retVal;
@@ -206,7 +176,7 @@ namespace SeventyTwoDesktop.Controllers
             bool retVal = false;
 
             try {
-                TemplateInstance.Items[ Key ].Value = Value;
+                TemplateInstance.items[ Key ].value = Value;
                 retVal = true;
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
 
@@ -219,10 +189,10 @@ namespace SeventyTwoDesktop.Controllers
             try {
                 try {
                     if( Index == -1 ) {
-                        TemplateInstance.Items[ Key ].Subrecords.Add( SubRecord );
-                        retVal = TemplateInstance.Items[ Key ].Subrecords.Count - 1;
+                        TemplateInstance.items[ Key ].subrecords.Add( SubRecord );
+                        retVal = TemplateInstance.items[ Key ].subrecords.Count - 1;
                     } else {
-                        TemplateInstance.Items[ Key ].Subrecords[ Index ] = SubRecord;
+                        TemplateInstance.items[ Key ].subrecords[ Index ] = SubRecord;
                     }
                 } catch( Exception exc ) {
                     Models.Log.WriteToLog( exc );
@@ -240,7 +210,7 @@ namespace SeventyTwoDesktop.Controllers
             try {
                 try {
                     //Get the object for this key
-                    retVal = ( JObject ) TemplateInstance.Items[ Key ].Subrecords[ Index ];
+                    retVal = ( JObject ) TemplateInstance.items[ Key ].subrecords[ Index ];
                 } catch( Exception exc ) {
                     Models.Log.WriteToLog( exc );
                 }

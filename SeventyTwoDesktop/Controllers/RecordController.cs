@@ -16,7 +16,7 @@ namespace SeventyTwoDesktop.Controllers
 
         private TemplateController TC { get; set; }
         private string TemplateName { get; set; }
-        private JObject RecordData { get; set; }
+        //private JObject RecordData { get; set; }
         private string _RecordGUID { get; set; }
         public string RecordGUID { get { return _RecordGUID; } }
         public string ProfileGUID { get; set; }
@@ -24,28 +24,30 @@ namespace SeventyTwoDesktop.Controllers
         private FileReadWriteController FileController { get; set; }
 
         //This is a base constructor
-        public RecordController() {
+        public RecordController( ) {
 
         }
 
         //This constructor is for loading a JOBject record in and determining if it is the full template, or just the record.
-        public RecordController( string fileName, string profileGUID ) {
+        public RecordController( string TypeOrFile, string _ProfileGUID, TemplateStyle Style ) {
             try {
-                ProfileGUID = profileGUID;
+                ProfileGUID = _ProfileGUID;
  
+                if ( Style == TemplateStyle.Blank ) {
+                    TC = new TemplateController( TypeOrFile, Style );
+                    _RecordGUID = Guid.NewGuid( ).ToString( );
+                    TC.SetRecordGUID( _RecordGUID );
+                    TC.SetProfileGUID( ProfileGUID );
+                } else {
+                    //Create a new template based on the type the record.
+                    JObject template = JsonConvert.DeserializeObject<JObject>( File.ReadAllText( TypeOrFile ) );
+                    _RecordGUID = template[ "record_guid" ].ToString( );
 
-                //Create a new template based on the type the record.
-                JObject template = JsonConvert.DeserializeObject<JObject>( File.ReadAllText( fileName ) );
-                _RecordGUID = template[ "record_guid" ].ToString( );
-                ProfileGUID = template[ "profile_guid" ].ToString( );
+                    //Create a new template instance from here.
+                    TC = new TemplateController( File.ReadAllText( TypeOrFile ), Style );
 
-                //Create a new template instance from here.
-                TC = new TemplateController( File.ReadAllText( fileName ), TemplateStyle.HasValues );
+                }
                     
-                //Now get the simple record object.
-                RecordData = TC.TemplateToSimpleRecordObject( );
-
-
               
               
             } catch( Exception errMsg ) {
@@ -56,12 +58,6 @@ namespace SeventyTwoDesktop.Controllers
             }
         }
 
-        //This constructor is for loading a new object based on template.
-        public RecordController( string templateName ) {
-            TC = new TemplateController( templateName, TemplateStyle.Blank );
-            StartNewRecord( );
-        }
-        
 
         public string GetTemplateType() {
             return TC.TemplateType;
@@ -69,7 +65,7 @@ namespace SeventyTwoDesktop.Controllers
 
         public string GetRecordDisplayText( ) {
             string title = TemplateController.GetTemplateTypes( ).Where( T => T.Key == TC.TemplateType ).First( ).Value;
-            string suffix = RecordData.ContainsKey( "date_entered" ) ? " - " + RecordData[ "date_entered" ].ToString( ) : "";
+            string suffix = " - " + TC.GetTemplateDateEntered( ).ToString( "dd-MMM-yyyy" );
             return title + suffix;
         }
 
@@ -85,66 +81,50 @@ namespace SeventyTwoDesktop.Controllers
             return TC.GetGroupDisplayName( groupKey );
         }
    
-        public string StartNewRecord() {
-            try {
-                _RecordGUID = Guid.NewGuid( ).ToString( );
-                RecordData = new JObject {
-                    [ "record_guid" ] = _RecordGUID,
-                    [ "type" ] = TC.TemplateType,
-                    [ "title" ] = TemplateController.GetTemplateTypes( ).Where( T => T.Key == TC.TemplateType ).First( ).Value,
-                    [ "date_entered" ] = DateTime.Now.ToString( "dd-MMM-yyyy" )
-                };
-            } catch ( Exception er ) { Models.Log.WriteToLog( er ); }
-            return _RecordGUID;
-        }
 
-        public JObject RenderDataToFullTemplateJSON () {
-            return TC.TemplateToFullJSONObject( );
-        }
+        //public JObject RenderDataToSimpleJSON( ) {
+        //    return TC.TemplateToSimpleRecordObject();
+        //    /*
+        //      try {
 
-        public JObject RenderDataToSimpleJSON( ) {
-            return TC.TemplateToSimpleRecordObject();
-            /*
-              try {
-
-                //This is the basic stuff
-                recordData[ "type" ] = curTemplate.GetTemplateType( );
-                recordData[ "template_guid" ] = Template.jsonTemplate[ "template_guid" ];
-                recordData[ "record_guid" ] = Profile.guid;
-                recordData[ "date_entered" ] = Template.jsonTemplate[ "date_entered" ];
-                recordData[ "notes" ] = Template.jsonTemplate[ "notes" ];
-                recordData[ "record_attachment" ] = Template.jsonTemplate[ "record_attachment" ];
+        //        //This is the basic stuff
+        //        recordData[ "type" ] = curTemplate.GetTemplateType( );
+        //        recordData[ "template_guid" ] = Template.jsonTemplate[ "template_guid" ];
+        //        recordData[ "record_guid" ] = Profile.guid;
+        //        recordData[ "date_entered" ] = Template.jsonTemplate[ "date_entered" ];
+        //        recordData[ "notes" ] = Template.jsonTemplate[ "notes" ];
+        //        recordData[ "record_attachment" ] = Template.jsonTemplate[ "record_attachment" ];
 
 
-                JObject items = ( JObject )Template.jsonTemplate[ "items" ];
-                foreach( KeyValuePair<string, JToken> property in items )
-                {
-                    //Write the record data
-                    string groupName = items[ property.Key ][ "group" ].ToString( );
-                    if( !recordData.ContainsKey( groupName ) )
-                    {
-                        recordData[ groupName ] = new JObject( );
-                    }
-                    recordData[ groupName ][ property.Key ] = items[ property.Key ][ "value" ];
-                    JObject optionalFields = ( JObject )items[ property.Key ][ "optional_fields" ];
-                    foreach( KeyValuePair<string, JToken> optField in optionalFields )
-                    {
-                        recordData[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value" ];
-                    }
-                    //Console.WriteLine( property.Key + " - " + property.Value );
-                }
+        //        JObject items = ( JObject )Template.jsonTemplate[ "items" ];
+        //        foreach( KeyValuePair<string, JToken> property in items )
+        //        {
+        //            //Write the record data
+        //            string groupName = items[ property.Key ][ "group" ].ToString( );
+        //            if( !recordData.ContainsKey( groupName ) )
+        //            {
+        //                recordData[ groupName ] = new JObject( );
+        //            }
+        //            recordData[ groupName ][ property.Key ] = items[ property.Key ][ "value" ];
+        //            JObject optionalFields = ( JObject )items[ property.Key ][ "optional_fields" ];
+        //            foreach( KeyValuePair<string, JToken> optField in optionalFields )
+        //            {
+        //                recordData[ groupName ][ optField.Key ] = items[ property.Key ][ "optional_fields" ][ optField.Key ][ "value" ];
+        //            }
+        //            //Console.WriteLine( property.Key + " - " + property.Value );
+        //        }
 
-                if( fileName != "" )
-                {
-                    File.WriteAllText( fileName, JsonConvert.SerializeObject( recordData ) );
-                }
+        //        if( fileName != "" )
+        //        {
+        //            File.WriteAllText( fileName, JsonConvert.SerializeObject( recordData ) );
+        //        }
            
-            } catch(Exception errMsg ) {
-                //Figure out how to log these somewhere.
-                Models.Log.WriteToLog(errMsg );
-            }
-            */
-        }
+        //    } catch(Exception errMsg ) {
+        //        //Figure out how to log these somewhere.
+        //        Models.Log.WriteToLog(errMsg );
+        //    }
+        //    */
+        //}
 
 
         public string GetData( string Key ) {
@@ -175,13 +155,13 @@ namespace SeventyTwoDesktop.Controllers
             try {
 
                 TC.UpdateTemplateItemValue( Key, Value );
-                RecordData[ Key ] = Value;
+                //RecordData[ Key ] = Value;
 
 
                 //Check to see if I need to do a calculation
                 Models.TemplateItem ti = TC.GetTemplateItem( Key );
-                for( int i = 0; i < ti.Calculation.Count; i++ ) {
-                    JObject calcDef = ( JObject )ti.Calculation[ i ];
+                for( int i = 0; i < ti.calculation.Count; i++ ) {
+                    JObject calcDef = ( JObject )ti.calculation[ i ];
                     string destField = calcDef[ "destination_field" ].ToString( );
                     switch ( calcDef["type"].ToString() ) {
                         case "add":
@@ -209,7 +189,7 @@ namespace SeventyTwoDesktop.Controllers
                                 }
                                 string addValToUpdate = calcTime.ToString( "dd-MMM-yyyy" );
                                 TC.UpdateTemplateItemValue( destField, addValToUpdate );
-                                RecordData[ destField ] = addValToUpdate;
+                               // RecordData[ destField ] = addValToUpdate;
                                 retVal.AdditionalValuesUpdated.Add( destField, addValToUpdate );
                             }
                             break;
@@ -239,7 +219,7 @@ namespace SeventyTwoDesktop.Controllers
                             }
                             
                             TC.UpdateTemplateItemValue( destField, nowDiffTargetValue );
-                            RecordData[ destField ] = nowDiffTargetValue;
+                           //RecordData[ destField ] = nowDiffTargetValue;
                             retVal.AdditionalValuesUpdated.Add( destField, nowDiffTargetValue );
                            
                             break;
@@ -253,24 +233,23 @@ namespace SeventyTwoDesktop.Controllers
             return retVal;
         }
 
-        private void WriteRecord() {
+        public void WriteRecord() {
             
             if( !string.IsNullOrEmpty( ProfileGUID ) && !string.IsNullOrEmpty( RecordGUID ) ) {
                 SaveFullRecordObject( "profiles/" + ProfileGUID + "/" + RecordGUID + ".json"  );
             }
         }
 
-        public bool SaveFullRecordObject( string fileNameToSaveFileTo )
+        private bool SaveFullRecordObject( string fileNameToSaveFileTo )
         {
             bool retVal = false;
             try {
-                if( FileController == null || ( FileController != null && ( FileController.TargetFile == fileNameToSaveFileTo ) ) ) {
+                if( FileController == null || ( FileController != null && ( FileController.TargetFile != fileNameToSaveFileTo ) ) ) {
                     FileController = new FileReadWriteController( fileNameToSaveFileTo );
                 }
-                JObject templateData =  TC.TemplateToFullJSONObject( );
-                templateData[ "record_guid" ] = _RecordGUID;
-                templateData[ "profile_guid" ] = ProfileGUID;
-                FileController.WriteDataToFile( JsonConvert.SerializeObject( templateData ) );
+                TC.SetRecordGUID( _RecordGUID );
+                TC.SetProfileGUID( ProfileGUID );
+                FileController.WriteDataToFile( TC.TemplateToFullJSONString( ) );
                 retVal = true;
             } catch( Exception err ) {
                 Models.Log.WriteToLog( err );

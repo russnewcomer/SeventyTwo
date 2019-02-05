@@ -55,7 +55,7 @@ namespace SeventyTwoDesktop
             txtCommunity.Text = Profile.Profile.community;
             txtLocation.Text = Profile.Profile.location;
             txtPhone.Text = Profile.Profile.phonenumber;
-            cbGender.ValueMember = Profile.Profile.gender;
+            cbGender.SelectedItem = Profile.Profile.gender;
             dtpBirthDate.Value = Profile.Profile.birthdate;
         }
         public void SaveData() {
@@ -65,7 +65,7 @@ namespace SeventyTwoDesktop
             Profile.Profile.community = txtCommunity.Text;
             Profile.Profile.location = txtLocation.Text;
             Profile.Profile.phonenumber = txtPhone.Text;
-            Profile.Profile.gender = cbGender.ValueMember.ToString();
+            Profile.Profile.gender = cbGender.SelectedItem.ToString();
             Profile.Profile.birthdate = dtpBirthDate.Value;
             Profile.SaveProfileData();
         }
