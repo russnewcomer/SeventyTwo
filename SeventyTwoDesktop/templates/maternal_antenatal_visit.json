@@ -3,7 +3,7 @@
 	"nature":"visit",
 	"record_guid":"",
 	"template_guid":"41591cac-7df2-4bb3-81ad-8ef8db337a26",
-	"date_entered":"",
+	"date_entered":"01-JAN-2019",
 	"title":"Maternal Antenatal Visit",
 	"notes":"",
 	"record_attachment":"",
@@ -11,7 +11,7 @@
 		"current_problems":"Current Problems",
 		"measurements":"Measurements",
 		"instructions":"Instructions",
-		"education_provided":"Education Provided",
+		"education":"Education Provided",
 		"referral":"Referral Given"
 	},
 	"items":{
@@ -20,9 +20,9 @@
 			"field_type":"true_false",
 			"title":"Any Bleeding?",
 			"order":1,
-			"value":"false",
+			"value":"",
 			"optional_fields":{
-				"optional_field_name":{
+				"bleeding_notes":{
 					"title":"Notes",
 					"field_type":"notes",
 					"value":""
@@ -34,9 +34,9 @@
 			"field_type":"true_false",
 			"title":"Any Fluid Leaking?",
 			"order":2,
-			"value":"false",
+			"value":"",
 			"optional_fields":{
-				"optional_field_name":{
+				"fluid_leaking_notes":{
 					"title":"Notes",
 					"field_type":"notes",
 					"value":""
@@ -48,9 +48,9 @@
 			"field_type":"true_false",
 			"title":"Any Swelling?",
 			"order":3,
-			"value":"false",
+			"value":"",
 			"optional_fields":{
-				"optional_field_name":{
+				"swelling_notes":{
 					"title":"Notes",
 					"field_type":"notes",
 					"value":""
@@ -83,7 +83,7 @@
 		},
 		"fetal_heart_rate":{
 			"group":"measurements",
-			"field_type":"numeric",
+			"field_type":"text",
 			"title":"Fetal Heartrate (BPM)",
 			"order":4,
 			"value":"",
@@ -91,8 +91,8 @@
 		},
 		"fundal_height":{
 			"group":"measurements",
-			"field_type":"true_false",
-			"title":"Fundal Height (cm)?",
+			"field_type":"numeric",
+			"title":"Fundal Height (cm)",
 			"order":5,
 			"value":"",
 			"optional_fields":{}
@@ -152,7 +152,7 @@
 			"field_type":"true_false",
 			"title":"Nutrition",
 			"order":1,
-			"value":"false",
+			"value":"",
 			"optional_fields":{}
 		},
 		"eight_glasses_of_water":{
@@ -160,7 +160,7 @@
 			"field_type":"true_false",
 			"title":"8 Glasses of Water",
 			"order":2,
-			"value":"false",
+			"value":"",
 			"optional_fields":{}
 		},
 		"activity_exercise":{
@@ -168,7 +168,7 @@
 			"field_type":"true_false",
 			"title":"Activity/Exercise",
 			"order":3,
-			"value":"false",
+			"value":"",
 			"optional_fields":{}
 		},
 		"bleed_fluid_swell":{
@@ -176,7 +176,7 @@
 			"field_type":"true_false",
 			"title":"Bleeding/Fluid/Swelling",
 			"order":4,
-			"value":"false",
+			"value":"",
 			"optional_fields":{}
 		},
 		"birth_plan":{
@@ -184,7 +184,7 @@
 			"field_type":"true_false",
 			"title":"Birth Plan",
 			"order":5,
-			"value":"false",
+			"value":"",
 			"optional_fields":{}
 		},
 		"family_planning":{
@@ -192,7 +192,7 @@
 			"field_type":"true_false",
 			"title":"Family Planning",
 			"order":6,
-			"value":"false",
+			"value":"",
 			"optional_fields":{}
 		},
 		"mental_health":{
@@ -200,7 +200,7 @@
 			"field_type":"true_false",
 			"title":"Mental Health",
 			"order":7,
-			"value":"false",
+			"value":"",
 			"optional_fields":{}
 		},
 		"other_education":{
@@ -208,7 +208,7 @@
 			"field_type":"true_false",
 			"title":"Other",
 			"order":8,
-			"value":"false",
+			"value":"",
 			"optional_fields":{	
 				"optional_field_name":{
 					"title":"Notes",
@@ -222,7 +222,7 @@
 			"field_type":"true_false",
 			"title":"Referral Given?",
 			"order":8,
-			"value":"false",
+			"value":"",
 			"optional_fields":{	
 				"optional_field_name":{
 					"title":"Referral Notes",

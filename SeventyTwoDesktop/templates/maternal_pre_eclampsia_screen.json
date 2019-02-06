@@ -3,7 +3,7 @@
 	"nature":"visit",
 	"record_guid":"",
 	"template_guid":"fa8db616-beb7-4b92-a142-fce5343fe61f",
-	"date_entered":"",
+	"date_entered":"01-JAN-2019",
 	"title":"Maternal Pre-Eclampsia Screening",
 	"notes":"",
 	"record_attachment":"",
@@ -92,7 +92,7 @@
 			"optional_fields":{}
 		},
 		"other":{
-			"group":"physical",
+			"group":"assessment",
 			"field_type":"notes",
 			"title":"Other Physical Assessments",
 			"order":11,

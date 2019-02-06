@@ -3,7 +3,7 @@
 	"nature":"visit",
 	"record_guid":"",
 	"template_guid":"4d54af9b-31a0-4dbe-be17-612ecfa7be03",
-	"date_entered":"",
+	"date_entered":"01-JAN-2019",
 	"title":"Urinalysis Results",
 	"notes":"",
 	"record_attachment":"",
@@ -92,7 +92,7 @@
 			"optional_fields":{}
 		},
 		"other":{
-			"group":"physical",
+			"group":"results",
 			"field_type":"notes",
 			"title":"Other Physical Assessments",
 			"order":11,
