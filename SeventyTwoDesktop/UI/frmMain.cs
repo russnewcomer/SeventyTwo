@@ -607,12 +607,26 @@ namespace SeventyTwoDesktop
             return tabPageToCreate;
         }
 
-        
-        
-
-        
-        
+        private void BtnSendLogs_Click( object sender, EventArgs e ) {
 
 
+            try {
+                TabPage tabPageToCreate = new TabPage { Name = "Logs", Text = "Logs" };
+
+                Button btnClose = new Button( ) { Text = "Press to close", Top = 455, Left = 5, Width = 800 };
+                btnClose.Click += delegate ( object o, EventArgs evt ) {
+                    tabMain.TabPages.RemoveByKey( "Logs" );
+                };
+                tabPageToCreate.Controls.Add( new RichTextBox( ) { Top = 50, Height = 400, Width = 800, Left = 5, Text = Log.GetRecentLogFiles( ) } );
+                tabPageToCreate.Controls.Add( new Label( ) { Top = 5, Left = 5, Width = 800, Text = "Copy the text below to your clipboard.  Then open your email program and paste it into an email to whoever is helping you with SeventyTwo" } );
+                tabPageToCreate.Controls.Add( btnClose );
+
+                tabMain.TabPages.Add( tabPageToCreate );
+                tabMain.SelectTab( "Logs" );
+
+            } catch ( Exception exc ) { Log.WriteToLog( exc ); }
+
+
+        }
     }
 }

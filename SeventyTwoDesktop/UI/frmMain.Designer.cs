@@ -42,6 +42,7 @@
             this.LstProfiles = new System.Windows.Forms.ListBox();
             this.tabReports = new System.Windows.Forms.TabPage();
             this.BtnShowAll = new System.Windows.Forms.Button();
+            this.BtnSendLogs = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProfiles.SuspendLayout();
             this.grpExisting.SuspendLayout();
@@ -60,6 +61,7 @@
             // 
             // tabProfiles
             // 
+            this.tabProfiles.Controls.Add(this.BtnSendLogs);
             this.tabProfiles.Controls.Add(this.BtnCloseAllOpenProfiles);
             this.tabProfiles.Controls.Add(this.gbCalendar);
             this.tabProfiles.Controls.Add(this.btnNewProfile);
@@ -195,6 +197,17 @@
             this.BtnShowAll.UseVisualStyleBackColor = true;
             this.BtnShowAll.Click += new System.EventHandler(this.BtnShowAll_Click);
             // 
+            // BtnSendLogs
+            // 
+            this.BtnSendLogs.BackColor = System.Drawing.Color.Transparent;
+            this.BtnSendLogs.Location = new System.Drawing.Point(20, 430);
+            this.BtnSendLogs.Name = "BtnSendLogs";
+            this.BtnSendLogs.Size = new System.Drawing.Size(140, 43);
+            this.BtnSendLogs.TabIndex = 11;
+            this.BtnSendLogs.Text = "Send Log Files";
+            this.BtnSendLogs.UseVisualStyleBackColor = false;
+            this.BtnSendLogs.Click += new System.EventHandler(this.BtnSendLogs_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -228,5 +241,6 @@
         private System.Windows.Forms.Button BtnLoadSelectedProfile;
         private System.Windows.Forms.Button BtnCloseAllOpenProfiles;
         private System.Windows.Forms.Button BtnShowAll;
+        private System.Windows.Forms.Button BtnSendLogs;
     }
 }
