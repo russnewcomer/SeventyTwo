@@ -12,7 +12,8 @@ namespace SeventyTwoDesktop.Models
         public string Number { get; set; } = "";
 
         public string DisplayText {
-            get { return Name + " - " + Number; }
+            //Display Text should only add the number in if they have a number
+            get { return Name + ( Number != "" ? " - " + Number : "" ); }
         }
         public string GUID { get; set; } = "";
 

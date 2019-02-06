@@ -28,16 +28,14 @@ namespace SeventyTwoDesktop
             LoadAllProfiles( );
         }
 
-        private void LoadAllProfiles() {
-            //First, we need to get the profiles
-            LstProfiles.Items.Clear( );
-            foreach ( ProfileListItem pli in ProfileListController.ProfileList ) {
-                LstProfiles.Items.Add( pli );
-            }
-        }
+
 
         private void BtnSearch_Click(object sender, EventArgs e) {
-           
+            if( TxtSearch.Text != "" ) {
+                SearchProfileListForString( TxtSearch.Text );
+            } else {
+                LoadAllProfiles( );
+            }
         }
 
         private void BtnNewProfile_Click( object sender, EventArgs e ) {
@@ -53,6 +51,37 @@ namespace SeventyTwoDesktop
 
         private void BtnLoadSelectedProfile_Click( object sender, EventArgs e ) {
             LoadProfileSelectedByListBox( );
+        }
+
+
+        private void BtnCloseAllOpenProfiles_Click( object sender, EventArgs e )
+        {
+            //Clear out all tabs that aren't the main two.
+            while( tabMain.TabPages.Count > 2 ) {
+                tabMain.TabPages.RemoveAt( tabMain.TabPages.Count - 1 );
+            }
+            LoadedProfiles = new Dictionary<string, ProfileController>( );
+        }
+
+        private void BtnShowAll_Click( object sender, EventArgs e ) {
+            LoadAllProfiles( );
+        }
+
+        private void LoadAllProfiles( ) {
+            //First, we need to get the profiles
+            LstProfiles.Items.Clear( );
+            foreach( ProfileListItem pli in ProfileListController.ProfileList ) {
+                LstProfiles.Items.Add( pli );
+            }
+            LblProfileList.Text = "Profile List";
+        }
+
+        private void SearchProfileListForString( string SearchString ) {
+            LstProfiles.Items.Clear( );
+            foreach( ProfileListItem pli in ProfileListController.ProfileList.Where( T => T.Name.Contains( SearchString ) ) ) {
+                LstProfiles.Items.Add( pli );
+            }
+            LblProfileList.Text = "Profile List: " + SearchString;
         }
 
         private void LoadProfileSelectedByListBox() {
@@ -172,8 +201,9 @@ namespace SeventyTwoDesktop
                 };
 
 
-                Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 30, Width = 150, Text = "&Previous", Visible = false };
-                Button btnNextGuidanceItem = new Button { Left = 225, Top = 250, Height = 30, Width = 150, Text = "&Next", Visible = false };
+                Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 90, Width = 170, Text = "&Previous", Visible = false, Font = new Font( "Segoe UI", 20 )
+                };
+                Button btnNextGuidanceItem = new Button { Left = 205, Top = 250, Height = 90, Width = 170, Text = "&Next", Visible = false, Font = new Font( "Segoe UI", 20 ) };
 
                 #endregion
 
@@ -182,6 +212,9 @@ namespace SeventyTwoDesktop
                 void _ChangeToRecordView( ) {
                     permRecordControl.Hide( );
                     pnlGuidanceControls.Show( );
+
+                    btnPreviousGuidanceItem.Show( );
+                    btnNextGuidanceItem.Show( );
 
                     tvExistingRecords.Hide( );
                     tvTemplateItems.Show( );
@@ -197,6 +230,8 @@ namespace SeventyTwoDesktop
                     tvTemplateItems.Hide( );
                     btnCreateNewRecord.Show( );
                     cmbNewRecord.Show( );
+                    btnPreviousGuidanceItem.Hide( );
+                    btnNextGuidanceItem.Hide( );
 
                     _PopulateExistingRecordsTreeView( );
                 }
@@ -227,6 +262,7 @@ namespace SeventyTwoDesktop
                     } else {
                         ProfileListController.AlterExistingItem( curProfile );
                     }
+                    LoadAllProfiles( );
                 }
 
                 void _EnableGuidanceItem( string ControlKey ) {
@@ -243,14 +279,25 @@ namespace SeventyTwoDesktop
 
                 }
 
-                void _CheckPrevNextButtons(  ) {
-                    //Check to see if the 'Previous' button should be enabled.
-                    if( tvTemplateItems.SelectedNode != null || ( tvTemplateItems.SelectedNode != null && tvTemplateItems.SelectedNode.PrevNode == null && tvTemplateItems.SelectedNode.Parent.PrevNode != null ) ) {
-                        btnPreviousGuidanceItem.Enabled = true;
-                    }
-                    //Check to see if the next button should be enabled.
-                    if( tvTemplateItems.SelectedNode != null || ( tvTemplateItems.SelectedNode != null && tvTemplateItems.SelectedNode.NextNode == null && tvTemplateItems.SelectedNode.Parent.NextNode != null ) ) {
-                        btnNextGuidanceItem.Enabled = true;
+                void _CheckPrevNextButtons( TreeNode CurrentNode ) {
+                    try {
+                        //Check to see if the 'Previous' button should be enabled.
+                        if( CurrentNode != null && ( CurrentNode.PrevNode != null || ( CurrentNode.Parent != null && CurrentNode.Parent.PrevNode != null ) ) ) {
+                            btnPreviousGuidanceItem.Show( );
+                        } else {
+                            btnPreviousGuidanceItem.Hide( );
+                        }
+                        //Check to see if the next button should be enabled.
+                        if( CurrentNode != null && ( CurrentNode.NextNode != null || ( CurrentNode.Parent != null && CurrentNode.Parent.NextNode != null ) ) ) {
+                            btnNextGuidanceItem.Show( );
+                        } else {
+                            btnNextGuidanceItem.Hide( );
+                        }
+                    } catch ( Exception exc ) {
+                        //Yes, we are kind of swallowing errors, but we want to default to being able to see the UI.
+                        Log.WriteToLog( exc );
+                        btnPreviousGuidanceItem.Show( );
+                        btnNextGuidanceItem.Show( );
                     }
                 }
 
@@ -270,7 +317,7 @@ namespace SeventyTwoDesktop
                         _EnableGuidanceItem( tvTemplateItems.SelectedNode.Name );
                     }
                     //Check to see if we should show these.
-                    _CheckPrevNextButtons( );
+                    _CheckPrevNextButtons( tvTemplateItems.SelectedNode );
                 }
 
                 void _GoToNextGuidanceItem() {
@@ -289,7 +336,7 @@ namespace SeventyTwoDesktop
                         _EnableGuidanceItem( tvTemplateItems.SelectedNode.Name );
                     }
                     //Check to see if we should show these.
-                    _CheckPrevNextButtons( );
+                    _CheckPrevNextButtons( tvTemplateItems.SelectedNode );
                 }
 
                 void _CreateNewRecord() {
@@ -314,7 +361,7 @@ namespace SeventyTwoDesktop
                     if( CurrentNode.Name != "" && !CurrentNode.Name.Contains( "tv_subrecord_" ) ) {
                         //MessageBox.Show( e.Node.Name );
                         _EnableGuidanceItem( CurrentNode.Name );
-                        _CheckPrevNextButtons( );
+                        _CheckPrevNextButtons( CurrentNode );
                     } else if( CurrentNode.Name != "" && CurrentNode.Name.Contains( "tv_subrecord_" ) ) {
                         //Pop up FrmSubRecord instance with this in it.
                         UI.FrmSubRecord frmSub = new UI.FrmSubRecord( );
@@ -350,7 +397,7 @@ namespace SeventyTwoDesktop
 
                 void _PopulateRecordUI( string RecordGUID ) {
                     try {
-
+                        TreeNode firstNode = null;
                         RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ RecordGUID ];
 
                         //Get the GUID for the profile
@@ -392,6 +439,9 @@ namespace SeventyTwoDesktop
                             string nodeTitle = ( string.IsNullOrEmpty( ti.Value.value ) ) ? ti.Value.title : ti.Value.title + " - " + _DisplayTextFormatter( ti.Value.value );
 
                             rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.group ] ].Nodes.Add( ti.Value.name, nodeTitle );
+                            if ( firstNode == null ) {
+                                firstNode = rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.group ] ].Nodes[ 0 ];
+                            }
 
                             if( ti.Value.subrecord_items.Count == 0 ) {
                                 CtlTemplateItem guidanceItem = new CtlTemplateItem {
@@ -404,7 +454,6 @@ namespace SeventyTwoDesktop
                                     //MessageBox.Show( guidanceItem.ItemValue );
                                     TemplateItemEventArgs tiea = ( TemplateItemEventArgs )e;
                                     TemplateItem displayItem = rc.GetTemplateItem( tiea.Key );
-
                                     
 
                                     rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.group ] ].Nodes[ tiea.Key ].Text = displayItem.title + " - " + _DisplayTextFormatter(tiea.Value);
@@ -432,7 +481,7 @@ namespace SeventyTwoDesktop
                         //Expand all items
                         rootNode.ExpandAll( );
                         //Select the first node.
-                        tvTemplateItems.SelectedNode = tvTemplateItems.Nodes[ 0 ].Nodes[ 0 ];
+                        tvTemplateItems.SelectedNode = firstNode;
                         _EnableGuidanceItem( tvTemplateItems.SelectedNode.Name );
 
                         _ChangeToRecordView( );
@@ -445,7 +494,10 @@ namespace SeventyTwoDesktop
                     cmbNewRecord.Items.Clear( );
 
                     foreach( KeyValuePair<string, string> record in TemplateTypes ) {
-                        cmbNewRecord.Items.Add( record.Value );
+                        //We don't want to show the permanent option.
+                        if( record.Key != "permanent" ) {
+                            cmbNewRecord.Items.Add( record.Value );
+                        }
                     };
                 }
 
@@ -466,7 +518,8 @@ namespace SeventyTwoDesktop
                 }
 
                 string _DisplayTextFormatter( string TextToFormat ) {
-                    string retVal = TextToFormat;
+                    //We only show the first 50 characters.
+                    string retVal = ( TextToFormat.Length > 50 ) ? TextToFormat.Substring( 0,50 ) : TextToFormat;
                     //Terning right around... to show yes/no instead of True/False
                     if( TextToFormat == "true" ) {
                         retVal = "Yes";
@@ -486,7 +539,6 @@ namespace SeventyTwoDesktop
 
                 permRecordControl.ProfileSaved += delegate ( object o, EventArgs e ) {
                     _HandleProfileNameChange( );
-                    _ChangeToRecordView( );
                     _HandleProfileUpdate( );  
                 };
 
@@ -561,19 +613,6 @@ namespace SeventyTwoDesktop
         
         
 
-        private void btnSearch_KeyDown( object sender, KeyEventArgs e ) {
-            if( e.KeyData.ToString( ).ToUpper( ) == "R" ) {
-                ProfileListController.LoadList( );
-                LoadAllProfiles( );
-            }
-        }
 
-        private void BtnCloseAllOpenProfiles_Click( object sender, EventArgs e ) {
-            //Clear out all tabs that aren't the main two.
-            while( tabMain.TabPages.Count > 2 ) {
-                tabMain.TabPages.RemoveAt( tabMain.TabPages.Count - 1 );
-            }
-            LoadedProfiles = new Dictionary<string, ProfileController>( );
-        }
     }
 }
