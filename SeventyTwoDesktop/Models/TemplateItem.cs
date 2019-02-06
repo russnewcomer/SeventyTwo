@@ -16,10 +16,10 @@ namespace SeventyTwoDesktop.Models
         public string group { get; set; }
         public string title { get; set; }
         public int order { get; set; }
-        public JArray dropdown_options{ get; set; }
+        public List<string> dropdown_options{ get; set; }
         public string show_on { get; set; }
         public string value { get; set; }
-        public KeyValuePair<string,TemplateItem> optional_fields { get; set; }
+        public Dictionary<string,TemplateItem> optional_fields { get; set; }
         public string nature { get; set; }
         public Dictionary<string, TemplateItem> subrecord_items{ get; set; }
         public JArray subrecords { get; set; }
@@ -40,17 +40,15 @@ namespace SeventyTwoDesktop.Models
             order = ti[ "order" ] != null ? int.Parse( ti[ "order" ].ToString( ) ) : 0;
             show_on = ti[ "show_on" ] != null ? ti[ "show_on" ].ToString( ) : "";
             value = ti[ "value" ] != null ? ti[ "value" ].ToString( ) : ""; 
-            dropdown_options = ti[ "dropdown_options" ] != null ? new JArray( ti[ "dropdown_options" ].ToString( ) ) : new JArray( );
-            
+            //I need to make sure we don't write random jazz into here.
+            dropdown_options = ti[ "dropdown_options" ] != null ? JsonConvert.DeserializeObject<List<string>>( ti[ "dropdown_options" ].ToString() ) : new List<string>( );
+            optional_fields = new Dictionary<string, TemplateItem>( );
             if( ti[ "optional_fields" ] != null ) {
+                Console.WriteLine( ti[ "optional_fields" ].ToString( ) );
                 foreach( KeyValuePair<string, JToken> property in ( JObject )ti[ "optional_fields" ] ) {
-                    if( property.Key == "name" ) {
-                        optional_fields = new KeyValuePair<string, TemplateItem>( property.Value.ToString( ), new TemplateItem( ti[ "optional_fields" ] ) );
-                    }
+                    optional_fields.Add( property.Key, new TemplateItem( property.Value ) );
                 }
-            } else {
-                optional_fields = new KeyValuePair<string, TemplateItem>();
-            }
+            } 
             nature = ti[ "nature" ] != null ? ti[ "nature" ].ToString( ) : "";
             subrecords = ti[ "subrecords" ] != null ? ( JArray )ti[ "subrecords" ] : new JArray( );
             subrecord_items = new Dictionary<string,TemplateItem>( );

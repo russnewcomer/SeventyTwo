@@ -211,7 +211,7 @@ namespace SeventyTwoDesktop
                     this.Controls.Add( btnYes );
                     this.Controls.Add( btnNo );
 
-                    if( _ti.optional_fields.Value != null ) {
+                    foreach( KeyValuePair<string, TemplateItem> optField in _ti.optional_fields ) {
                         HasOptionalFields = true;
 
                         if( OptionalFieldsFlowPanel == null ) {
@@ -222,24 +222,24 @@ namespace SeventyTwoDesktop
                             OptionalFieldsFlowPanel.BringToFront( );
                         }
 
-                        OptionalFieldsFlowPanel.Controls.Add( new Label { Top = 4, Left = 4, Text = _ti.optional_fields.Value.title, AutoSize = true } );
+                        OptionalFieldsFlowPanel.Controls.Add( new Label { Top = 4, Left = 4, Text = optField.Value.title, AutoSize = true } );
 
-                        switch ( _ti.optional_fields.Value.field_type ) {
+                        switch ( optField.Value.field_type ) {
                             case "notes":
 
                                 RichTextBox notesCtl = new RichTextBox {
                                     Left = 4,
                                     Width = 130,
                                     Height = 75,
-                                    Text = _ti.optional_fields.Value.value,
+                                    Text = optField.Value.value,
                                     Multiline = true,
                                     WordWrap = true,
                                     ScrollBars = RichTextBoxScrollBars.Vertical
                                 };
                                 notesCtl.TextChanged += delegate ( object o, EventArgs e ) {
-                                    _ti.optional_fields.Value.value = notesCtl.Text;
+                                    optField.Value.value = notesCtl.Text;
                                     if( this.Focused ) {
-                                        HandleOptionalItemValueChange( _ti.optional_fields.Value, notesCtl.Text );
+                                        HandleOptionalItemValueChange( optField.Value, notesCtl.Text );
                                     }
                                 };
                                 OptionalFieldsFlowPanel.Controls.Add( notesCtl );
@@ -248,7 +248,7 @@ namespace SeventyTwoDesktop
                                 NumericUpDown nudCtl = new NumericUpDown {
                                     Left = 4,
                                     Width = 130,
-                                    Text = _ti.value,
+                                    Text = optField.Value.value,
                                     Font = new Font( "Segoe UI", 20 ),
                                     Maximum = 10000,
                                     Minimum = -10000
@@ -256,11 +256,15 @@ namespace SeventyTwoDesktop
                                 nudCtl.TextChanged += delegate ( object o, EventArgs e ) {
                                     //Raise the textchanged event.
                                     if( this.Focused ) {
-                                        HandleOptionalItemValueChange( _ti.optional_fields.Value, nudCtl.Text );
+                                        HandleOptionalItemValueChange( optField.Value, nudCtl.Text );
                                     }
                                 };
                                 OptionalFieldsFlowPanel.Controls.Add( nudCtl );
                                 break;
+                        }
+
+                        if ( _ti.value == "true" ) {
+                            OptionalFieldsFlowPanel.Show( );
                         }
 
                     }

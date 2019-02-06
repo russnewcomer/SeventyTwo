@@ -294,18 +294,19 @@ namespace SeventyTwoDesktop
 
                 void _CreateNewRecord() {
                     try {
+                        if( cmbNewRecord.SelectedItem != null ) {
+                            string templateType = TemplateTypes.First( T => T.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key;
+                            DialogResult result = MessageBox.Show( "Do you want to create a new " + cmbNewRecord.SelectedItem.ToString( ) + " record?", "Confirmation", MessageBoxButtons.YesNo );
+                            if( result == DialogResult.Yes ) {
+                                //If we confirm we want to create, create a new one
+                                RecordController rc = new RecordController( templateType, ProfileGUID, TemplateStyle.Blank );
+                                string currentRecordGUID = rc.RecordGUID;
+                                LoadedProfiles[ ProfileGUID ].Records.Add( rc.RecordGUID, rc );
+                                _PopulateRecordUI( currentRecordGUID );
+                            }
 
-                        string templateType = TemplateTypes.First( T => T.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key;
-                        DialogResult result = MessageBox.Show( "Do you want to create a new " + cmbNewRecord.SelectedItem.ToString( ) + " record?", "Confirmation", MessageBoxButtons.YesNo );
-                        if( result == DialogResult.Yes ) {
-                            //If we confirm we want to create, create a new one
-                            RecordController rc = new RecordController( templateType, ProfileGUID, TemplateStyle.Blank );
-                            string currentRecordGUID = rc.RecordGUID;
-                            LoadedProfiles[ ProfileGUID ].Records.Add( rc.RecordGUID, rc );
-                            _PopulateRecordUI( currentRecordGUID );
+                            _ChangeToRecordView( );
                         }
-
-                        _ChangeToRecordView( );
                     } catch( Exception exc ) { Log.WriteToLog( exc ); }
                 }
 
@@ -458,7 +459,7 @@ namespace SeventyTwoDesktop
 
                         //Show the first 5 items
                         foreach( KeyValuePair<string, TemplateItem> item in rc.Value.GetTemplateItems( ).Take( 3 ) ) {
-                            curRecNode.Nodes.Add( new TreeNode( item.Value.title + " - " + item.Value.value ) { Name = rc.Key } );
+                            curRecNode.Nodes.Add( new TreeNode( item.Value.title + " - " + _DisplayTextFormatter( item.Value.value ) ) { Name = rc.Key } );
                         }
                         tvExistingRecords.Nodes.Add( curRecNode );
                     }
