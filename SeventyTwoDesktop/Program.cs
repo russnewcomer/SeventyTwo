@@ -22,6 +22,7 @@ namespace SeventyTwoDesktop
             ConfirmDirectory( "config" );
             ConfirmDirectory( "export" );
             ConfirmDirectory( "reconcile" );
+            ConfirmDirectory( "calendar" );
 
             GetProfileTypesAndLoadIntoConfigFile( );
 
