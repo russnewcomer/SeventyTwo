@@ -65,7 +65,7 @@ namespace SeventyTwoDesktop.Controllers
 
         public string GetRecordDisplayText( ) {
             string title = TemplateController.GetTemplateTypes( ).Where( T => T.Key == TC.TemplateType ).First( ).Value;
-            string suffix = " - " + TC.GetTemplateDateEntered( ).ToString( "dd-MMM-yyyy" );
+            string suffix = " - " + CalendarListController.GetDateString( TC.GetTemplateDateEntered( ) );
             return title + suffix;
         }
 
@@ -137,6 +137,10 @@ namespace SeventyTwoDesktop.Controllers
             }
 
             return retVal;
+        }
+
+        public Dictionary<string, string> GetFollowupSchedule( ) {
+            return TC.GetFollowupSchedule( );
         }
 
         public int UpdateTemplateItemSubRecord( string Key, JObject Value, int Index = -1 ) {

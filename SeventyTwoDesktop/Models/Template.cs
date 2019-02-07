@@ -20,6 +20,7 @@ namespace SeventyTwoDesktop.Models
         public string record_attachment { get; set; }
         public string notes { get; set; }
         public DateTime date_entered { get; set; }
+        public Dictionary<string, string> followup { get; set; }
         public Dictionary<string, string> groups { get; set; }
         public Dictionary<string, TemplateItem> items { get; set; }
 
@@ -33,6 +34,13 @@ namespace SeventyTwoDesktop.Models
             nature = jsonTemplate[ "nature" ].ToString( );
             template_guid = jsonTemplate[ "template_guid" ].ToString( );
             title = jsonTemplate[ "title" ].ToString( );
+
+            followup = new Dictionary<string, string>( );
+
+            foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "followup" ] ) {
+                groups[ property.Key ] = property.Value.ToString( );
+            }
+
 
             if( jsonTemplate.ContainsKey( "profile_guid" ) ) {
                 profile_guid = jsonTemplate[ "profile_guid" ].ToString( );

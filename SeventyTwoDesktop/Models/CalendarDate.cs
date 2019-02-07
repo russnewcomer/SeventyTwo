@@ -8,6 +8,6 @@ namespace SeventyTwoDesktop.Models
 {
     class CalendarDate {
         public List<CalendarItem> calendar_items;
-        public DateTime calendar_date;
+        public string calendar_date;
     }
 }

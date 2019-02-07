@@ -137,6 +137,11 @@ namespace SeventyTwoDesktop.Controllers
             return TemplateInstance.date_entered;
         }
 
+
+        public Dictionary<string, string> GetFollowupSchedule( ) {
+            return TemplateInstance.followup;
+        }
+
         public TemplateItem GetTemplateItem( string itemName ) {
 
    

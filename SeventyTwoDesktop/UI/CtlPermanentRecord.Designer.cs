@@ -165,12 +165,14 @@
             // 
             // dtpBirthDate
             // 
+            this.dtpBirthDate.CustomFormat = "dd-MMM-yyyy";
             this.dtpBirthDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpBirthDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpBirthDate.Location = new System.Drawing.Point(275, 234);
             this.dtpBirthDate.Name = "dtpBirthDate";
             this.dtpBirthDate.Size = new System.Drawing.Size(110, 23);
             this.dtpBirthDate.TabIndex = 8;
+            this.dtpBirthDate.Value = new System.DateTime(2000, 1, 1, 0, 0, 0, 0);
             // 
             // btnSaveChanges
             // 

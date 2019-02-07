@@ -304,7 +304,7 @@ namespace SeventyTwoDesktop
                     MainValueControl = new DateTimePicker {
                         Top = 50,
                         Left = 4,
-                        Width = 300,
+                        Width = 120,
                         Text = _ti.value,
                         CustomFormat = "dd-MMM-yyyy",
                         Format = DateTimePickerFormat.Custom

@@ -30,10 +30,12 @@
         {
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabProfiles = new System.Windows.Forms.TabPage();
+            this.BtnSendLogs = new System.Windows.Forms.Button();
             this.BtnCloseAllOpenProfiles = new System.Windows.Forms.Button();
             this.gbCalendar = new System.Windows.Forms.GroupBox();
             this.btnNewProfile = new System.Windows.Forms.Button();
             this.grpExisting = new System.Windows.Forms.GroupBox();
+            this.BtnShowAll = new System.Windows.Forms.Button();
             this.BtnLoadSelectedProfile = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.TxtSearch = new System.Windows.Forms.TextBox();
@@ -41,8 +43,6 @@
             this.LblProfileList = new System.Windows.Forms.Label();
             this.LstProfiles = new System.Windows.Forms.ListBox();
             this.tabReports = new System.Windows.Forms.TabPage();
-            this.BtnShowAll = new System.Windows.Forms.Button();
-            this.BtnSendLogs = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProfiles.SuspendLayout();
             this.grpExisting.SuspendLayout();
@@ -73,6 +73,17 @@
             this.tabProfiles.TabIndex = 0;
             this.tabProfiles.Text = "Profiles";
             this.tabProfiles.UseVisualStyleBackColor = true;
+            // 
+            // BtnSendLogs
+            // 
+            this.BtnSendLogs.BackColor = System.Drawing.Color.Transparent;
+            this.BtnSendLogs.Location = new System.Drawing.Point(48, 443);
+            this.BtnSendLogs.Name = "BtnSendLogs";
+            this.BtnSendLogs.Size = new System.Drawing.Size(90, 24);
+            this.BtnSendLogs.TabIndex = 11;
+            this.BtnSendLogs.Text = "Send Log Files";
+            this.BtnSendLogs.UseVisualStyleBackColor = false;
+            this.BtnSendLogs.Click += new System.EventHandler(this.BtnSendLogs_Click);
             // 
             // BtnCloseAllOpenProfiles
             // 
@@ -121,6 +132,16 @@
             this.grpExisting.TabIndex = 7;
             this.grpExisting.TabStop = false;
             this.grpExisting.Text = "Existing Profiles";
+            // 
+            // BtnShowAll
+            // 
+            this.BtnShowAll.Location = new System.Drawing.Point(183, 66);
+            this.BtnShowAll.Name = "BtnShowAll";
+            this.BtnShowAll.Size = new System.Drawing.Size(73, 27);
+            this.BtnShowAll.TabIndex = 14;
+            this.BtnShowAll.Text = "Show All";
+            this.BtnShowAll.UseVisualStyleBackColor = true;
+            this.BtnShowAll.Click += new System.EventHandler(this.BtnShowAll_Click);
             // 
             // BtnLoadSelectedProfile
             // 
@@ -186,27 +207,6 @@
             this.tabReports.TabIndex = 1;
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
-            // 
-            // BtnShowAll
-            // 
-            this.BtnShowAll.Location = new System.Drawing.Point(183, 66);
-            this.BtnShowAll.Name = "BtnShowAll";
-            this.BtnShowAll.Size = new System.Drawing.Size(73, 27);
-            this.BtnShowAll.TabIndex = 14;
-            this.BtnShowAll.Text = "Show All";
-            this.BtnShowAll.UseVisualStyleBackColor = true;
-            this.BtnShowAll.Click += new System.EventHandler(this.BtnShowAll_Click);
-            // 
-            // BtnSendLogs
-            // 
-            this.BtnSendLogs.BackColor = System.Drawing.Color.Transparent;
-            this.BtnSendLogs.Location = new System.Drawing.Point(20, 430);
-            this.BtnSendLogs.Name = "BtnSendLogs";
-            this.BtnSendLogs.Size = new System.Drawing.Size(140, 43);
-            this.BtnSendLogs.TabIndex = 11;
-            this.BtnSendLogs.Text = "Send Log Files";
-            this.BtnSendLogs.UseVisualStyleBackColor = false;
-            this.BtnSendLogs.Click += new System.EventHandler(this.BtnSendLogs_Click);
             // 
             // FrmMain
             // 

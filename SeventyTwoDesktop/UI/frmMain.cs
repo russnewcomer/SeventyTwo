@@ -20,12 +20,19 @@ namespace SeventyTwoDesktop
         private Dictionary< string, ProfileController > LoadedProfiles { get; set; } = new Dictionary< string, ProfileController >( );
         private Dictionary< string, string > TemplateTypes = TemplateController.GetTemplateTypes( );
         private Dictionary< string, Dictionary< string, TemplateItem > > SubrecordTemplates { get; set; }
+        private CalendarListController Calendar { get; set; } = new CalendarListController( );
         
 
         public FrmMain() {
             InitializeComponent();
 
             LoadAllProfiles( );
+
+            Calendar.CalendarItemAdded += delegate ( object o, EventArgs e ) {
+                CalendarItemEventArgs cie = ( CalendarItemEventArgs )e;
+
+                AddCalendarItemToList( cie.Item );
+            };
         }
 
 
@@ -97,6 +104,10 @@ namespace SeventyTwoDesktop
 
                 tabMain.SelectTab( guidToLoad );
             }
+        }
+
+        private void AddCalendarItemToList( CalendarItem ci ) {
+
         }
 
         private string CreateNewProfile( ) {
@@ -201,14 +212,46 @@ namespace SeventyTwoDesktop
                 };
 
 
-                Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 90, Width = 170, Text = "&Previous", Visible = false, Font = new Font( "Segoe UI", 20 )
-                };
+                Button btnPreviousGuidanceItem = new Button { Left = 15, Top = 250, Height = 90, Width = 170, Text = "&Previous", Visible = false, Font = new Font( "Segoe UI", 20 ) };
                 Button btnNextGuidanceItem = new Button { Left = 205, Top = 250, Height = 90, Width = 170, Text = "&Next", Visible = false, Font = new Font( "Segoe UI", 20 ) };
+
+
+                //Followup panel and related controls
+
+                Panel pnlFollowup = new Panel {
+                    Name = "pnlFollowup",
+                    Left = 10,
+                    Top = 355,
+                    Height = 110,
+                    Width = 550,
+                    Visible = true
+                };
+
+
+                DateTimePicker dtpFollowupDate = new DateTimePicker {
+                    Left = 5,
+                    Top = 30,
+                    Height = 23,
+                    Width = 110,
+                    CustomFormat = "dd-MMM-yyyy",
+                    Format = DateTimePickerFormat.Custom
+                };
+
+
+                Button btnAddApptDate = new Button { Left = 5, Top = 55, Height = 40, Width = 110, Text = "Add Date", Font = new Font( "Segoe UI", 9 ) };
+                ListBox lstAppointmentDates = new ListBox { Top = 30, Width = 200, Height = 65, Left = 130 };
+                Button btnSaveAppointments = new Button { Left = 340, Top = 30, Height = 65, Width = 110, Text = "Schedule Appointments", Font = new Font( "Segoe UI", 9 ) };
+
+
 
                 #endregion
 
 
                 #region Scope Functions
+
+
+                List<DateTime> AppointmentDates = new List<DateTime>( );
+                
                 void _ChangeToRecordView( ) {
                     permRecordControl.Hide( );
                     pnlGuidanceControls.Show( );
@@ -240,7 +283,7 @@ namespace SeventyTwoDesktop
 
                     string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
 
-                    LoadedProfiles[ tabPageToCreate.Name ].Records[ curRecordGuid ].WriteRecord( );
+                    LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ].WriteRecord( );
                     _ChangeToProfileView( );
 
                 }
@@ -383,7 +426,7 @@ namespace SeventyTwoDesktop
                         };
 
                         //Load the template
-                        frmSub.LoadTemplate( SubrecordTemplates[ CurrentNode.Parent.Name ], LoadedProfiles[ tabPageToCreate.Name ].Records[ curRecordGuid ] );
+                        frmSub.LoadTemplate( SubrecordTemplates[ CurrentNode.Parent.Name ], LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ] );
 
                         //If we are loading items that already exist (they don't have the _add_ in their name)
                         if( !CurrentNode.Name.Contains( "tv_subrecord_add_" ) ) {
@@ -397,6 +440,12 @@ namespace SeventyTwoDesktop
 
                 void _PopulateRecordUI( string RecordGUID ) {
                     try {
+
+
+                        //Clear out our followup dates.
+                        AppointmentDates = new List<DateTime>( );
+                        
+
                         TreeNode firstNode = null;
                         RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ RecordGUID ];
 
@@ -530,6 +579,38 @@ namespace SeventyTwoDesktop
                     return retVal;
                 }
 
+                void _AddDateToAppointmentList( DateTime dateToAdd ) {
+                    AppointmentDates.Add( dateToAdd );
+                    AppointmentDates.Sort( );
+                    lstAppointmentDates.Items.Clear( );
+                    foreach( DateTime dt in AppointmentDates ) {
+                        lstAppointmentDates.Items.Add( dt.ToString( "dd-MMM-yyyy" ) );
+                    }
+                }
+
+                void _RemoveDateFromAppointmentList( ) {
+                    AppointmentDates.RemoveAt( lstAppointmentDates.SelectedIndex );
+                    lstAppointmentDates.Items.RemoveAt( lstAppointmentDates.SelectedIndex );
+                }
+
+                void _SaveAppointments() {
+                    foreach (DateTime dt in AppointmentDates ) {
+                        string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
+                        RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ];
+                        Dictionary<string, string> FollowupSchedule = rc.GetFollowupSchedule( );
+                        
+                        Calendar.AddCalendarItem( new CalendarItem {
+                            item_date = CalendarListController.GetDateString( dt ),
+                            item_title = TemplateController.GetTemplateTypes( )[ FollowupSchedule[ "record_type" ] ],
+                            record_type = FollowupSchedule[ "record_type" ],
+                            linked_record_guid = curRecordGuid,
+                            linked_profile_guid = ProfileGUID,
+                            responsible_party = "",
+                            item_notes = ""
+                        } );
+                    }
+                };
+
                 #endregion
 
                 #region Event Handlers
@@ -574,6 +655,21 @@ namespace SeventyTwoDesktop
                     _PopulateRecordUI( e.Node.Name );
                 };
 
+                btnAddApptDate.Click += delegate ( object o, EventArgs e ) {
+                    _AddDateToAppointmentList( dtpFollowupDate.Value );
+                };
+
+                lstAppointmentDates.KeyDown += delegate ( object o, KeyEventArgs e ) {
+                    if( e.KeyCode == Keys.Delete ) {
+                        _RemoveDateFromAppointmentList( );
+                    }
+                };
+
+                btnSaveAppointments.Click += delegate ( object o, EventArgs e ) {
+                    _SaveAppointments();
+                };
+
+
                 #endregion
 
                 #region Loading Data For Tab
@@ -588,9 +684,22 @@ namespace SeventyTwoDesktop
                 //load existing records in the profile.
 
                 _PopulateExistingRecordsTreeView( );
+
+
                 #endregion
 
                 #region Add Controls To Page
+
+
+
+                pnlFollowup.Controls.Add( new Label { Top = 5, Left = 5, Width = 200, Font = new Font( "Segoe UI", 9 ), Text = "Schedule Followup Appointments" } );
+                pnlFollowup.Controls.Add( dtpFollowupDate );
+                pnlFollowup.Controls.Add( btnAddApptDate );
+                pnlFollowup.Controls.Add( lstAppointmentDates );
+                pnlFollowup.Controls.Add( btnSaveAppointments );
+
+
+
                 tabPageToCreate.Controls.Add( permRecordControl );
                 tabPageToCreate.Controls.Add( btnEditProfile );
                 tabPageToCreate.Controls.Add( lblProfileName );
@@ -601,6 +710,9 @@ namespace SeventyTwoDesktop
                 tabPageToCreate.Controls.Add( pnlGuidanceControls );
                 tabPageToCreate.Controls.Add( cmbNewRecord );
                 tabPageToCreate.Controls.Add( btnCreateNewRecord );
+                tabPageToCreate.Controls.Add( pnlFollowup );
+
+
                 #endregion
             } catch ( Exception exc ) { Log.WriteToLog( exc );  }
 
