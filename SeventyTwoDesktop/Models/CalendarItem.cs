@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 namespace SeventyTwoDesktop.Models
 {
     public class CalendarItem {
-        public string record_type;
-        public string linked_profile_guid;
-        public string linked_record_guid;
+        public string item_date;
         public string item_title;
         public string item_notes;
+        public string item_confirmed;
+        public string item_completed;
         public string responsible_party;
-        public string item_date;
+        public string record_type;
+        public string linked_record_guid;
+        public string linked_profile_guid;
     }
 }

@@ -98,9 +98,9 @@
             // 
             // gbCalendar
             // 
-            this.gbCalendar.Location = new System.Drawing.Point(468, 11);
+            this.gbCalendar.Location = new System.Drawing.Point(468, 10);
             this.gbCalendar.Name = "gbCalendar";
-            this.gbCalendar.Size = new System.Drawing.Size(490, 462);
+            this.gbCalendar.Size = new System.Drawing.Size(500, 460);
             this.gbCalendar.TabIndex = 9;
             this.gbCalendar.TabStop = false;
             this.gbCalendar.Text = "Appointment Calendar";
@@ -126,7 +126,7 @@
             this.grpExisting.Controls.Add(this.LblProfileList);
             this.grpExisting.Controls.Add(this.LstProfiles);
             this.grpExisting.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.grpExisting.Location = new System.Drawing.Point(181, 11);
+            this.grpExisting.Location = new System.Drawing.Point(181, 10);
             this.grpExisting.Name = "grpExisting";
             this.grpExisting.Size = new System.Drawing.Size(265, 462);
             this.grpExisting.TabIndex = 7;

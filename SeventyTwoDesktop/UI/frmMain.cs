@@ -20,19 +20,13 @@ namespace SeventyTwoDesktop
         private Dictionary< string, ProfileController > LoadedProfiles { get; set; } = new Dictionary< string, ProfileController >( );
         private Dictionary< string, string > TemplateTypes = TemplateController.GetTemplateTypes( );
         private Dictionary< string, Dictionary< string, TemplateItem > > SubrecordTemplates { get; set; }
-        private CalendarListController Calendar { get; set; } = new CalendarListController( );
-        
+                
 
         public FrmMain() {
             InitializeComponent();
 
             LoadAllProfiles( );
 
-            Calendar.CalendarItemAdded += delegate ( object o, EventArgs e ) {
-                CalendarItemEventArgs cie = ( CalendarItemEventArgs )e;
-
-                AddCalendarItemToList( cie.Item );
-            };
         }
 
 

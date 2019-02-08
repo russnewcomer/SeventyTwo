@@ -118,6 +118,21 @@
     <Compile Include="UI\CtlTemplateItem.Designer.cs">
       <DependentUpon>CtlTemplateItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\CtlCalendar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\CtlCalendar.Designer.cs">
+      <DependentUpon>CtlCalendar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CtlCalDate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\CtlCalDate.Designer.cs">
+      <DependentUpon>CtlCalDate.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="UI\CtlCalendar.resx">
+      <DependentUpon>CtlCalendar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -138,6 +153,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FrmSubRecord.resx">
       <DependentUpon>FrmSubRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\CtlCalDate.resx">
+      <DependentUpon>CtlCalDate.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

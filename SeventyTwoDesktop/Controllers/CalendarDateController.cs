@@ -9,7 +9,7 @@ using SeventyTwoDesktop.Models;
 
 namespace SeventyTwoDesktop.Controllers
 {
-    class CalendarDateController {
+    public class CalendarDateController {
         public CalendarDate Data { get; set; }
         public string JSONDate { get; }
         private string FileName { get; set; } 
@@ -47,6 +47,32 @@ namespace SeventyTwoDesktop.Controllers
             //Save the date
             WriteFile( );
 
+        }
+
+        public int GetNumberOfScheduledItemsForToday( ) {
+            int retVal = 0;
+            try {
+                //Get the number of schedule items for today.
+            } catch ( Exception exc ) { Models.Log.WriteToLog( exc ); }
+            return retVal;
+        }
+
+        public int GetNumberOfConfirmedItemsForToday( )
+        {
+            int retVal = 0;
+            try {
+                //Get the number of schedule items for today.
+            } catch( Exception exc ) { Models.Log.WriteToLog( exc ); }
+            return retVal;
+        }
+
+        public int GetNumberOfCompletedItemsForToday( )
+        {
+            int retVal = 0;
+            try {
+                //Get the number of schedule items for today.
+            } catch( Exception exc ) { Models.Log.WriteToLog( exc ); }
+            return retVal;
         }
 
     }
