@@ -16,7 +16,7 @@ namespace SeventyTwoDesktop.UI
 
         private CalendarDateController CDC { get; set; }
 
-        public event EventHandler Click;
+        public event EventHandler Clicked;
            
         public CtlCalDate( )
         {
@@ -52,14 +52,26 @@ namespace SeventyTwoDesktop.UI
                     lblDayOfWeek.Text = "";
                     break;
             }
-            LblScheduled.Text = CDC.GetNumberOfScheduledItemsForToday( ).ToString( ) + " Scheduled";
-            LblConfirmed.Text = CDC.GetNumberOfConfirmedItemsForToday( ).ToString( ) + " Confirmed";
-            LblCompleted.Text = CDC.GetNumberOfCompletedItemsForToday( ).ToString( ) + " Completed";
+            LblScheduled.Text = CDC.GetNumberOfScheduledItemsForToday( ).ToString( ) + " Sched.";
+            LblConfirmed.Text = CDC.GetNumberOfConfirmedItemsForToday( ).ToString( ) + " Conf.";
+            LblCompleted.Text = CDC.GetNumberOfCompletedItemsForToday( ).ToString( ) + " Complt.";
 
         }
 
         private void CtlCalDate_Click( object sender, EventArgs e ) {
-            this.Click?.Invoke( this, new CalDateClickEventArgs( CDC.JSONDate )  );
+            if ( CDC != null ) {
+                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CDC.JSONDate ) );
+            } else {
+                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CalendarListController.GetDateString( DateTime.Now ) ) );
+            }
+        }
+
+        private void Control_Click( object sender, EventArgs e ) {
+            if( CDC != null ) {
+                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CDC.JSONDate ) );
+            } else {
+                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CalendarListController.GetDateString( DateTime.Now ) ) );
+            }
         }
 
     }

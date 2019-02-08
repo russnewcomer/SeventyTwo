@@ -36,47 +36,55 @@
             // 
             // LblDay
             // 
-            this.LblDay.Enabled = false;
+            this.LblDay.ForeColor = System.Drawing.SystemColors.ControlText;
             this.LblDay.Location = new System.Drawing.Point(0, 0);
             this.LblDay.Name = "LblDay";
             this.LblDay.Size = new System.Drawing.Size(40, 15);
             this.LblDay.TabIndex = 1;
             this.LblDay.Text = "9 Feb";
             this.LblDay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.LblDay.Click += new System.EventHandler(this.Control_Click);
             // 
             // lblDayOfWeek
             // 
-            this.lblDayOfWeek.Enabled = false;
-            this.lblDayOfWeek.Location = new System.Drawing.Point(45, 0);
+            this.lblDayOfWeek.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblDayOfWeek.Location = new System.Drawing.Point(40, 0);
             this.lblDayOfWeek.Name = "lblDayOfWeek";
-            this.lblDayOfWeek.Size = new System.Drawing.Size(20, 15);
+            this.lblDayOfWeek.Size = new System.Drawing.Size(25, 15);
             this.lblDayOfWeek.TabIndex = 2;
             this.lblDayOfWeek.Text = "Sa";
-            this.lblDayOfWeek.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDayOfWeek.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDayOfWeek.Click += new System.EventHandler(this.Control_Click);
             // 
             // LblScheduled
             // 
-            this.LblScheduled.Location = new System.Drawing.Point(0, 25);
+            this.LblScheduled.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.LblScheduled.Location = new System.Drawing.Point(0, 20);
             this.LblScheduled.Name = "LblScheduled";
             this.LblScheduled.Size = new System.Drawing.Size(65, 15);
             this.LblScheduled.TabIndex = 3;
             this.LblScheduled.Text = "X Sched";
+            this.LblScheduled.Click += new System.EventHandler(this.Control_Click);
             // 
             // LblConfirmed
             // 
-            this.LblConfirmed.Location = new System.Drawing.Point(0, 45);
+            this.LblConfirmed.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.LblConfirmed.Location = new System.Drawing.Point(0, 40);
             this.LblConfirmed.Name = "LblConfirmed";
             this.LblConfirmed.Size = new System.Drawing.Size(65, 13);
             this.LblConfirmed.TabIndex = 4;
             this.LblConfirmed.Text = "X Conf";
+            this.LblConfirmed.Click += new System.EventHandler(this.Control_Click);
             // 
             // LblCompleted
             // 
-            this.LblCompleted.Location = new System.Drawing.Point(0, 65);
+            this.LblCompleted.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.LblCompleted.Location = new System.Drawing.Point(0, 60);
             this.LblCompleted.Name = "LblCompleted";
             this.LblCompleted.Size = new System.Drawing.Size(65, 15);
             this.LblCompleted.TabIndex = 5;
             this.LblCompleted.Text = "X Complete";
+            this.LblCompleted.Click += new System.EventHandler(this.Control_Click);
             // 
             // CtlCalDate
             // 

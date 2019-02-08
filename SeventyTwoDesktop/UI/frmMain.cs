@@ -593,15 +593,15 @@ namespace SeventyTwoDesktop
                         RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ];
                         Dictionary<string, string> FollowupSchedule = rc.GetFollowupSchedule( );
                         
-                        Calendar.AddCalendarItem( new CalendarItem {
-                            item_date = CalendarListController.GetDateString( dt ),
-                            item_title = TemplateController.GetTemplateTypes( )[ FollowupSchedule[ "record_type" ] ],
-                            record_type = FollowupSchedule[ "record_type" ],
-                            linked_record_guid = curRecordGuid,
-                            linked_profile_guid = ProfileGUID,
-                            responsible_party = "",
-                            item_notes = ""
-                        } );
+                        //Calendar.AddCalendarItem( new CalendarItem {
+                        //    item_date = CalendarListController.GetDateString( dt ),
+                        //    item_title = TemplateController.GetTemplateTypes( )[ FollowupSchedule[ "record_type" ] ],
+                        //    record_type = FollowupSchedule[ "record_type" ],
+                        //    linked_record_guid = curRecordGuid,
+                        //    linked_profile_guid = ProfileGUID,
+                        //    responsible_party = "",
+                        //    item_notes = ""
+                        //} );
                     }
                 };
 

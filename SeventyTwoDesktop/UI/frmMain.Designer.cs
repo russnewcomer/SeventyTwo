@@ -32,7 +32,6 @@
             this.tabProfiles = new System.Windows.Forms.TabPage();
             this.BtnSendLogs = new System.Windows.Forms.Button();
             this.BtnCloseAllOpenProfiles = new System.Windows.Forms.Button();
-            this.gbCalendar = new System.Windows.Forms.GroupBox();
             this.btnNewProfile = new System.Windows.Forms.Button();
             this.grpExisting = new System.Windows.Forms.GroupBox();
             this.BtnShowAll = new System.Windows.Forms.Button();
@@ -43,6 +42,7 @@
             this.LblProfileList = new System.Windows.Forms.Label();
             this.LstProfiles = new System.Windows.Forms.ListBox();
             this.tabReports = new System.Windows.Forms.TabPage();
+            this.ctlCalendar1 = new SeventyTwoDesktop.UI.CtlCalendar();
             this.tabMain.SuspendLayout();
             this.tabProfiles.SuspendLayout();
             this.grpExisting.SuspendLayout();
@@ -61,9 +61,9 @@
             // 
             // tabProfiles
             // 
+            this.tabProfiles.Controls.Add(this.ctlCalendar1);
             this.tabProfiles.Controls.Add(this.BtnSendLogs);
             this.tabProfiles.Controls.Add(this.BtnCloseAllOpenProfiles);
-            this.tabProfiles.Controls.Add(this.gbCalendar);
             this.tabProfiles.Controls.Add(this.btnNewProfile);
             this.tabProfiles.Controls.Add(this.grpExisting);
             this.tabProfiles.Location = new System.Drawing.Point(4, 24);
@@ -95,15 +95,6 @@
             this.BtnCloseAllOpenProfiles.Text = "Close All Open Profiles";
             this.BtnCloseAllOpenProfiles.UseVisualStyleBackColor = false;
             this.BtnCloseAllOpenProfiles.Click += new System.EventHandler(this.BtnCloseAllOpenProfiles_Click);
-            // 
-            // gbCalendar
-            // 
-            this.gbCalendar.Location = new System.Drawing.Point(468, 10);
-            this.gbCalendar.Name = "gbCalendar";
-            this.gbCalendar.Size = new System.Drawing.Size(500, 460);
-            this.gbCalendar.TabIndex = 9;
-            this.gbCalendar.TabStop = false;
-            this.gbCalendar.Text = "Appointment Calendar";
             // 
             // btnNewProfile
             // 
@@ -208,6 +199,14 @@
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
             // 
+            // ctlCalendar1
+            // 
+            this.ctlCalendar1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ctlCalendar1.Location = new System.Drawing.Point(467, 17);
+            this.ctlCalendar1.Name = "ctlCalendar1";
+            this.ctlCalendar1.Size = new System.Drawing.Size(500, 460);
+            this.ctlCalendar1.TabIndex = 12;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -237,10 +236,10 @@
         private System.Windows.Forms.Label LblProfileList;
         private System.Windows.Forms.ListBox LstProfiles;
         private System.Windows.Forms.TabPage tabReports;
-        private System.Windows.Forms.GroupBox gbCalendar;
         private System.Windows.Forms.Button BtnLoadSelectedProfile;
         private System.Windows.Forms.Button BtnCloseAllOpenProfiles;
         private System.Windows.Forms.Button BtnShowAll;
         private System.Windows.Forms.Button BtnSendLogs;
+        private UI.CtlCalendar ctlCalendar1;
     }
 }
