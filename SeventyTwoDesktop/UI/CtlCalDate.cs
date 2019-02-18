@@ -60,17 +60,38 @@ namespace SeventyTwoDesktop.UI
 
         private void CtlCalDate_Click( object sender, EventArgs e ) {
             if ( CDC != null ) {
-                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CDC.JSONDate ) );
+                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CDC.DisplayDate, CalendarAppointmentType.All ) );
             } else {
-                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CalendarListController.GetDateString( DateTime.Now ) ) );
+                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CalendarListController.GetDateString( DateTime.Now ), CalendarAppointmentType.All ) );
             }
         }
 
         private void Control_Click( object sender, EventArgs e ) {
+            
+            CalendarAppointmentType appt = CalendarAppointmentType.All;
+            try {
+                Control clickedControl = ( Control )sender;
+                switch( clickedControl.Tag ) {
+                    case "Scheduled":
+                        appt = CalendarAppointmentType.Scheduled;
+                        break;
+                    case "Confirmed":
+                        appt = CalendarAppointmentType.Confirmed;
+                        break;
+                    case "Completed":
+                        appt = CalendarAppointmentType.Completed;
+                        break;
+                    default:
+                        appt = CalendarAppointmentType.All;
+                        break;
+                }
+            } catch ( Exception exc ) {
+                Models.Log.WriteToLog( exc );
+            }
             if( CDC != null ) {
-                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CDC.JSONDate ) );
+                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CDC.DisplayDate, appt ) );
             } else {
-                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CalendarListController.GetDateString( DateTime.Now ) ) );
+                this.Clicked?.Invoke( this, new CalDateClickEventArgs( CalendarListController.GetDateString( DateTime.Now ), appt ) );
             }
         }
 
@@ -78,8 +99,11 @@ namespace SeventyTwoDesktop.UI
     public class CalDateClickEventArgs : EventArgs
     {
         public string Date { get; set; }
-        public CalDateClickEventArgs( string dt ) {
+        public CalendarAppointmentType AppointmentType { get; set; }
+        public CalDateClickEventArgs( string dt, CalendarAppointmentType apptType ) {
             Date = dt;
+            AppointmentType = apptType;
         }
     }
+    public enum CalendarAppointmentType { All, Scheduled, Confirmed, Completed }
 }

@@ -63,6 +63,7 @@
             this.LblScheduled.Name = "LblScheduled";
             this.LblScheduled.Size = new System.Drawing.Size(65, 15);
             this.LblScheduled.TabIndex = 3;
+            this.LblScheduled.Tag = "Scheduled";
             this.LblScheduled.Text = "X Sched";
             this.LblScheduled.Click += new System.EventHandler(this.Control_Click);
             // 
@@ -73,6 +74,7 @@
             this.LblConfirmed.Name = "LblConfirmed";
             this.LblConfirmed.Size = new System.Drawing.Size(65, 13);
             this.LblConfirmed.TabIndex = 4;
+            this.LblConfirmed.Tag = "Confirmed";
             this.LblConfirmed.Text = "X Conf";
             this.LblConfirmed.Click += new System.EventHandler(this.Control_Click);
             // 
@@ -83,6 +85,7 @@
             this.LblCompleted.Name = "LblCompleted";
             this.LblCompleted.Size = new System.Drawing.Size(65, 15);
             this.LblCompleted.TabIndex = 5;
+            this.LblCompleted.Tag = "Completed";
             this.LblCompleted.Text = "X Complete";
             this.LblCompleted.Click += new System.EventHandler(this.Control_Click);
             // 

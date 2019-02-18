@@ -47,11 +47,15 @@ namespace SeventyTwoDesktop
         }
 
         private void LstProfiles_DoubleClick( object sender, EventArgs e ) {
-            LoadProfileSelectedByListBox( );
+            if( LstProfiles.SelectedIndex > -1 ) {
+                RequestProfilePage( ProfileListController.ProfileList[ LstProfiles.SelectedIndex ].GUID );
+            }
         }
 
         private void BtnLoadSelectedProfile_Click( object sender, EventArgs e ) {
-            LoadProfileSelectedByListBox( );
+            if( LstProfiles.SelectedIndex > -1 ) {
+                RequestProfilePage( ProfileListController.ProfileList[ LstProfiles.SelectedIndex ].GUID );
+            }
         }
 
 
@@ -67,6 +71,39 @@ namespace SeventyTwoDesktop
         private void BtnShowAll_Click( object sender, EventArgs e ) {
             LoadAllProfiles( );
         }
+        private void BtnSendLogs_Click( object sender, EventArgs e )
+        {
+
+
+            try {
+                TabPage tabPageToCreate = new TabPage { Name = "Logs", Text = "Logs" };
+
+                Button btnClose = new Button( ) { Text = "Press to close", Top = 455, Left = 5, Width = 800 };
+                btnClose.Click += delegate ( object o, EventArgs evt ) {
+                    tabMain.TabPages.RemoveByKey( "Logs" );
+                };
+                tabPageToCreate.Controls.Add( new RichTextBox( ) { Top = 50, Height = 400, Width = 800, Left = 5, Text = Log.GetRecentLogFiles( ) } );
+                tabPageToCreate.Controls.Add( new Label( ) { Top = 5, Left = 5, Width = 800, Text = "Copy the text below to your clipboard.  Then open your email program and paste it into an email to whoever is helping you with SeventyTwo" } );
+                tabPageToCreate.Controls.Add( btnClose );
+
+                tabMain.TabPages.Add( tabPageToCreate );
+                tabMain.SelectTab( "Logs" );
+
+            } catch( Exception exc ) { Log.WriteToLog( exc ); }
+
+
+        }
+
+        private void ctlCalendar1_AppointmentClicked( object sender, EventArgs e ) {
+            UI.AppointmentHandlingEventArgs appt = ( UI.AppointmentHandlingEventArgs )e;
+            RequestProfilePage( appt.Node.Profile_guid );
+            if ( !string.IsNullOrEmpty( appt.Node.Record_guid  ) ) {
+                MessageBox.Show( "We have record, finish implementation" );
+            } else if ( !string.IsNullOrEmpty( appt.Node.Template_type ) ) {
+                MessageBox.Show( "We have template type, finish implementation" );
+            }
+        }
+
 
         private void LoadAllProfiles( ) {
             //First, we need to get the profiles
@@ -84,24 +121,17 @@ namespace SeventyTwoDesktop
             }
             LblProfileList.Text = "Profile List: " + SearchString;
         }
+        
 
-        private void LoadProfileSelectedByListBox() {
-
-            if( LstProfiles.SelectedIndex > -1 ) {
-                string guidToLoad = ProfileListController.ProfileList[ LstProfiles.SelectedIndex ].GUID;
-
-                if( !tabMain.TabPages.ContainsKey( guidToLoad ) ) {
-                    //Tab has not been loaded, create a new copy and load it.
-                    LoadProfile( guidToLoad );
-                    tabMain.TabPages.Add( CreateProfileTab( guidToLoad, true ) );
-                }
-
-                tabMain.SelectTab( guidToLoad );
+        private void RequestProfilePage( string guidToLoad )
+        {
+            if( !tabMain.TabPages.ContainsKey( guidToLoad ) ) {
+                //Tab has not been loaded, create a new copy and load it.
+                LoadProfile( guidToLoad );
+                tabMain.TabPages.Add( CreateProfileTab( guidToLoad, true ) );
             }
-        }
 
-        private void AddCalendarItemToList( CalendarItem ci ) {
-
+            tabMain.SelectTab( guidToLoad );
         }
 
         private string CreateNewProfile( ) {
@@ -243,6 +273,7 @@ namespace SeventyTwoDesktop
 
                 #region Scope Functions
 
+                
 
                 List<DateTime> AppointmentDates = new List<DateTime>( );
                 
@@ -592,16 +623,21 @@ namespace SeventyTwoDesktop
                         string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
                         RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ];
                         Dictionary<string, string> FollowupSchedule = rc.GetFollowupSchedule( );
-                        
-                        //Calendar.AddCalendarItem( new CalendarItem {
-                        //    item_date = CalendarListController.GetDateString( dt ),
-                        //    item_title = TemplateController.GetTemplateTypes( )[ FollowupSchedule[ "record_type" ] ],
-                        //    record_type = FollowupSchedule[ "record_type" ],
-                        //    linked_record_guid = curRecordGuid,
-                        //    linked_profile_guid = ProfileGUID,
-                        //    responsible_party = "",
-                        //    item_notes = ""
-                        //} );
+                        string recordType = FollowupSchedule[ "record_type" ];
+                        string itemTitle = LoadedProfiles[ ProfileGUID ].Profile.name + " - " + LoadedProfiles[ ProfileGUID ].Profile.phonenumber + " - " + TemplateController.GetTemplateTypes( )[ recordType ] + " - ";
+                        try {
+                            ctlCalendar1.AddCalendarItem( new CalendarItem {
+                                item_date = CalendarListController.GetDateString( dt ),
+                                item_title = itemTitle,
+                                record_type = recordType,
+                                linked_record_guid = curRecordGuid,
+                                linked_profile_guid = ProfileGUID,
+                                responsible_party = "",
+                                item_notes = ""
+                            } );
+                        } catch ( Exception exc ) {
+                            Log.WriteToLog( exc );
+                        }
                     }
                 };
 
@@ -713,26 +749,6 @@ namespace SeventyTwoDesktop
             return tabPageToCreate;
         }
 
-        private void BtnSendLogs_Click( object sender, EventArgs e ) {
-
-
-            try {
-                TabPage tabPageToCreate = new TabPage { Name = "Logs", Text = "Logs" };
-
-                Button btnClose = new Button( ) { Text = "Press to close", Top = 455, Left = 5, Width = 800 };
-                btnClose.Click += delegate ( object o, EventArgs evt ) {
-                    tabMain.TabPages.RemoveByKey( "Logs" );
-                };
-                tabPageToCreate.Controls.Add( new RichTextBox( ) { Top = 50, Height = 400, Width = 800, Left = 5, Text = Log.GetRecentLogFiles( ) } );
-                tabPageToCreate.Controls.Add( new Label( ) { Top = 5, Left = 5, Width = 800, Text = "Copy the text below to your clipboard.  Then open your email program and paste it into an email to whoever is helping you with SeventyTwo" } );
-                tabPageToCreate.Controls.Add( btnClose );
-
-                tabMain.TabPages.Add( tabPageToCreate );
-                tabMain.SelectTab( "Logs" );
-
-            } catch ( Exception exc ) { Log.WriteToLog( exc ); }
-
-
-        }
+        
     }
 }

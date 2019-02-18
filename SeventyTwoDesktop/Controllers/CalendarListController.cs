@@ -18,7 +18,7 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         //This is our basic list of dates
-        private Dictionary<string, CalendarDateController> Calendar { get; set; }
+        private Dictionary<string, CalendarDateController> Calendar { get; set; } = new Dictionary<string, CalendarDateController>( );
         private List<DateTime> DaysWithScheduledAppointments { get; set; }
 
         public event EventHandler CalendarItemAdded;
@@ -35,7 +35,8 @@ namespace SeventyTwoDesktop.Controllers
             }
         }
 
-        public CalendarDateController GetCalendarItemsForDate( string dateString ) {
+        public CalendarDateController GetCalendarItemsForDate( DateTime dt ) {
+            string dateString = GetDateString( dt );
             VerifyCalendarItemForDate( dateString );
             return Calendar[ dateString ];
         }

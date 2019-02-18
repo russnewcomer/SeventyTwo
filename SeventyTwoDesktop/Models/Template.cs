@@ -35,12 +35,38 @@ namespace SeventyTwoDesktop.Models
             template_guid = jsonTemplate[ "template_guid" ].ToString( );
             title = jsonTemplate[ "title" ].ToString( );
 
+
+            BuildFromJObject( jsonTemplate );
+
+        }
+
+        public Template( string templateString ) {
+
+            JObject jsonTemplate = JObject.Parse( templateString );
+        
+            type = jsonTemplate[ "type" ].ToString();
+            nature = jsonTemplate[ "nature" ].ToString( );
+            template_guid = jsonTemplate[ "template_guid" ].ToString( );
+            title = jsonTemplate[ "title" ].ToString( );
+
+            BuildFromJObject( jsonTemplate );
+        }
+
+
+        public void BuildFromJObject( JObject jsonTemplate ) {
+            
             followup = new Dictionary<string, string>( );
 
-            foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "followup" ] ) {
-                groups[ property.Key ] = property.Value.ToString( );
-            }
+            try {
 
+                if( jsonTemplate.ContainsKey( "followup" ) && jsonTemplate[ "followup" ].HasValues ) {
+                    foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "followup" ] ) {
+                        followup[ property.Key ] = property.Value.ToString( );
+                    }
+                }
+            } catch ( Exception exc ) {
+                Log.WriteToLog( exc );
+            } 
 
             if( jsonTemplate.ContainsKey( "profile_guid" ) ) {
                 profile_guid = jsonTemplate[ "profile_guid" ].ToString( );
@@ -59,59 +85,27 @@ namespace SeventyTwoDesktop.Models
             }
 
             groups = new Dictionary<string, string>( );
+            try {
 
-            foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "groups" ] ) {
-                groups[ property.Key ] = property.Value.ToString( );
+                foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "groups" ] ) {
+                    groups[ property.Key ] = property.Value.ToString( );
+                }
+            } catch( Exception exc ) {
+                Log.WriteToLog( exc );
             }
 
             items = new Dictionary<string, TemplateItem>( );
+            try { 
 
-            foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "items" ] ) {
-                items[ property.Key ] = ( new TemplateItem( property.Value ) );
-            }
-
-        }
-
-        public Template( string templateString ) {
-
-            JObject jsonTemplate = JObject.Parse( templateString );
-        
-            type = jsonTemplate[ "type" ].ToString();
-            nature = jsonTemplate[ "nature" ].ToString( );
-            template_guid = jsonTemplate[ "template_guid" ].ToString( );
-            title = jsonTemplate[ "title" ].ToString( );
-
-            if( jsonTemplate.ContainsKey( "profile_guid" ) ) {
-                profile_guid = jsonTemplate[ "profile_guid" ].ToString( );
-            }
-            if( jsonTemplate.ContainsKey( "record_guid" ) ) {
-                record_guid = jsonTemplate[ "record_guid" ].ToString( );
-            }
-            if( jsonTemplate.ContainsKey( "date_entered" ) ) {
-                date_entered = DateTime.Parse( jsonTemplate[ "date_entered" ].ToString( ) );
-            }
-            if( jsonTemplate.ContainsKey( "notes" ) ) {
-                notes = jsonTemplate[ "notes" ].ToString( );
-            }
-            if( jsonTemplate.ContainsKey( "record_attachment" ) ) {
-                record_attachment = jsonTemplate[ "record_attachment" ].ToString( );
-            }
-
-            groups = new Dictionary<string, string>();
-
-            foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "groups" ] ) {
-                groups[ property.Key ] = property.Value.ToString();
-            }
-
-            items = new Dictionary<string, TemplateItem>( );
-
-            foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "items" ] ) {
-                items[ property.Key ] = ( new TemplateItem( property.Value ) );
+                foreach( KeyValuePair<string, JToken> property in ( JObject )jsonTemplate[ "items" ] ) {
+                    items[ property.Key ] = ( new TemplateItem( property.Value ) );
+                }
+            } catch( Exception exc ) {
+                Log.WriteToLog( exc );
             }
         }
 
 
-        
         //public JObject TemplateToSimpleRecordObject( ) {
         //    JObject recordData = new JObject {
 

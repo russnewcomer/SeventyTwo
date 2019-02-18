@@ -10,8 +10,8 @@ namespace SeventyTwoDesktop.Models
         public string item_date;
         public string item_title;
         public string item_notes;
-        public string item_confirmed;
-        public string item_completed;
+        public bool item_confirmed = false;
+        public bool item_completed = false;
         public string responsible_party;
         public string record_type;
         public string linked_record_guid;

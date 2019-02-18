@@ -38,7 +38,7 @@
             System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Patient C - 934838843 - Maternal Antenatal Visit");
             System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Completed", new System.Windows.Forms.TreeNode[] {
             treeNode6});
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Saturday, 9 Feb 2019", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Saturday, 9-Feb-2019", new System.Windows.Forms.TreeNode[] {
             treeNode3,
             treeNode5,
             treeNode7});
@@ -69,6 +69,7 @@
             this.BtnPrevWeek.TabIndex = 0;
             this.BtnPrevWeek.Text = "<--";
             this.BtnPrevWeek.UseVisualStyleBackColor = true;
+            this.BtnPrevWeek.Click += new System.EventHandler(this.BtnPrevWeek_Click);
             // 
             // LblApptWeek
             // 
@@ -79,6 +80,7 @@
             this.LblApptWeek.TabIndex = 1;
             this.LblApptWeek.Text = "Week Beginning 9-Feb-2019";
             this.LblApptWeek.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.LblApptWeek.Click += new System.EventHandler(this.LblApptWeek_Click);
             // 
             // BtnNextWeek
             // 
@@ -88,38 +90,39 @@
             this.BtnNextWeek.TabIndex = 2;
             this.BtnNextWeek.Text = "-->";
             this.BtnNextWeek.UseVisualStyleBackColor = true;
+            this.BtnNextWeek.Click += new System.EventHandler(this.BtnNextWeek_Click);
             // 
             // TvCalendarItems
             // 
             this.TvCalendarItems.Location = new System.Drawing.Point(4, 140);
             this.TvCalendarItems.Name = "TvCalendarItems";
-            treeNode1.Name = "Node9";
+            treeNode1.Name = "09-Feb-2019-Scheduled-0";
             treeNode1.Text = "Patient A - +93770998343 - Maternal Antenatal Visit";
-            treeNode2.Name = "Node15";
+            treeNode2.Name = "09-Feb-2019-Scheduled-1";
             treeNode2.Text = "Patient 1 - 9374783843  - Maternal Antenatal Visit";
-            treeNode3.Name = "Node8";
+            treeNode3.Name = "09-Feb-2019-Scheduled";
             treeNode3.Text = "Scheduled";
-            treeNode4.Name = "Node12";
+            treeNode4.Name = "09-Feb-2019-Confirmed-0";
             treeNode4.Text = "Patient B - 888349343 - Maternal Postpartum Visit";
-            treeNode5.Name = "Node10";
+            treeNode5.Name = "09-Feb-2019-Confirmed";
             treeNode5.Text = "Confirmed";
-            treeNode6.Name = "Node13";
+            treeNode6.Name = "09-Feb-2019-Completed-0";
             treeNode6.Text = "Patient C - 934838843 - Maternal Antenatal Visit";
-            treeNode7.Name = "Node11";
+            treeNode7.Name = "09-Feb-2019-Completed";
             treeNode7.Text = "Completed";
-            treeNode8.Name = "Node0";
-            treeNode8.Text = "Saturday, 9 Feb 2019";
-            treeNode9.Name = "Node1";
+            treeNode8.Name = "09-Feb-2019-All";
+            treeNode8.Text = "Saturday, 9-Feb-2019";
+            treeNode9.Name = "10-Feb-2019-All";
             treeNode9.Text = "Sunday, 10 Feb 2019";
-            treeNode10.Name = "Node2";
+            treeNode10.Name = "11-Feb-2019-All";
             treeNode10.Text = "Monday, 11 Feb 2019";
-            treeNode11.Name = "Node3";
+            treeNode11.Name = "12-Feb-2019-All";
             treeNode11.Text = "Tuesday, 12 Feb 2019";
-            treeNode12.Name = "Node4";
+            treeNode12.Name = "13-Feb-2019-All";
             treeNode12.Text = "Wednesday, 13 Feb 2019";
-            treeNode13.Name = "Node5";
+            treeNode13.Name = "14-Feb-2019-All";
             treeNode13.Text = "Thursday, 14 Feb 2019";
-            treeNode14.Name = "Node6";
+            treeNode14.Name = "15-Feb-2019-All";
             treeNode14.Text = "Friday, 15 Feb 2019";
             this.TvCalendarItems.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode8,
@@ -131,6 +134,7 @@
             treeNode14});
             this.TvCalendarItems.Size = new System.Drawing.Size(493, 317);
             this.TvCalendarItems.TabIndex = 11;
+            this.TvCalendarItems.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvCalendarItems_NodeMouseDoubleClick);
             // 
             // CalDate7
             // 
