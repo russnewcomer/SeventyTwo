@@ -142,6 +142,10 @@ namespace SeventyTwoDesktop.Controllers
             return TemplateInstance.followup;
         }
 
+        public void SetFollowupScheduled( bool Scheduled ) {
+            TemplateInstance.followup[ "scheduled" ] = Scheduled.ToString( );
+        }
+
         public TemplateItem GetTemplateItem( string itemName ) {
 
    

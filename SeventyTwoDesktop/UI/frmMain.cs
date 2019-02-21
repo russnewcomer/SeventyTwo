@@ -474,6 +474,8 @@ namespace SeventyTwoDesktop
                         TreeNode firstNode = null;
                         RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ RecordGUID ];
 
+                        pnlFollowup.Visible = !rc.GetFollowupScheduled( );
+
                         //Get the GUID for the profile
                         string templateType = rc.GetTemplateType( );
                         
@@ -528,9 +530,12 @@ namespace SeventyTwoDesktop
                                     //MessageBox.Show( guidanceItem.ItemValue );
                                     TemplateItemEventArgs tiea = ( TemplateItemEventArgs )e;
                                     TemplateItem displayItem = rc.GetTemplateItem( tiea.Key );
-                                    
-
                                     rootNode.Nodes[ dStrIntNodeIndex[ ti.Value.group ] ].Nodes[ tiea.Key ].Text = displayItem.title + " - " + _DisplayTextFormatter(tiea.Value);
+
+                                    //check to see if the guidance item value is the Followup Schedule Field
+                                    if ( tiea.Key == rc.GetFollowupFieldUntilName() && !rc.GetFollowupScheduled() ) {
+                                        _PopulateAppointmentDates( );
+                                    }
                                 };
 
                                 guidanceItem.LoadTemplateItem( ti.Value );
@@ -591,6 +596,8 @@ namespace SeventyTwoDesktop
                     }
                 }
 
+
+
                 string _DisplayTextFormatter( string TextToFormat ) {
                     //We only show the first 50 characters.
                     string retVal = ( TextToFormat.Length > 50 ) ? TextToFormat.Substring( 0,50 ) : TextToFormat;
@@ -602,6 +609,40 @@ namespace SeventyTwoDesktop
                     }
 
                     return retVal;
+                }
+
+                void _PopulateAppointmentDates( ) {
+                    /*
+            		"interval":"1",
+		            "field_until":"due_date",
+		            "units":"m",
+		            "record_type":"maternal_antenatal_visit",
+		            "scheduled":"false",
+                     */
+                    
+                    RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ tvTemplateItems.Nodes[ 0 ].Name ];
+
+                    //Check to see if we have scheduled the followup yet.
+                    if ( !rc.GetFollowupScheduled() ) {
+                        AppointmentDates.Clear( );
+                        Dictionary<string, string> FollowupSchedule = rc.GetFollowupSchedule( );
+                        _AddDatesToAppointmentListUntil( CalendarListController.GetDateTime( rc.GetData( FollowupSchedule[ "field_until" ] ) ), FollowupSchedule[ "units" ], int.Parse( FollowupSchedule[ "interval" ] ) );
+                    }
+
+                }
+
+                void _AddDatesToAppointmentListUntil( DateTime finalDate, string units, int interval ) {
+                    DateTime incrementer = CalendarListController.AddTime( DateTime.Now, units, interval );
+                    while( incrementer < finalDate ) {
+
+                        AppointmentDates.Add( incrementer );
+                        incrementer = CalendarListController.AddTime( incrementer, units, interval );
+                    }
+                    AppointmentDates.Sort( );
+                    lstAppointmentDates.Items.Clear( );
+                    foreach( DateTime dt in AppointmentDates ) {
+                        lstAppointmentDates.Items.Add( dt.ToString( "dd-MMM-yyyy" ) );
+                    }
                 }
 
                 void _AddDateToAppointmentList( DateTime dateToAdd ) {
@@ -619,9 +660,9 @@ namespace SeventyTwoDesktop
                 }
 
                 void _SaveAppointments() {
+                    string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
+                    RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ];
                     foreach (DateTime dt in AppointmentDates ) {
-                        string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
-                        RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ];
                         Dictionary<string, string> FollowupSchedule = rc.GetFollowupSchedule( );
                         string recordType = FollowupSchedule[ "record_type" ];
                         string itemTitle = LoadedProfiles[ ProfileGUID ].Profile.name + " - " + LoadedProfiles[ ProfileGUID ].Profile.phonenumber + " - " + TemplateController.GetTemplateTypes( )[ recordType ] + " - ";
@@ -639,6 +680,7 @@ namespace SeventyTwoDesktop
                             Log.WriteToLog( exc );
                         }
                     }
+                    rc.SetFollowupScheduled( true );
                 };
 
                 #endregion
@@ -712,7 +754,6 @@ namespace SeventyTwoDesktop
                 _PopulateRecordTypesComboBox( );
                 
                 //load existing records in the profile.
-
                 _PopulateExistingRecordsTreeView( );
 
 

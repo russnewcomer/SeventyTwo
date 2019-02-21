@@ -20,6 +20,7 @@ namespace SeventyTwoDesktop.Controllers
         private string _RecordGUID { get; set; }
         public string RecordGUID { get { return _RecordGUID; } }
         public string ProfileGUID { get; set; }
+        public DateTime DateEntered { get { return TC.GetTemplateDateEntered( ); } }
         
         private FileReadWriteController FileController { get; set; }
 
@@ -143,6 +144,19 @@ namespace SeventyTwoDesktop.Controllers
             return TC.GetFollowupSchedule( );
         }
 
+        public string GetFollowupFieldUntilName( ) {
+            return TC.GetFollowupSchedule( )[ "field_until" ];
+        }
+
+        public bool GetFollowupScheduled() {
+            string scheduledStatus = TC.GetFollowupSchedule( )[ "scheduled" ].ToString( );
+            return ( scheduledStatus == "true" );
+        }
+
+        public void SetFollowupScheduled( bool scheduled ) {
+            TC.SetFollowupScheduled( true );
+        }
+
         public int UpdateTemplateItemSubRecord( string Key, JObject Value, int Index = -1 ) {
             return TC.UpdateTemplateItemSubRecord( Key, Value, Index );
         }
@@ -170,27 +184,7 @@ namespace SeventyTwoDesktop.Controllers
                     switch ( calcDef["type"].ToString() ) {
                         case "add":
                             if ( calcDef["display"].ToString() == "date" ) {
-                                DateTime calcTime = DateTime.Parse( Value );
-                                switch ( calcDef["units"].ToString()) {
-                                    case "s":
-                                        calcTime = calcTime.AddSeconds( int.Parse( calcDef[ "value" ].ToString( ) ) );
-                                        break;
-                                    case "m":
-                                        calcTime = calcTime.AddMinutes( int.Parse( calcDef[ "value" ].ToString( ) ) );
-                                        break;
-                                    case "h":
-                                        calcTime = calcTime.AddHours( int.Parse( calcDef[ "value" ].ToString( ) ) );
-                                        break;
-                                    case "d":
-                                        calcTime = calcTime.AddDays( double.Parse( calcDef[ "value" ].ToString( ) ) );
-                                        break;
-                                    case "M":
-                                        calcTime = calcTime.AddMonths( int.Parse( calcDef[ "value" ].ToString( ) ) );
-                                        break;
-                                    case "y":
-                                        calcTime = calcTime.AddYears( int.Parse( calcDef[ "value" ].ToString( ) ) );
-                                        break;
-                                }
+                                DateTime calcTime = CalendarListController.AddTime( DateTime.Parse( Value ), calcDef[ "units" ].ToString( ), int.Parse( calcDef[ "value" ].ToString( ) ) );
                                 string addValToUpdate = calcTime.ToString( "dd-MMM-yyyy" );
                                 TC.UpdateTemplateItemValue( destField, addValToUpdate );
                                // RecordData[ destField ] = addValToUpdate;
@@ -198,30 +192,9 @@ namespace SeventyTwoDesktop.Controllers
                             }
                             break;
                         case "nowdiff":
-                            
-                            TimeSpan diff = ( DateTime.Now - DateTime.Parse( Value ) );
-                            string nowDiffTargetValue = "0";
-                            switch( calcDef[ "units" ].ToString( ) ) {
-                                case "s":
-                                    nowDiffTargetValue = Math.Floor( diff.TotalSeconds ).ToString();
-                                    break;
-                                case "m":
-                                    nowDiffTargetValue = Math.Floor( diff.TotalMinutes ).ToString( );
-                                    break;
-                                case "h":
-                                    nowDiffTargetValue = Math.Floor( diff.TotalHours ).ToString( );
-                                    break;
-                                case "d":
-                                    nowDiffTargetValue = Math.Floor( diff.TotalDays ).ToString( );
-                                    break;
-                                case "M":
-                                    nowDiffTargetValue = Math.Ceiling( ( decimal )diff.TotalDays / 30 ).ToString( );
-                                    break;
-                                case "y":
-                                    nowDiffTargetValue = Math.Ceiling( ( decimal )diff.TotalDays / 365 ).ToString( );
-                                    break;
-                            }
-                            
+
+                            string nowDiffTargetValue = CalendarListController.TimeDiff( DateTime.Now, DateTime.Parse( Value ), calcDef[ "units" ].ToString( ) ).ToString();
+                                                        
                             TC.UpdateTemplateItemValue( destField, nowDiffTargetValue );
                            //RecordData[ destField ] = nowDiffTargetValue;
                             retVal.AdditionalValuesUpdated.Add( destField, nowDiffTargetValue );

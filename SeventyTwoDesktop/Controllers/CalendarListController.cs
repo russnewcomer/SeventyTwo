@@ -16,6 +16,59 @@ namespace SeventyTwoDesktop.Controllers
         public static DateTime GetDateTime( string StringToGetDateFor ) {
             return DateTime.Parse( StringToGetDateFor );
         }
+        public static double TimeDiff( DateTime date1, DateTime date2, string unit )
+        {
+            TimeSpan diff = ( date1 - date2 );
+            double nowDiffTargetValue = 0;
+            switch( unit ) {
+                case "s":
+                    nowDiffTargetValue = Math.Floor( diff.TotalSeconds );
+                    break;
+                case "m":
+                    nowDiffTargetValue = Math.Floor( diff.TotalMinutes );
+                    break;
+                case "h":
+                    nowDiffTargetValue = Math.Floor( diff.TotalHours );
+                    break;
+                case "d":
+                    nowDiffTargetValue = Math.Floor( diff.TotalDays );
+                    break;
+                case "M":
+                    nowDiffTargetValue = (double) Math.Ceiling( ( decimal )diff.TotalDays / 30 );
+                    break;
+                case "y":
+                    nowDiffTargetValue = (double) Math.Ceiling( ( decimal )diff.TotalDays / 365 );
+                    break;
+            }
+            return nowDiffTargetValue;
+        }
+        public static DateTime AddTime( DateTime beginDate, string units, int timeToAdd ) {
+            DateTime retVal;
+            switch( units ) {
+                case "s":
+                    retVal = beginDate.AddSeconds( timeToAdd );
+                    break;
+                case "m":
+                    retVal = beginDate.AddMinutes( timeToAdd );
+                    break;
+                case "h":
+                    retVal = beginDate.AddHours( timeToAdd );
+                    break;
+                case "d":
+                    retVal = beginDate.AddDays( timeToAdd );
+                    break;
+                case "M":
+                    retVal = beginDate.AddMonths( timeToAdd );
+                    break;
+                case "y":
+                    retVal = beginDate.AddYears( timeToAdd );
+                    break;
+                default:
+                    retVal = beginDate;
+                    break;
+            }
+            return retVal;
+        }
 
         //This is our basic list of dates
         private Dictionary<string, CalendarDateController> Calendar { get; set; } = new Dictionary<string, CalendarDateController>( );
