@@ -145,11 +145,22 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         public string GetFollowupFieldUntilName( ) {
-            return TC.GetFollowupSchedule( )[ "field_until" ];
+            string followupField = "";
+            try {
+                followupField = TC.GetFollowupSchedule()["field_until"];
+            } catch ( Exception er ) {
+                Models.Log.WriteToLog( er );
+            }
+            return followupField;
         }
 
         public bool GetFollowupScheduled() {
-            string scheduledStatus = TC.GetFollowupSchedule( )[ "scheduled" ].ToString( );
+            string scheduledStatus = "false";
+            try {
+                scheduledStatus = TC.GetFollowupSchedule( )[ "scheduled" ].ToString( );
+            } catch ( Exception er ) {
+                Models.Log.WriteToLog( er );
+            }
             return ( scheduledStatus == "true" );
         }
 

@@ -18,7 +18,7 @@ namespace SeventyTwoDesktop
 
         private CtlTemplateItem ActiveGuidanceItem { get; set; }
         private Dictionary< string, ProfileController > LoadedProfiles { get; set; } = new Dictionary< string, ProfileController >( );
-        private Dictionary< string, string > TemplateTypes = TemplateController.GetTemplateTypes( );
+        private readonly Dictionary< string, string > TemplateTypes = TemplateController.GetTemplateTypes( );
         private Dictionary< string, Dictionary< string, TemplateItem > > SubrecordTemplates { get; set; }
                 
 
@@ -306,10 +306,17 @@ namespace SeventyTwoDesktop
 
                 void _ForceProfileSave() {
 
-                    string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
+                    try
+                    {
+                        string curRecordGuid = tvTemplateItems.Nodes[0].Name;
+                        LoadedProfiles[ProfileGUID].Records[curRecordGuid].WriteRecord();
 
-                    LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ].WriteRecord( );
-                    _ChangeToProfileView( );
+                    }
+                    catch (Exception exc) { Log.WriteToLog(exc); }
+
+                 
+
+                      _ChangeToProfileView( );
 
                 }
 
