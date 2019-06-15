@@ -7,6 +7,13 @@
 	"title":"Maternal Permanent Record",
 	"notes":"",
 	"record_attachment":"",
+	"followup":{
+		"interval":"1",
+		"field_until":"due_date",
+		"units":"M",
+		"record_type":"maternal_antenatal_visit",
+		"scheduled":"false"
+	},
 	"groups":{
 		"dates":"Conception and Due Date",
 		"pregnancies":"Previous Pregnancies",
