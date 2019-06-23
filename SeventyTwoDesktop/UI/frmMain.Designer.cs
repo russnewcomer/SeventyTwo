@@ -191,12 +191,12 @@
             // 
             // LstProfiles
             // 
-            this.LstProfiles.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LstProfiles.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.LstProfiles.FormattingEnabled = true;
-            this.LstProfiles.ItemHeight = 45;
+            this.LstProfiles.ItemHeight = 32;
             this.LstProfiles.Location = new System.Drawing.Point(9, 162);
             this.LstProfiles.Name = "LstProfiles";
-            this.LstProfiles.Size = new System.Drawing.Size(479, 274);
+            this.LstProfiles.Size = new System.Drawing.Size(479, 260);
             this.LstProfiles.TabIndex = 4;
             this.LstProfiles.DoubleClick += new System.EventHandler(this.LstProfiles_DoubleClick);
             // 
