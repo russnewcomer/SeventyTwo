@@ -352,7 +352,20 @@ namespace SeventyTwoDesktop
 
             }
             this.Controls.Add( MainValueControl );
+            _ResetControlDPISizes( this );
+        }
 
+
+        private void _ResetControlDPISizes(Control ctrl)
+        {
+            ctrl.Height = ctrl.LogicalToDeviceUnits(ctrl.Height);
+            ctrl.Width = ctrl.LogicalToDeviceUnits(ctrl.Width);
+            ctrl.Top = ctrl.LogicalToDeviceUnits(ctrl.Top);
+            ctrl.Left = ctrl.LogicalToDeviceUnits(ctrl.Left);
+            foreach (Control subCtrl in ctrl.Controls)
+            {
+                _ResetControlDPISizes(subCtrl);
+            }
         }
 
         private void HandleItemValueChange( string value ) {

@@ -6,7 +6,9 @@
 	"date_entered":"01-JAN-2019",
 	"title":"Maternal Postpartum Assessment",
 	"notes":"",
-	"record_attachment":"",
+  "record_attachment": "",
+  "followup":{
+	},
 	"groups":{
 		"maternal_assessment":"Maternal Assessment",
 		"instructions":"Instructions",

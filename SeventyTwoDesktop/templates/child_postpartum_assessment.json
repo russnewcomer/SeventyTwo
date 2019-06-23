@@ -6,7 +6,9 @@
 	"date_entered":"01-JAN-2019",
 	"title":"Child Postpartum Assessment",
 	"notes":"",
-	"record_attachment":"",
+  "record_attachment": "",
+  "followup":{
+	},
 	"groups":{
 		"information":"Basic Information",
 		"reflexes":"Reflexes",

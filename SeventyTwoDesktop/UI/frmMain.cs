@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using SeventyTwoDesktop.Controllers;
+using SeventyTwoDesktop.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using SeventyTwoDesktop.Controllers;
-using SeventyTwoDesktop.Models;
-using Newtonsoft.Json.Linq;
 
 namespace SeventyTwoDesktop
 {
@@ -74,7 +71,7 @@ namespace SeventyTwoDesktop
         private void BtnSendLogs_Click( object sender, EventArgs e )
         {
 
-
+            
             try {
                 TabPage tabPageToCreate = new TabPage { Name = "Logs", Text = "Logs" };
 
@@ -176,8 +173,9 @@ namespace SeventyTwoDesktop
                 };
 
 
-                Button btnEditProfile = new Button { Left = 400, Top = 5, Height = 30, Width = 150, Text = "Back To Profile" };
+                Button btnEditProfile = new Button { Left = 450, Top = 5, Height = 30, Width = 150, Text = "Back To Profile" };
 
+                
 
                 CtlPermanentRecord permRecordControl = new CtlPermanentRecord {
                     Name = "permRecordControl",
@@ -187,19 +185,23 @@ namespace SeventyTwoDesktop
                     Width = 600
                 };
 
+                permRecordControl.Height = permRecordControl.LogicalToDeviceUnits( permRecordControl.Height );
+                permRecordControl.Width = permRecordControl.LogicalToDeviceUnits( permRecordControl.Width );
+
 
                 ComboBox cmbNewRecord = new ComboBox {
                     Name = "cmbNewRecord",
                     Top = 5,
-                    Left = 650,
-                    Width = 280,
-                    Height = 40
+                    Left = 700,
+                    Width = 250,
+                    Height = 50
                 };
 
                 Button btnCreateNewRecord = new Button {
                     Top = 5,
                     Left = 605,
-                    Width = 40,
+                    Width = 80,
+                    Height = 40,
                     Text = "New"
                 };
 
@@ -209,9 +211,9 @@ namespace SeventyTwoDesktop
                     Name = "tvExistingRecords",
                     Top = 55,
                     Left = 605,
-                    Width = 325,
+                    Width = 350,
                     Height = 400,
-                    Font = new Font( "Segoe UI", 9 ),
+                    Font = new Font( "Segoe UI", 12 ),
                     Visible = true
                 };
 
@@ -221,9 +223,9 @@ namespace SeventyTwoDesktop
                     Name = "tvTemplateItems",
                     Top = 5,
                     Left = 605,
-                    Width = 325,
+                    Width = 350,
                     Height = 450,
-                    Font = new Font( "Segoe UI", 9 ),
+                    Font = new Font( "Segoe UI", 12 ),
                     Visible = false
                 };
 
@@ -232,7 +234,8 @@ namespace SeventyTwoDesktop
                     Top = 50,
                     Height = 200,
                     Left = 5,
-                    Width = 550
+                    Width = 550, 
+                    Visible = false
                 };
 
 
@@ -690,6 +693,16 @@ namespace SeventyTwoDesktop
                     rc.SetFollowupScheduled( true );
                 };
 
+                void _ResetControlDPISizes( Control ctrl ) {
+                    ctrl.Height = ctrl.LogicalToDeviceUnits( ctrl.Height );
+                    ctrl.Width = ctrl.LogicalToDeviceUnits( ctrl.Width );
+                    ctrl.Top = ctrl.LogicalToDeviceUnits( ctrl.Top );
+                    ctrl.Left = ctrl.LogicalToDeviceUnits( ctrl.Left );
+                    foreach ( Control subCtrl in ctrl.Controls ) {
+                        _ResetControlDPISizes( subCtrl );
+                    }
+                };
+
                 #endregion
 
                 #region Event Handlers
@@ -770,15 +783,9 @@ namespace SeventyTwoDesktop
 
 
 
-                pnlFollowup.Controls.Add( new Label { Top = 5, Left = 5, Width = 200, Font = new Font( "Segoe UI", 9 ), Text = "Schedule Followup Appointments" } );
-                pnlFollowup.Controls.Add( dtpFollowupDate );
-                pnlFollowup.Controls.Add( btnAddApptDate );
-                pnlFollowup.Controls.Add( lstAppointmentDates );
-                pnlFollowup.Controls.Add( btnSaveAppointments );
+                
 
 
-
-                tabPageToCreate.Controls.Add( permRecordControl );
                 tabPageToCreate.Controls.Add( btnEditProfile );
                 tabPageToCreate.Controls.Add( lblProfileName );
                 tabPageToCreate.Controls.Add( btnPreviousGuidanceItem );
@@ -788,9 +795,21 @@ namespace SeventyTwoDesktop
                 tabPageToCreate.Controls.Add( pnlGuidanceControls );
                 tabPageToCreate.Controls.Add( cmbNewRecord );
                 tabPageToCreate.Controls.Add( btnCreateNewRecord );
-                tabPageToCreate.Controls.Add( pnlFollowup );
+                
+
+                _ResetControlDPISizes( tabPageToCreate );
 
 
+                pnlFollowup.Controls.Add(new Label { Top = 5, Left = 5, Width = 200, Font = new Font("Segoe UI", 9), Text = "Schedule Followup Appointments" });
+                pnlFollowup.Controls.Add(dtpFollowupDate);
+                pnlFollowup.Controls.Add(btnAddApptDate);
+                pnlFollowup.Controls.Add(lstAppointmentDates);
+                pnlFollowup.Controls.Add(btnSaveAppointments);
+                tabPageToCreate.Controls.Add(pnlFollowup);
+                _ResetControlDPISizes( pnlFollowup );
+
+
+                tabPageToCreate.Controls.Add(permRecordControl);
                 #endregion
             } catch ( Exception exc ) { Log.WriteToLog( exc );  }
 

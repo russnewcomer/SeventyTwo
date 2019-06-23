@@ -6,7 +6,9 @@
 	"date_entered":"01-JAN-2019",
 	"title":"Urinalysis Results",
 	"notes":"",
-	"record_attachment":"",
+  "record_attachment": "",
+  "followup":{
+	},
 	"groups":{
 		"results":"Results"
 	},

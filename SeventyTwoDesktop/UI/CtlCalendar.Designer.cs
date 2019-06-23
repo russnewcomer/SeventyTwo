@@ -65,7 +65,7 @@
             // 
             this.BtnPrevWeek.Location = new System.Drawing.Point(3, 3);
             this.BtnPrevWeek.Name = "BtnPrevWeek";
-            this.BtnPrevWeek.Size = new System.Drawing.Size(56, 32);
+            this.BtnPrevWeek.Size = new System.Drawing.Size(56, 49);
             this.BtnPrevWeek.TabIndex = 0;
             this.BtnPrevWeek.Text = "<--";
             this.BtnPrevWeek.UseVisualStyleBackColor = true;
@@ -76,7 +76,7 @@
             this.LblApptWeek.Font = new System.Drawing.Font("Segoe UI Light", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LblApptWeek.Location = new System.Drawing.Point(65, 3);
             this.LblApptWeek.Name = "LblApptWeek";
-            this.LblApptWeek.Size = new System.Drawing.Size(370, 32);
+            this.LblApptWeek.Size = new System.Drawing.Size(621, 49);
             this.LblApptWeek.TabIndex = 1;
             this.LblApptWeek.Text = "Week Beginning 9-Feb-2019";
             this.LblApptWeek.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -84,9 +84,9 @@
             // 
             // BtnNextWeek
             // 
-            this.BtnNextWeek.Location = new System.Drawing.Point(441, 3);
+            this.BtnNextWeek.Location = new System.Drawing.Point(692, 3);
             this.BtnNextWeek.Name = "BtnNextWeek";
-            this.BtnNextWeek.Size = new System.Drawing.Size(56, 32);
+            this.BtnNextWeek.Size = new System.Drawing.Size(56, 49);
             this.BtnNextWeek.TabIndex = 2;
             this.BtnNextWeek.Text = "-->";
             this.BtnNextWeek.UseVisualStyleBackColor = true;
@@ -94,7 +94,7 @@
             // 
             // TvCalendarItems
             // 
-            this.TvCalendarItems.Location = new System.Drawing.Point(4, 140);
+            this.TvCalendarItems.Location = new System.Drawing.Point(3, 242);
             this.TvCalendarItems.Name = "TvCalendarItems";
             treeNode1.Name = "09-Feb-2019-Scheduled-0";
             treeNode1.Text = "Patient A - +93770998343 - Maternal Antenatal Visit";
@@ -132,69 +132,76 @@
             treeNode12,
             treeNode13,
             treeNode14});
-            this.TvCalendarItems.Size = new System.Drawing.Size(493, 317);
+            this.TvCalendarItems.Size = new System.Drawing.Size(745, 274);
             this.TvCalendarItems.TabIndex = 11;
             this.TvCalendarItems.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvCalendarItems_NodeMouseDoubleClick);
             // 
             // CalDate7
             // 
-            this.CalDate7.Location = new System.Drawing.Point(432, 41);
+            this.CalDate7.Location = new System.Drawing.Point(648, 84);
+            this.CalDate7.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CalDate7.Name = "CalDate7";
-            this.CalDate7.Size = new System.Drawing.Size(65, 85);
+            this.CalDate7.Size = new System.Drawing.Size(100, 150);
             this.CalDate7.TabIndex = 10;
             this.CalDate7.Clicked += new System.EventHandler(this.CalDate_ClickedEventHandler);
             // 
             // CalDate6
             // 
-            this.CalDate6.Location = new System.Drawing.Point(360, 41);
+            this.CalDate6.Location = new System.Drawing.Point(540, 84);
+            this.CalDate6.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CalDate6.Name = "CalDate6";
-            this.CalDate6.Size = new System.Drawing.Size(65, 85);
+            this.CalDate6.Size = new System.Drawing.Size(100, 150);
             this.CalDate6.TabIndex = 9;
             this.CalDate6.Clicked += new System.EventHandler(this.CalDate_ClickedEventHandler);
             // 
             // CalDate5
             // 
-            this.CalDate5.Location = new System.Drawing.Point(288, 41);
+            this.CalDate5.Location = new System.Drawing.Point(432, 84);
+            this.CalDate5.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CalDate5.Name = "CalDate5";
-            this.CalDate5.Size = new System.Drawing.Size(65, 85);
+            this.CalDate5.Size = new System.Drawing.Size(100, 150);
             this.CalDate5.TabIndex = 8;
             this.CalDate5.Clicked += new System.EventHandler(this.CalDate_ClickedEventHandler);
             // 
             // CalDate4
             // 
-            this.CalDate4.Location = new System.Drawing.Point(216, 41);
+            this.CalDate4.Location = new System.Drawing.Point(324, 84);
+            this.CalDate4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CalDate4.Name = "CalDate4";
-            this.CalDate4.Size = new System.Drawing.Size(65, 85);
+            this.CalDate4.Size = new System.Drawing.Size(100, 150);
             this.CalDate4.TabIndex = 7;
             this.CalDate4.Clicked += new System.EventHandler(this.CalDate_ClickedEventHandler);
             // 
             // CalDate3
             // 
-            this.CalDate3.Location = new System.Drawing.Point(144, 41);
+            this.CalDate3.Location = new System.Drawing.Point(216, 84);
+            this.CalDate3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CalDate3.Name = "CalDate3";
-            this.CalDate3.Size = new System.Drawing.Size(65, 85);
+            this.CalDate3.Size = new System.Drawing.Size(100, 150);
             this.CalDate3.TabIndex = 6;
             this.CalDate3.Clicked += new System.EventHandler(this.CalDate_ClickedEventHandler);
             // 
             // CalDate2
             // 
-            this.CalDate2.Location = new System.Drawing.Point(72, 41);
+            this.CalDate2.Location = new System.Drawing.Point(108, 84);
+            this.CalDate2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CalDate2.Name = "CalDate2";
-            this.CalDate2.Size = new System.Drawing.Size(65, 85);
+            this.CalDate2.Size = new System.Drawing.Size(100, 150);
             this.CalDate2.TabIndex = 5;
             this.CalDate2.Clicked += new System.EventHandler(this.CalDate_ClickedEventHandler);
             // 
             // CalDate1
             // 
-            this.CalDate1.Location = new System.Drawing.Point(0, 41);
+            this.CalDate1.Location = new System.Drawing.Point(0, 84);
+            this.CalDate1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.CalDate1.Name = "CalDate1";
-            this.CalDate1.Size = new System.Drawing.Size(65, 85);
+            this.CalDate1.Size = new System.Drawing.Size(100, 150);
             this.CalDate1.TabIndex = 4;
             this.CalDate1.Clicked += new System.EventHandler(this.CalDate_ClickedEventHandler);
             // 
             // CtlCalendar
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.TvCalendarItems);
             this.Controls.Add(this.CalDate7);
@@ -209,7 +216,7 @@
             this.Controls.Add(this.BtnPrevWeek);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "CtlCalendar";
-            this.Size = new System.Drawing.Size(500, 460);
+            this.Size = new System.Drawing.Size(755, 519);
             this.ResumeLayout(false);
 
         }
