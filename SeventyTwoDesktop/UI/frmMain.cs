@@ -828,7 +828,7 @@ namespace SeventyTwoDesktop
 
         private void BtnExportProfiles_Click( object sender, EventArgs e ) {
             SaveFileDialog zipDialog = new SaveFileDialog {
-                Filter = "72 Profiles (zip)|.zip",
+                //Filter = "72 Profiles (zip)|.zip",
                 Title = "Export File",
                 FileName = DateTime.Now.ToString( "yyyy-MM-dd" ) + "-72-Sync-Out-" + UserController.ActiveUser.Name + ".zip"
             };
@@ -841,7 +841,7 @@ namespace SeventyTwoDesktop
 
         private void BtnImportProfiles_Click( object sender, EventArgs e ) {
             OpenFileDialog zipDialog = new OpenFileDialog {
-                Filter = "72 Profiles (zip)|.zip",
+                //Filter = "72 Profiles (zip)|.zip",
                 Title = "Import File"
             };
 

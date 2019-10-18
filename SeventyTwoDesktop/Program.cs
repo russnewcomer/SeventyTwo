@@ -16,14 +16,13 @@ namespace SeventyTwoDesktop
         static void Main()
         {
             
-            ConfirmDirectory( "profiles" );
+            ConfirmDirectory( "data" );
+            ConfirmDirectory( "data/calendar" );
             ConfirmDirectory( "templates" );
             ConfirmDirectory( "log" );
             ConfirmDirectory( "config" );
-            ConfirmDirectory( "export" );
             ConfirmDirectory( "reconcile" );
-            ConfirmDirectory( "calendar" );
-            ConfirmDirectory( "users" );
+            ConfirmDirectory( "temp" );
 
             GetProfileTypesAndLoadIntoConfigFile( );
 

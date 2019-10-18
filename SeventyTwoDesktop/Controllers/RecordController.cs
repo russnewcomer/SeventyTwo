@@ -81,7 +81,10 @@ namespace SeventyTwoDesktop.Controllers
         public string GetGroupDisplayName( string groupKey ) {
             return TC.GetGroupDisplayName( groupKey );
         }
-   
+
+        public DateTime GetDateUpdated(  ) {
+            return TC.GetTemplateDateUpdated( );
+        }
 
         //public JObject RenderDataToSimpleJSON( ) {
         //    return TC.TemplateToSimpleRecordObject();
@@ -119,7 +122,7 @@ namespace SeventyTwoDesktop.Controllers
         //        {
         //            File.WriteAllText( fileName, JsonConvert.SerializeObject( recordData ) );
         //        }
-           
+
         //    } catch(Exception errMsg ) {
         //        //Figure out how to log these somewhere.
         //        Models.Log.WriteToLog(errMsg );
@@ -224,7 +227,7 @@ namespace SeventyTwoDesktop.Controllers
         public void WriteRecord() {
             
             if( !string.IsNullOrEmpty( ProfileGUID ) && !string.IsNullOrEmpty( RecordGUID ) ) {
-                SaveFullRecordObject( "profiles/" + ProfileGUID + "/" + RecordGUID + ".json"  );
+                SaveFullRecordObject( "data/" + ProfileGUID + "/" + RecordGUID + ".json"  );
             }
         }
 

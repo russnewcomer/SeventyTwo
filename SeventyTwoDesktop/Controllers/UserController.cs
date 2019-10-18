@@ -8,8 +8,8 @@ namespace SeventyTwoDesktop.Controllers
 {
     static class UserController {
 
-        const string LIST_FILE_PATH = "profiles/users.json";
-        const string LIST_DUPLICATE_FILE_PATH = "profiles/backup_user_list.json";
+        const string LIST_FILE_PATH = "data/users.json";
+        const string LIST_DUPLICATE_FILE_PATH = "data/backup_user_list.json";
 
         public static UserItem ActiveUser { get; set; }
         public static List<UserItem> UserList {get; set;} = new List<UserItem>();
@@ -51,6 +51,19 @@ namespace SeventyTwoDesktop.Controllers
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
         }
 
+        public static void AddItemToListIfNotExists( UserItem itm ) {
+            
+            try {
+                List<string> guidList = new List<string>( );
+                foreach (UserItem user in UserList) {
+                    guidList.Add( user.GUID );
+                }
+                if ( !guidList.Contains( itm.GUID ) ) {
+                    UserList.Add( itm );
+                    SaveList( );
+                }
+            } catch ( Exception exc ) { Log.WriteToLog( exc ); }
+        }
         public static UserItem AddItemToList( string name, string number ) {
             UserItem retVal = null;
             try {

@@ -137,6 +137,9 @@ namespace SeventyTwoDesktop.Controllers
             return TemplateInstance.date_entered;
         }
 
+        public DateTime GetTemplateDateUpdated( ) {
+            return TemplateInstance.date_updated;
+        }
 
         public Dictionary<string, string> GetFollowupSchedule( ) {
             return TemplateInstance.followup;

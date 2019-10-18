@@ -27,7 +27,25 @@ namespace SeventyTwoDesktop.Models
                     System.Windows.Forms.Clipboard.SetText(errText);
                 } 
             }
-        } 
+        }
+
+        public static void WriteImport( String importRecord ) {
+            try {
+                string logFileName = "log/Import-" + DateTime.Now.ToString( "yyyy-MM-dd" ) + ".txt";
+                StringBuilder sb = new StringBuilder( DateTime.Now.ToString( "dd-MMM-yyyy hh:mm" ) );
+                sb.AppendLine( "Import Log:" );
+                sb.Append( importRecord );
+                sb.AppendLine( );
+                File.AppendAllText( logFileName, sb.ToString( ) );
+
+            } catch ( Exception logExc ) {
+                string errText = Environment.NewLine + Environment.NewLine + importRecord + Environment.NewLine + logExc.ToString( );
+                var result = System.Windows.Forms.MessageBox.Show( "Sorry about this.  A really strange error has happened.  You probably want to email whoever is helping you with SeventyTwo this error.  If you click yes, I'll copy this to your clipboard, then you can paste it into an email to your technical person." + errText, "Argh. Sorry.", System.Windows.Forms.MessageBoxButtons.YesNo );
+                if ( result == System.Windows.Forms.DialogResult.Yes ) {
+                    System.Windows.Forms.Clipboard.SetText( errText );
+                }
+            }
+        }
 
         public static string GetRecentLogFiles( int numberOfDaysToRetrieve = 3) {
             StringBuilder logText = new StringBuilder( );

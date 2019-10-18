@@ -12,6 +12,17 @@ namespace SeventyTwoDesktop.Controllers
     public class ProfileController
     {
 
+        //Static Method to check if profile exists
+        public static bool ProfileExists( string guid ) {
+            bool retVal = false;
+            try {
+                //Read and load the permanent JSON item.
+                retVal = Directory.Exists( "data/" + guid );
+
+            } catch ( Exception exc ) { Log.WriteToLog( exc ); }
+            return retVal;
+        }
+
         //Non-Static Methods and Properties
 
 
@@ -39,14 +50,14 @@ namespace SeventyTwoDesktop.Controllers
 
         }
 
-        public void LoadProfileData( string guid ) {
+        public void LoadProfileData( string guid, string rootFileLocation = "data/" ) {
             try {
                 //Read and load the permanent JSON item.
-                if( Directory.Exists( "profiles/" + guid ) ) {
-                    Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( "profiles/" + guid + "/permanent.json" ) );
+                if( Directory.Exists( rootFileLocation + guid ) ) {
+                    Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( rootFileLocation + guid + "/permanent.json" ) );
                     
                     //Read and load all other JSON templates.
-                    IEnumerable<string> records = Directory.EnumerateFiles( "profiles/" + guid );
+                    IEnumerable<string> records = Directory.EnumerateFiles( rootFileLocation + guid );
 
                     foreach ( string filename in records) {
 
@@ -67,37 +78,22 @@ namespace SeventyTwoDesktop.Controllers
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
         }
 
+
+
         public void SaveProfileData() {
             try {
 
-                if( !System.IO.Directory.Exists( "profiles/" + Profile.guid ) ) {
-                    System.IO.Directory.CreateDirectory( "profiles/" + Profile.guid );
+                if( !System.IO.Directory.Exists( "data/" + Profile.guid ) ) {
+                    System.IO.Directory.CreateDirectory( "data/" + Profile.guid );
                 }
                 Profile.modifydate = DateTime.Now;
                 Profile.last_modified_guid = UserController.ActiveUser.GUID;
 
                 //Overwrites existing changes
-                File.WriteAllText("profiles/" + Profile.guid + "/permanent.json", JsonConvert.SerializeObject(Profile));
+                File.WriteAllText("data/" + Profile.guid + "/permanent.json", JsonConvert.SerializeObject(Profile));
                 
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
         }
-
-        //public JObject ProfileDataToSimpleRecord( ) {
-
-        //    JObject recordData = new JObject( );
-
-        //    try {
-
-        //        foreach( KeyValuePair<string, RecordController> Record in Records ) {
-        //            Record.Value.RenderDataToSimpleJSON( );
-        //        }
-        //    } catch( Exception errMsg ) {
-        //        //Figure out how to log these somewhere.
-        //        Log.WriteToLog( errMsg );
-        //    }
-        //    return recordData;
-        //}
-
 
     }
 }

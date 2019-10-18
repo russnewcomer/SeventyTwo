@@ -22,7 +22,7 @@ namespace SeventyTwoDesktop.Controllers
             Date = CalDate;
             JSONDate = Date.ToString( "yyyy-MM-dd" );
             DisplayDate = CalendarListController.GetDateString( Date );
-            FileName = "calendar/" + JSONDate + ".json";
+            FileName = "data/calendar/" + JSONDate + ".json";
             FileController = new FileReadWriteController( FileName );
             ReadFile( );
         }
