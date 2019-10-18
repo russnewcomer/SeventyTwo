@@ -73,6 +73,7 @@ namespace SeventyTwoDesktop.Controllers
                 if( !System.IO.Directory.Exists( "profiles/" + Profile.guid ) ) {
                     System.IO.Directory.CreateDirectory( "profiles/" + Profile.guid );
                 }
+                Profile.modifydate = DateTime.Now;
 
                 //Overwrites existing changes
                 File.WriteAllText("profiles/" + Profile.guid + "/permanent.json", JsonConvert.SerializeObject(Profile));

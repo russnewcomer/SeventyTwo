@@ -17,6 +17,8 @@ namespace SeventyTwoDesktop.Models
         }
         public string GUID { get; set; } = "";
 
+        public DateTime LastModified { get; set; } = DateTime.Now;
+
         public ProfileListItem() {
 
         }

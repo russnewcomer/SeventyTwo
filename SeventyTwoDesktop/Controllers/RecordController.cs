@@ -237,6 +237,7 @@ namespace SeventyTwoDesktop.Controllers
                 }
                 TC.SetRecordGUID( _RecordGUID );
                 TC.SetProfileGUID( ProfileGUID );
+
                 FileController.WriteDataToFile( TC.TemplateToFullJSONString( ) );
                 retVal = true;
             } catch( Exception err ) {

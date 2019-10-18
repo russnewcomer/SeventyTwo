@@ -144,6 +144,7 @@ namespace SeventyTwoDesktop.Controllers
 
         public void SetFollowupScheduled( bool Scheduled ) {
             TemplateInstance.followup[ "scheduled" ] = Scheduled.ToString( );
+            TemplateInstance.date_updated = DateTime.Now;
         }
 
         public TemplateItem GetTemplateItem( string itemName ) {
@@ -186,6 +187,7 @@ namespace SeventyTwoDesktop.Controllers
 
             try {
                 TemplateInstance.items[ Key ].value = Value;
+                TemplateInstance.date_updated = DateTime.Now;
                 retVal = true;
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
 
@@ -203,6 +205,7 @@ namespace SeventyTwoDesktop.Controllers
                     } else {
                         TemplateInstance.items[ Key ].subrecords[ Index ] = SubRecord;
                     }
+                    TemplateInstance.date_updated = DateTime.Now;
                 } catch( Exception exc ) {
                     Models.Log.WriteToLog( exc );
                 }

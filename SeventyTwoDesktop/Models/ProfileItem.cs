@@ -17,6 +17,7 @@ namespace SeventyTwoDesktop.Models
         public DateTime birthdate { get; set; } = new DateTime( 2000, 1, 1 );
         public string phonenumber { get; set; }
         public List<string> recordArray { get; set; }
+        public DateTime modifydate { get; set; } = DateTime.Now;
 
         public ProfileItem()
         {

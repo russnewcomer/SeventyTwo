@@ -20,6 +20,7 @@ namespace SeventyTwoDesktop.Models
         public string record_attachment { get; set; }
         public string notes { get; set; }
         public DateTime date_entered { get; set; }
+        public DateTime date_updated { get; set; }
         public Dictionary<string, string> followup { get; set; }
         public Dictionary<string, string> groups { get; set; }
         public Dictionary<string, TemplateItem> items { get; set; }
@@ -77,7 +78,10 @@ namespace SeventyTwoDesktop.Models
             if( jsonTemplate.ContainsKey( "date_entered" ) ) {
                 date_entered = DateTime.Parse( jsonTemplate[ "date_entered" ].ToString( ) );
             }
-            if( jsonTemplate.ContainsKey( "notes" ) ) {
+            if ( jsonTemplate.ContainsKey("date_updated") ) {
+                date_updated = DateTime.Parse( jsonTemplate[ "date_updated" ].ToString( ) );
+            }
+            if ( jsonTemplate.ContainsKey( "notes" ) ) {
                 notes = jsonTemplate[ "notes" ].ToString( );
             }
             if( jsonTemplate.ContainsKey( "record_attachment" ) ) {

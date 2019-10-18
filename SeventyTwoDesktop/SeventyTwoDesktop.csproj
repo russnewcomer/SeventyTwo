@@ -73,6 +73,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CalendarListController.cs" />
     <Compile Include="Controllers\CalendarDateController.cs" />
+    <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\FileReadWriteController.cs" />
     <Compile Include="Controllers\RecordController.cs" />
     <Compile Include="Controllers\ProfileListController.cs" />

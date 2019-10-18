@@ -43,7 +43,8 @@ namespace SeventyTwoDesktop
         //Look at the templates directory, and get the list.  Compare it to a file in 'config' and write the new files if necessary.
         static void GetProfileTypesAndLoadIntoConfigFile() {
             bool configListDirty = false;
-            JArray configList = File.Exists( "config/templates.json" ) ? JArray.Parse( File.ReadAllText( "config/templates.json" ) ) : new JArray();
+            bool templateConfigFileExists = File.Exists( "config/templates.json" );
+            JArray configList = templateConfigFileExists ? JArray.Parse( File.ReadAllText( "config/templates.json" ) ) : new JArray();
             List<string> profileNamesFromConfigList = new List<string>();
             foreach( JToken x in configList ) {
                 foreach( KeyValuePair<string, JToken> property in ( JObject )x ) {
@@ -63,7 +64,7 @@ namespace SeventyTwoDesktop
                 }
             }
             
-            if ( configListDirty ) {
+            if ( configListDirty || !templateConfigFileExists ) {
                 File.WriteAllText( "config/templates.json", configList.ToString( ) );
             }
         }

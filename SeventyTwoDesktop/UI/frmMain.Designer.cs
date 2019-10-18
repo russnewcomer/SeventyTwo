@@ -30,6 +30,7 @@
         {
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabProfiles = new System.Windows.Forms.TabPage();
+            this.btnSyncProfiles = new System.Windows.Forms.Button();
             this.ctlCalendar1 = new SeventyTwoDesktop.UI.CtlCalendar();
             this.BtnSendLogs = new System.Windows.Forms.Button();
             this.BtnCloseAllOpenProfiles = new System.Windows.Forms.Button();
@@ -61,6 +62,7 @@
             // 
             // tabProfiles
             // 
+            this.tabProfiles.Controls.Add(this.btnSyncProfiles);
             this.tabProfiles.Controls.Add(this.ctlCalendar1);
             this.tabProfiles.Controls.Add(this.BtnSendLogs);
             this.tabProfiles.Controls.Add(this.BtnCloseAllOpenProfiles);
@@ -73,6 +75,17 @@
             this.tabProfiles.TabIndex = 0;
             this.tabProfiles.Text = "Profiles";
             this.tabProfiles.UseVisualStyleBackColor = true;
+            // 
+            // btnSyncProfiles
+            // 
+            this.btnSyncProfiles.BackColor = System.Drawing.Color.Transparent;
+            this.btnSyncProfiles.Location = new System.Drawing.Point(20, 421);
+            this.btnSyncProfiles.Name = "btnSyncProfiles";
+            this.btnSyncProfiles.Size = new System.Drawing.Size(140, 75);
+            this.btnSyncProfiles.TabIndex = 13;
+            this.btnSyncProfiles.Text = "Sync Profiles";
+            this.btnSyncProfiles.UseVisualStyleBackColor = false;
+            this.btnSyncProfiles.Click += new System.EventHandler(this.BtnSyncProfiles_Click);
             // 
             // ctlCalendar1
             // 
@@ -205,7 +218,7 @@
             this.tabReports.Location = new System.Drawing.Point(4, 34);
             this.tabReports.Name = "tabReports";
             this.tabReports.Padding = new System.Windows.Forms.Padding(3);
-            this.tabReports.Size = new System.Drawing.Size(1241, 540);
+            this.tabReports.Size = new System.Drawing.Size(1442, 812);
             this.tabReports.TabIndex = 1;
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
@@ -244,5 +257,6 @@
         private System.Windows.Forms.Button BtnShowAll;
         private System.Windows.Forms.Button BtnSendLogs;
         private UI.CtlCalendar ctlCalendar1;
+        private System.Windows.Forms.Button btnSyncProfiles;
     }
 }

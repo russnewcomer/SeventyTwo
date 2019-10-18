@@ -83,13 +83,9 @@ namespace SeventyTwoDesktop.Controllers
                     lock( WriteLocker ) {
                         //Should we be backing this up?
                         if( !string.IsNullOrEmpty( BackupFileName ) ) {
-                            //Delete an existing duplicate.
-                            if( File.Exists( BackupFileName ) ) {
-                                File.Delete( BackupFileName );
-                            }
                             //Make a quick copy of the old list
                             if( File.Exists( FileName ) ) {
-                                File.Copy( FileName, BackupFileName );
+                                File.Copy( FileName, BackupFileName, true );
                             }
                         }
 
@@ -125,5 +121,6 @@ namespace SeventyTwoDesktop.Controllers
                 FileContentsToWrite = File.ReadAllText( FileName );
             }
         }
+
     }
 }

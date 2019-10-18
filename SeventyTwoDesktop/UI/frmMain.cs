@@ -816,6 +816,8 @@ namespace SeventyTwoDesktop
             return tabPageToCreate;
         }
 
-        
+        private void BtnSyncProfiles_Click( object sender, EventArgs e ) {
+            SyncController.createExportZip( "c:\file.zip" );
+        }
     }
 }
