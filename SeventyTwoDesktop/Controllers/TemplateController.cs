@@ -35,10 +35,10 @@ namespace SeventyTwoDesktop.Controllers
 
 
         public string TemplateType { get; set; }
-        private JObject JsonTemplate { get; set; }
-        private string _fileName { get; set; }
+        //private JObject JsonTemplate { get; set; }
+        //private string _fileName { get; set; }
+        //private List<string> OrderedKeys { get; set; }
         private Template TemplateInstance { get; set; }
-        private List<string> OrderedKeys { get; set; }
         public FileReadWriteController FileController { get; set; }
 
         public TemplateController( ) { }
@@ -188,6 +188,7 @@ namespace SeventyTwoDesktop.Controllers
             try {
                 TemplateInstance.items[ Key ].value = Value;
                 TemplateInstance.date_updated = DateTime.Now;
+                TemplateInstance.last_modified_guid = UserController.ActiveUser.GUID;
                 retVal = true;
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
 

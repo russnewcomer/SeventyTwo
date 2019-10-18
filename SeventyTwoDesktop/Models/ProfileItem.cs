@@ -18,6 +18,7 @@ namespace SeventyTwoDesktop.Models
         public string phonenumber { get; set; }
         public List<string> recordArray { get; set; }
         public DateTime modifydate { get; set; } = DateTime.Now;
+        public string last_modified_guid { get; set; }
 
         public ProfileItem()
         {

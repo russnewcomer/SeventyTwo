@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.IO;
 using System.Windows.Forms;
 
 namespace SeventyTwoDesktop
@@ -24,7 +25,15 @@ namespace SeventyTwoDesktop
 
             LoadAllProfiles( );
 
+            if ( UserController.ActiveUser == null ) {
+                setCurrentUser();
+            } else {
+                btnCurrUser.Text = "User: " + UserController.ActiveUser.Name + ( UserController.ActiveUser.Number.Length > 0 ? " - " + UserController.ActiveUser.Number : "" );
+            }
+
         }
+
+
 
 
 
@@ -101,6 +110,7 @@ namespace SeventyTwoDesktop
             }
         }
 
+        #region Profiles
 
         private void LoadAllProfiles( ) {
             //First, we need to get the profiles
@@ -816,8 +826,96 @@ namespace SeventyTwoDesktop
             return tabPageToCreate;
         }
 
-        private void BtnSyncProfiles_Click( object sender, EventArgs e ) {
-            SyncController.createExportZip( "c:\file.zip" );
+        private void BtnExportProfiles_Click( object sender, EventArgs e ) {
+            SaveFileDialog zipDialog = new SaveFileDialog {
+                Filter = "72 Profiles (zip)|.zip",
+                Title = "Export File",
+                FileName = DateTime.Now.ToString( "yyyy-MM-dd" ) + "-72-Sync-Out-" + UserController.ActiveUser.Name + ".zip"
+            };
+            
+            if ( zipDialog.ShowDialog( ) == DialogResult.OK ) { 
+                SyncController.CreateExportZip( zipDialog.FileName );
+            }
         }
+
+
+        private void BtnImportProfiles_Click( object sender, EventArgs e ) {
+            OpenFileDialog zipDialog = new OpenFileDialog {
+                Filter = "72 Profiles (zip)|.zip",
+                Title = "Import File"
+            };
+
+            if ( zipDialog.ShowDialog( ) == DialogResult.OK ) {
+                SyncController.ImportData( zipDialog.FileName );
+            }
+
+        }
+
+        #endregion 
+
+        //Look at the users list.  Pick the current user as necessary
+        private void setCurrentUser( ) {
+            Form userSelDlg = new Form( ) {
+                Text = "Select a name",
+                Width = 600,
+                Height = 600,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen
+            };
+
+            userSelDlg.Controls.Add( new Label( ) { Left = 50, Top = 20, Width = 500, Text = "Enter a user name" } );
+            TextBox txtNewUser = new TextBox( ) { Left = 50, Width = 500, Top = 50, Height = 50 };
+
+            userSelDlg.Controls.Add( new Label( ) { Left = 50, Top = 120, Width = 500, Text = "Enter a user number" } );
+            TextBox txtNewNumber = new TextBox( ) { Left = 50, Width = 500, Top = 150, Height = 50 };
+
+            userSelDlg.Controls.Add( new Label( ) { Left = 50, Top = 200, Width = 500, Text = "Or select a user" } );
+            ListBox lstUsers = new ListBox( ) { Left = 50, Top = 230, Width = 500, Height = 250 };
+            Button confirmation = new Button( ) { Text = "Ok", Left = 350, Height = 50, Width = 100, Top = 480, DialogResult = DialogResult.OK };
+            confirmation.Click += ( sender, e ) => {
+                if ( !checkCanClose( ) ) { userSelDlg.Close( ); }
+            };
+            userSelDlg.FormClosing += ( sender, e ) => {
+                e.Cancel = !checkCanClose( );
+            };
+            bool checkCanClose() {
+                if ( lstUsers.SelectedIndex > -1 ) {
+                    UserItem activeUsr =(UserItem)(lstUsers.SelectedItem);
+
+                    UserController.SetActiveUser( activeUsr.GUID );
+
+                    btnCurrUser.Text = "User: " + activeUsr.Name + ( activeUsr.Number.Length > 0 ? " - " + activeUsr.Number : "" );
+                    return true;
+                } else if ( txtNewUser.TextLength > 0 ) {
+                    UserItem newUsr = UserController.AddItemToList( txtNewUser.Text, txtNewNumber.Text );
+                    lstUsers.Items.Add( newUsr );
+                    lstUsers.SelectedItem = newUsr;
+                    btnCurrUser.Text = "User: " + newUsr.Name + ( newUsr.Number.Length > 0 ? " - " + newUsr.Number : "" );
+                    return true;
+                } else {
+                    MessageBox.Show( "You must select a user or add a new one" );
+                    return false;
+                }
+            }
+
+
+            foreach ( UserItem u in UserController.UserList ) {
+                lstUsers.Items.Add( u );
+            }
+
+
+            userSelDlg.Controls.Add( txtNewUser );
+            userSelDlg.Controls.Add( txtNewNumber );
+            userSelDlg.Controls.Add( lstUsers );
+            userSelDlg.Controls.Add( confirmation );
+            userSelDlg.AcceptButton = confirmation;
+
+            userSelDlg.ShowDialog( );
+
+        }
+        private void BtnCurrUser_Click( object sender, EventArgs e ) {
+            setCurrentUser( );
+        }
+
     }
 }

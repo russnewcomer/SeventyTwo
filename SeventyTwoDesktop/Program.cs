@@ -23,6 +23,7 @@ namespace SeventyTwoDesktop
             ConfirmDirectory( "export" );
             ConfirmDirectory( "reconcile" );
             ConfirmDirectory( "calendar" );
+            ConfirmDirectory( "users" );
 
             GetProfileTypesAndLoadIntoConfigFile( );
 
@@ -68,5 +69,6 @@ namespace SeventyTwoDesktop
                 File.WriteAllText( "config/templates.json", configList.ToString( ) );
             }
         }
+
     }
 }

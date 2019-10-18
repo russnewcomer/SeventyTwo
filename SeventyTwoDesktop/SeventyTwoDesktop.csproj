@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CalendarListController.cs" />
     <Compile Include="Controllers\CalendarDateController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\FileReadWriteController.cs" />
     <Compile Include="Controllers\RecordController.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Models\CalendarItem.cs" />
     <Compile Include="Models\CalendarDate.cs" />
+    <Compile Include="Models\UserItem.cs" />
     <Compile Include="Models\Template.cs" />
     <Compile Include="Models\TemplateItem.cs" />
     <Compile Include="UI\FrmSubRecord.cs">

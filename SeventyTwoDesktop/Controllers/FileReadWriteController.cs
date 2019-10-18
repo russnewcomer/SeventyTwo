@@ -43,7 +43,6 @@ namespace SeventyTwoDesktop.Controllers
         public string TargetFile { get { return FileName; } }
 
 
-        private Guid gu { get; set; } = Guid.NewGuid( );
 
         private void InitTimer() {
             //If we don't have a timer, start one.

@@ -24,6 +24,7 @@ namespace SeventyTwoDesktop.Models
         public Dictionary<string, string> followup { get; set; }
         public Dictionary<string, string> groups { get; set; }
         public Dictionary<string, TemplateItem> items { get; set; }
+        public string last_modified_guid { get; set; }
 
         public Template() {
 

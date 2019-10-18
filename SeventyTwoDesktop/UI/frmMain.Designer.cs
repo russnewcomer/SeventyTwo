@@ -30,7 +30,9 @@
         {
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabProfiles = new System.Windows.Forms.TabPage();
-            this.btnSyncProfiles = new System.Windows.Forms.Button();
+            this.btnImportProfiles = new System.Windows.Forms.Button();
+            this.btnCurrUser = new System.Windows.Forms.Button();
+            this.btnExportProfiles = new System.Windows.Forms.Button();
             this.ctlCalendar1 = new SeventyTwoDesktop.UI.CtlCalendar();
             this.BtnSendLogs = new System.Windows.Forms.Button();
             this.BtnCloseAllOpenProfiles = new System.Windows.Forms.Button();
@@ -62,7 +64,9 @@
             // 
             // tabProfiles
             // 
-            this.tabProfiles.Controls.Add(this.btnSyncProfiles);
+            this.tabProfiles.Controls.Add(this.btnImportProfiles);
+            this.tabProfiles.Controls.Add(this.btnCurrUser);
+            this.tabProfiles.Controls.Add(this.btnExportProfiles);
             this.tabProfiles.Controls.Add(this.ctlCalendar1);
             this.tabProfiles.Controls.Add(this.BtnSendLogs);
             this.tabProfiles.Controls.Add(this.BtnCloseAllOpenProfiles);
@@ -76,16 +80,38 @@
             this.tabProfiles.Text = "Profiles";
             this.tabProfiles.UseVisualStyleBackColor = true;
             // 
-            // btnSyncProfiles
+            // btnImportProfiles
             // 
-            this.btnSyncProfiles.BackColor = System.Drawing.Color.Transparent;
-            this.btnSyncProfiles.Location = new System.Drawing.Point(20, 421);
-            this.btnSyncProfiles.Name = "btnSyncProfiles";
-            this.btnSyncProfiles.Size = new System.Drawing.Size(140, 75);
-            this.btnSyncProfiles.TabIndex = 13;
-            this.btnSyncProfiles.Text = "Sync Profiles";
-            this.btnSyncProfiles.UseVisualStyleBackColor = false;
-            this.btnSyncProfiles.Click += new System.EventHandler(this.BtnSyncProfiles_Click);
+            this.btnImportProfiles.BackColor = System.Drawing.Color.Transparent;
+            this.btnImportProfiles.Location = new System.Drawing.Point(20, 340);
+            this.btnImportProfiles.Name = "btnImportProfiles";
+            this.btnImportProfiles.Size = new System.Drawing.Size(140, 75);
+            this.btnImportProfiles.TabIndex = 15;
+            this.btnImportProfiles.Text = "Import Profiles";
+            this.btnImportProfiles.UseVisualStyleBackColor = false;
+            this.btnImportProfiles.Click += new System.EventHandler(this.BtnImportProfiles_Click);
+            // 
+            // btnCurrUser
+            // 
+            this.btnCurrUser.BackColor = System.Drawing.Color.Transparent;
+            this.btnCurrUser.Location = new System.Drawing.Point(20, 14);
+            this.btnCurrUser.Name = "btnCurrUser";
+            this.btnCurrUser.Size = new System.Drawing.Size(140, 85);
+            this.btnCurrUser.TabIndex = 14;
+            this.btnCurrUser.Text = "User:";
+            this.btnCurrUser.UseVisualStyleBackColor = false;
+            this.btnCurrUser.Click += new System.EventHandler(this.BtnCurrUser_Click);
+            // 
+            // btnExportProfiles
+            // 
+            this.btnExportProfiles.BackColor = System.Drawing.Color.Transparent;
+            this.btnExportProfiles.Location = new System.Drawing.Point(20, 421);
+            this.btnExportProfiles.Name = "btnExportProfiles";
+            this.btnExportProfiles.Size = new System.Drawing.Size(140, 75);
+            this.btnExportProfiles.TabIndex = 13;
+            this.btnExportProfiles.Text = "Export Profiles";
+            this.btnExportProfiles.UseVisualStyleBackColor = false;
+            this.btnExportProfiles.Click += new System.EventHandler(this.BtnExportProfiles_Click);
             // 
             // ctlCalendar1
             // 
@@ -111,7 +137,7 @@
             // BtnCloseAllOpenProfiles
             // 
             this.BtnCloseAllOpenProfiles.BackColor = System.Drawing.Color.Transparent;
-            this.BtnCloseAllOpenProfiles.Location = new System.Drawing.Point(20, 94);
+            this.BtnCloseAllOpenProfiles.Location = new System.Drawing.Point(20, 172);
             this.BtnCloseAllOpenProfiles.Name = "BtnCloseAllOpenProfiles";
             this.BtnCloseAllOpenProfiles.Size = new System.Drawing.Size(140, 75);
             this.BtnCloseAllOpenProfiles.TabIndex = 10;
@@ -122,7 +148,7 @@
             // btnNewProfile
             // 
             this.btnNewProfile.BackColor = System.Drawing.Color.Transparent;
-            this.btnNewProfile.Location = new System.Drawing.Point(20, 28);
+            this.btnNewProfile.Location = new System.Drawing.Point(20, 105);
             this.btnNewProfile.Name = "btnNewProfile";
             this.btnNewProfile.Size = new System.Drawing.Size(140, 60);
             this.btnNewProfile.TabIndex = 8;
@@ -257,6 +283,8 @@
         private System.Windows.Forms.Button BtnShowAll;
         private System.Windows.Forms.Button BtnSendLogs;
         private UI.CtlCalendar ctlCalendar1;
-        private System.Windows.Forms.Button btnSyncProfiles;
+        private System.Windows.Forms.Button btnExportProfiles;
+        private System.Windows.Forms.Button btnCurrUser;
+        private System.Windows.Forms.Button btnImportProfiles;
     }
 }

@@ -23,24 +23,20 @@ namespace SeventyTwoDesktop.Controllers
          */
 
 
-        public static void createExportZip( string DestinationZipFile ) {
-
-            ZipFile.CreateFromDirectory( "/profiles", DestinationZipFile );
-
+        public static void CreateExportZip( string DestinationZipFile ) {
+            ZipFile.CreateFromDirectory( "profiles", DestinationZipFile );
         }
         
 
-        private void compareData()
+        public static void ImportData( string importFileName )
         {
-            readFiles( );
-        }
+            //Unzip the files from the export list
+            ZipFile.ExtractToDirectory( importFileName, "temp" );
+            //Then check list of users
+            
+            //Then start walking the profiles and take the newest data
 
-        private void readFiles( ) {
-           
-        }
-
-        private void writeNewFiles( ) {
-
+            //Write a log for every row we overwrite
         }
 
     }

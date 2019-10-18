@@ -74,6 +74,7 @@ namespace SeventyTwoDesktop.Controllers
                     System.IO.Directory.CreateDirectory( "profiles/" + Profile.guid );
                 }
                 Profile.modifydate = DateTime.Now;
+                Profile.last_modified_guid = UserController.ActiveUser.GUID;
 
                 //Overwrites existing changes
                 File.WriteAllText("profiles/" + Profile.guid + "/permanent.json", JsonConvert.SerializeObject(Profile));

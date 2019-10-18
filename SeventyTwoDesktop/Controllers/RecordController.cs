@@ -15,7 +15,7 @@ namespace SeventyTwoDesktop.Controllers
     public class RecordController {
 
         private TemplateController TC { get; set; }
-        private string TemplateName { get; set; }
+        //private string TemplateName { get; set; }
         //private JObject RecordData { get; set; }
         private string _RecordGUID { get; set; }
         public string RecordGUID { get { return _RecordGUID; } }
@@ -165,7 +165,7 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         public void SetFollowupScheduled( bool scheduled ) {
-            TC.SetFollowupScheduled( true );
+            TC.SetFollowupScheduled( scheduled );
         }
 
         public int UpdateTemplateItemSubRecord( string Key, JObject Value, int Index = -1 ) {

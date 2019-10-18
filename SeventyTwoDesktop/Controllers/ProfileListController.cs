@@ -9,11 +9,9 @@ namespace SeventyTwoDesktop.Controllers
     static class ProfileListController {
 
         const string LIST_FILE_PATH = "profiles/list.json";
-        const string LIST_DUPLICATE_FILE_PATH = "profiles/list.json";
+        const string LIST_DUPLICATE_FILE_PATH = "profiles/backup_profile_list.json";
 
         public static List<ProfileListItem> ProfileList {get; set;} = new List<ProfileListItem>();
-        private static DateTime TimeSinceLastWrite { get; set; } = DateTime.Now;
-        private static bool RequestedWrite { get; set; } = false;
         private static FileReadWriteController FileController { get; set; } = new FileReadWriteController( LIST_FILE_PATH, LIST_DUPLICATE_FILE_PATH );
 
         static ProfileListController( ) {
