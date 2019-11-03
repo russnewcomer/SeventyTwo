@@ -78,7 +78,6 @@
             this.LblApptWeek.Name = "LblApptWeek";
             this.LblApptWeek.Size = new System.Drawing.Size(621, 49);
             this.LblApptWeek.TabIndex = 1;
-            this.LblApptWeek.Text = "Week Beginning 9-Feb-2019";
             this.LblApptWeek.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.LblApptWeek.Click += new System.EventHandler(this.LblApptWeek_Click);
             // 

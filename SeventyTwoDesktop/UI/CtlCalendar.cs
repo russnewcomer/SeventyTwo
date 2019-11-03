@@ -21,7 +21,7 @@ namespace SeventyTwoDesktop.UI
 
         private CalendarListController clc = new CalendarListController( );
 
-        private DateTime _firstDayOfActiveWeek { get; set; } = new DateTime( 2019, 02, 09 );
+        private DateTime _firstDayOfActiveWeek { get; set; } = new DateTime( 2019, 10, 26 );
         public DateTime ActiveWeekBeginningDate {
             get { return _firstDayOfActiveWeek; }
             set {
@@ -37,25 +37,38 @@ namespace SeventyTwoDesktop.UI
 
         public CtlCalendar( ) {
             InitializeComponent( );
+            ActiveWeekBeginningDate = DateTime.Now;
+            while( ActiveWeekBeginningDate.DayOfWeek != DayOfWeek.Saturday ) {
+                ActiveWeekBeginningDate.AddDays( -1 );
+            }
             LoadData( );
         }
 
         public void LoadData() {
 
+            //Clear out the existing data
+            TvCalendarItems.Nodes.Clear( ); 
+            
             //Load data based on _firstDayOfActiveWeek
-
-            for( var i = 0; i < 7; i++ ) {
+            for ( var i = 0; i < 7; i++ ) {
                 CalendarDateController cdc = clc.GetCalendarItemsForDate( _firstDayOfActiveWeek.AddDays( i ) );
+                string rootNodeName = cdc.DisplayDate + "-All";
                 foreach ( CalendarItem calItem in cdc.Data.calendar_items ) {
                     //Terning right around - into the type of item.
                     var itemType = ( calItem.item_completed ) ? "Completed" : ( ( calItem.item_confirmed ) ? "Comfirmed" : "Scheduled" );
+                    var dateItemNodeName = cdc.DisplayDate + "-" + itemType;
+
                     //Check to see if we have the root 'Scheduled/Confirmed/Completed' nodes.
-                    if( !TvCalendarItems.Nodes[ cdc.DisplayDate + "-All" ].Nodes.ContainsKey( cdc.DisplayDate + "-" + itemType ) ) {
-                        TvCalendarItems.Nodes[ cdc.DisplayDate + "-All" ].Nodes.Add( cdc.DisplayDate + "-" + itemType, itemType );
+                    if ( !TvCalendarItems.Nodes.ContainsKey( rootNodeName ) ) {
+                        TvCalendarItems.Nodes.Add( rootNodeName, cdc.DisplayDate );
+                    }
+                    if( !TvCalendarItems.Nodes[ rootNodeName ].Nodes.ContainsKey( dateItemNodeName ) ) {
+                        TvCalendarItems.Nodes[ rootNodeName ].Nodes.Add( dateItemNodeName, itemType );
                     }
                     //Add in the appropriate nodes.
-                    string nodeInfoKey = cdc.DisplayDate + "-" + itemType + "-" + TvCalendarItems.Nodes[ cdc.DisplayDate + "-All" ].Nodes[ cdc.DisplayDate + "-" + itemType ].Nodes.Count;
-                    TvCalendarItems.Nodes[ cdc.DisplayDate + "-All" ].Nodes[ cdc.DisplayDate + "-" + itemType ].Nodes.Add( nodeInfoKey, calItem.item_title );
+                    string nodeInfoKey = Guid.NewGuid( ).ToString( );
+                    TvCalendarItems.Nodes[ rootNodeName ].Nodes[ dateItemNodeName ].Nodes.Add( nodeInfoKey, calItem.item_title );
+                    Console.WriteLine( nodeInfoKey );
                     NodeInfo.Add( nodeInfoKey, new NodeInfoStruct { Profile_guid = calItem.linked_profile_guid, Template_type = calItem.record_type, Record_guid = calItem.linked_record_guid } );
                 }
             }
@@ -121,7 +134,6 @@ namespace SeventyTwoDesktop.UI
         }
 
         #endregion
-
     }
 
     public class AppointmentHandlingEventArgs : EventArgs

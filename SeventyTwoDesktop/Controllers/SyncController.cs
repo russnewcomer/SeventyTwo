@@ -41,14 +41,17 @@ namespace SeventyTwoDesktop.Controllers
 
                 //Unzip the files from the export list
                 ZipFile.ExtractToDirectory( importFileName, "temp/unzip" );
-                //Then check list of users
-
-                //Add New Users as necessary
+                
+                //Then check list of users, Add New Users as necessary
                 CheckUserList( importDirectoryName );
 
                 //Then start walking the profiles and take the newest data
                 IterateThroughProfileList( importDirectoryName );
+
+
                 //Also walk the calendar
+                IterateThroughCalendarDays( importDirectoryName );
+
 
                 //delete our temp directory
                 Directory.Delete( "temp/unzip", true );
@@ -69,6 +72,8 @@ namespace SeventyTwoDesktop.Controllers
 
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
         }
+
+        #region Profiles
 
         private static void IterateThroughProfileList( string importDirName ) {
 
@@ -118,5 +123,19 @@ namespace SeventyTwoDesktop.Controllers
 
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
         }
+        #endregion
+
+        #region Calendar
+        private static void IterateThroughCalendarDays( string importDirName ) {
+
+            //We need to loop through the calendar days in the directory
+
+            //Need to finish
+
+        }
+            
+
+        #endregion 
+
     }
 }

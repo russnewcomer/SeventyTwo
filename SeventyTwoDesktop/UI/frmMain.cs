@@ -102,12 +102,12 @@ namespace SeventyTwoDesktop
 
         private void ctlCalendar1_AppointmentClicked( object sender, EventArgs e ) {
             UI.AppointmentHandlingEventArgs appt = ( UI.AppointmentHandlingEventArgs )e;
-            RequestProfilePage( appt.Node.Profile_guid );
-            if ( !string.IsNullOrEmpty( appt.Node.Record_guid  ) ) {
-                MessageBox.Show( "We have record, finish implementation" );
-            } else if ( !string.IsNullOrEmpty( appt.Node.Template_type ) ) {
-                MessageBox.Show( "We have template type, finish implementation" );
-            }
+            RequestProfilePage( 
+                guidToLoad: appt.Node.Profile_guid, 
+                recordToOpen: appt.Node.Record_guid,
+                //If we have a record, we want to open the record, otherwise, we will create a template item
+                templateTypeToOpen: ( string.IsNullOrEmpty(appt.Node.Record_guid) ? appt.Node.Template_type : "" )
+            );
         }
 
         #region Profiles
@@ -130,14 +130,14 @@ namespace SeventyTwoDesktop
         }
         
 
-        private void RequestProfilePage( string guidToLoad )
+        private void RequestProfilePage( string guidToLoad, string templateTypeToOpen = "", string recordToOpen = "" )
         {
             if( !tabMain.TabPages.ContainsKey( guidToLoad ) ) {
                 //Tab has not been loaded, create a new copy and load it.
                 LoadProfile( guidToLoad );
-                tabMain.TabPages.Add( CreateProfileTab( guidToLoad, true ) );
+                tabMain.TabPages.Add( CreateProfileTab( ProfileGUID:guidToLoad, IsExistingProfile:true, templateTypeToInitiate:templateTypeToOpen, recordToOpen:recordToOpen ) );
             }
-
+            tabMain.TabPages[ guidToLoad ].Tag = recordToOpen;
             tabMain.SelectTab( guidToLoad );
         }
 
@@ -162,7 +162,7 @@ namespace SeventyTwoDesktop
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
         }
 
-        private TabPage CreateProfileTab( string ProfileGUID, bool IsExistingProfile ) {
+        private TabPage CreateProfileTab( string ProfileGUID, bool IsExistingProfile, string templateTypeToInitiate = "", string recordToOpen = "" ) {
 
             TabPage tabPageToCreate = new TabPage { Name = ProfileGUID, Text = LoadedProfiles[ ProfileGUID ].Profile.name };
 
@@ -427,21 +427,13 @@ namespace SeventyTwoDesktop
                     _CheckPrevNextButtons( tvTemplateItems.SelectedNode );
                 }
 
-                void _CreateNewRecord() {
+                void _CreateNewRecord( string templateType ) {
                     try {
-                        if( cmbNewRecord.SelectedItem != null ) {
-                            string templateType = TemplateTypes.First( T => T.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key;
-                            DialogResult result = MessageBox.Show( "Do you want to create a new " + cmbNewRecord.SelectedItem.ToString( ) + " record?", "Confirmation", MessageBoxButtons.YesNo );
-                            if( result == DialogResult.Yes ) {
-                                //If we confirm we want to create, create a new one
-                                RecordController rc = new RecordController( templateType, ProfileGUID, TemplateStyle.Blank );
-                                string currentRecordGUID = rc.RecordGUID;
-                                LoadedProfiles[ ProfileGUID ].Records.Add( rc.RecordGUID, rc );
-                                _PopulateRecordUI( currentRecordGUID );
-                            }
-
-                            _ChangeToRecordView( );
-                        }
+                        RecordController rc = new RecordController( templateType, ProfileGUID, TemplateStyle.Blank );
+                        string currentRecordGUID = rc.RecordGUID;
+                        LoadedProfiles[ ProfileGUID ].Records.Add( rc.RecordGUID, rc );
+                        _PopulateRecordUI( currentRecordGUID );
+                    
                     } catch( Exception exc ) { Log.WriteToLog( exc ); }
                 }
 
@@ -739,7 +731,19 @@ namespace SeventyTwoDesktop
                 };
 
                 btnCreateNewRecord.Click += delegate ( object o, EventArgs e ) {
-                    _CreateNewRecord( );
+                    try {
+                        if ( cmbNewRecord.SelectedItem != null ) {
+                            string templateType = TemplateTypes.First( T => T.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key;
+                            DialogResult result = MessageBox.Show( "Do you want to create a new " + cmbNewRecord.SelectedItem.ToString( ) + " record?", "Confirmation", MessageBoxButtons.YesNo );
+                            if ( result == DialogResult.Yes ) {
+                                //If we confirm we want to create, create a new one
+                                _CreateNewRecord( templateType );
+                            }
+
+                            _ChangeToRecordView( );
+                        }
+                    } catch ( Exception exc ) { Log.WriteToLog( exc ); }
+                    
                 };
 
                 tvTemplateItems.NodeMouseClick += delegate ( object o, TreeNodeMouseClickEventArgs e ) {
@@ -772,6 +776,22 @@ namespace SeventyTwoDesktop
                 };
 
 
+                
+                tabPageToCreate.Enter += delegate ( object o, EventArgs e ) {
+                    /*
+                     * This where the only real 'clever' part of this exists.  
+                     * To ensure that the functions stay in scope, we will add an event listener to 'open'
+                     * When we have a specific record to open, we will assign that to the .Tag for the tab
+                     * Then switch to the tab.  Switching to the tab will trigger this event handler
+                     * So if we have a string in the tag, we will populate the record, then clear it out
+                     */
+                    if ( !string.IsNullOrEmpty( tabPageToCreate.Tag.ToString( ) ) ) {
+                        _PopulateRecordUI( tabPageToCreate.Tag.ToString( ) );
+                        tabPageToCreate.Tag = null;
+                    }
+                };
+
+
                 #endregion
 
                 #region Loading Data For Tab
@@ -787,16 +807,25 @@ namespace SeventyTwoDesktop
                 _PopulateExistingRecordsTreeView( );
 
 
+                if ( !string.IsNullOrEmpty( templateTypeToInitiate ) ) {
+                    _CreateNewRecord( templateTypeToInitiate );
+                }
+
+                if ( !string.IsNullOrEmpty( recordToOpen ) ) {
+                    //Assign this to the tag so the .Enter event handler will pick this up
+                    tabPageToCreate.Tag = recordToOpen;
+                }
+
                 #endregion
 
                 #region Add Controls To Page
 
 
 
-                
 
 
-                tabPageToCreate.Controls.Add( btnEditProfile );
+
+                    tabPageToCreate.Controls.Add( btnEditProfile );
                 tabPageToCreate.Controls.Add( lblProfileName );
                 tabPageToCreate.Controls.Add( btnPreviousGuidanceItem );
                 tabPageToCreate.Controls.Add( btnNextGuidanceItem );
