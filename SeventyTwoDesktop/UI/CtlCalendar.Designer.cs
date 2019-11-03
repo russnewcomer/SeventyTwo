@@ -131,8 +131,10 @@
             treeNode12,
             treeNode13,
             treeNode14});
+            this.TvCalendarItems.ShowNodeToolTips = true;
             this.TvCalendarItems.Size = new System.Drawing.Size(745, 274);
             this.TvCalendarItems.TabIndex = 11;
+            this.TvCalendarItems.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvCalendarItems_NodeMouseClick);
             this.TvCalendarItems.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TvCalendarItems_NodeMouseDoubleClick);
             // 
             // CalDate7
