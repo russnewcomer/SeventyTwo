@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="Controllers\CalendarListController.cs" />
     <Compile Include="Controllers\CalendarDateController.cs" />
+    <Compile Include="Controllers\SpreadsheetExportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\FileReadWriteController.cs" />

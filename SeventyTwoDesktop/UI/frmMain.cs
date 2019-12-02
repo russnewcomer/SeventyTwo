@@ -8,7 +8,6 @@ using System.Drawing;
 using System.Linq;
 using System.IO;
 using System.Windows.Forms;
-using OfficeOpenXml;
 
 namespace SeventyTwoDesktop
 {
@@ -950,78 +949,16 @@ namespace SeventyTwoDesktop
 
         private void btnExcelExport_Click( object sender, EventArgs e ) {
 
-            Dictionary<string, int> curRowDict = new Dictionary<string, int>( );
-            using ( ExcelPackage excel = new ExcelPackage( ) ) {
+            SaveFileDialog excelSaveDialog = new SaveFileDialog {
+                Title = "Export File",
+                FileName = DateTime.Now.ToString( "yyyy-MM-dd" ) + "-72-Excel-Out.xlsx"
+            };
 
-                //Do profile page first
-                excel.Workbook.Worksheets.Add( "Profiles" );
-
-                Dictionary<string, List<string[]>> data = new Dictionary<string, List< string[] >>( );
-                data["Profiles"] = new List<string[]>( ) {
-                    new string[] { "Type", "Title", "Guid", "Name", "Number", "Address", "Community", "Location", "Gender", "Birthdate", "Phone Number" }
-                };
-                
-                foreach ( string template in TemplateTypes.Values ) {
-
-                    excel.Workbook.Worksheets.Add( template );
-                    curRowDict[ template ] = 2;
-
-                    data[ template ] = new List<string[]>( ) {
-                        //loop through the fields to create the header
-                    };
-                    //Create header range
-                    string headerRange = "A1:" + Char.ConvertFromUtf32( data[template][ 0 ].Length + 64 ) + "1";
-
-
-                }
-
-                //popoulate cells
-                
-                foreach ( ProfileListItem pli in ProfileListController.ProfileList ) {
-                    ProfileController x = new ProfileController( pli.GUID );
-                    data["Profiles"].Add( new string[] {
-                        x.Profile.type,
-                        x.Profile.title,
-                        x.Profile.guid,
-                        x.Profile.name,
-                        x.Profile.number,
-                        x.Profile.address,
-                        x.Profile.community,
-                        x.Profile.location,
-                        x.Profile.gender,
-                        x.Profile.birthdate.ToString(),
-                        x.Profile.phonenumber
-                    } );
-
-                    foreach( RecordController R in x.Records.Values ) {
-
-
-                        string[] rowData = new string[ R.GetTemplateItems().Count ];
-
-                        int i = 0;
-                        foreach ( TemplateItem ti in R.GetTemplateItems().Values ) {
-                            rowData[ i ] = ti.value;
-                            i++;
-                        }
-
-                        data[ R.GetTemplateType( ) ].Add( rowData );
-                    }
-                }
-                
-                //Create header range
-                foreach ( KeyValuePair<string, List<string[]> > p in data  ) {
-                    //loop through fields
-                    int i = 1;
-                    foreach( string[] row in p.Value ) {
-                        excel.Workbook.Worksheets[ p.Key ].Cells[ curRowDict[ p.Key ], i ].Value = row;
-                        i++;
-                    }
-                    curRowDict[ p.Key ]++;
-                }
-
-                FileInfo excelFile = new FileInfo( "temp/test.xlsx" );
-                excel.SaveAs( excelFile );
+            if ( excelSaveDialog.ShowDialog( ) == DialogResult.OK ) {
+                SpreadsheetExportController.CreateExportFile( excelSaveDialog.FileName );
             }
+
+          
         }
     }
 }
