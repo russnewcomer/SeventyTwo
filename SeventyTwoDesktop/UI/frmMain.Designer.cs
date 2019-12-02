@@ -33,6 +33,7 @@
             this.btnImportProfiles = new System.Windows.Forms.Button();
             this.btnCurrUser = new System.Windows.Forms.Button();
             this.btnExportProfiles = new System.Windows.Forms.Button();
+            this.ctlCalendar1 = new SeventyTwoDesktop.UI.CtlCalendar();
             this.BtnSendLogs = new System.Windows.Forms.Button();
             this.BtnCloseAllOpenProfiles = new System.Windows.Forms.Button();
             this.btnNewProfile = new System.Windows.Forms.Button();
@@ -45,10 +46,11 @@
             this.LblProfileList = new System.Windows.Forms.Label();
             this.LstProfiles = new System.Windows.Forms.ListBox();
             this.tabReports = new System.Windows.Forms.TabPage();
-            this.ctlCalendar1 = new SeventyTwoDesktop.UI.CtlCalendar();
+            this.btnExcelExport = new System.Windows.Forms.Button();
             this.tabMain.SuspendLayout();
             this.tabProfiles.SuspendLayout();
             this.grpExisting.SuspendLayout();
+            this.tabReports.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabMain
@@ -112,6 +114,16 @@
             this.btnExportProfiles.Text = "Export Profiles";
             this.btnExportProfiles.UseVisualStyleBackColor = false;
             this.btnExportProfiles.Click += new System.EventHandler(this.BtnExportProfiles_Click);
+            // 
+            // ctlCalendar1
+            // 
+            this.ctlCalendar1.ActiveWeekBeginningDate = new System.DateTime(((long)(0)));
+            this.ctlCalendar1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ctlCalendar1.Location = new System.Drawing.Point(681, 14);
+            this.ctlCalendar1.Name = "ctlCalendar1";
+            this.ctlCalendar1.Size = new System.Drawing.Size(755, 520);
+            this.ctlCalendar1.TabIndex = 12;
+            this.ctlCalendar1.AppointmentClicked += new System.EventHandler(this.ctlCalendar1_AppointmentClicked);
             // 
             // BtnSendLogs
             // 
@@ -231,6 +243,7 @@
             // 
             // tabReports
             // 
+            this.tabReports.Controls.Add(this.btnExcelExport);
             this.tabReports.Location = new System.Drawing.Point(4, 34);
             this.tabReports.Name = "tabReports";
             this.tabReports.Padding = new System.Windows.Forms.Padding(3);
@@ -239,15 +252,15 @@
             this.tabReports.Text = "Reports";
             this.tabReports.UseVisualStyleBackColor = true;
             // 
-            // ctlCalendar1
+            // btnExcelExport
             // 
-            this.ctlCalendar1.ActiveWeekBeginningDate = new System.DateTime(2019, 11, 2, 0, 0, 0, 0);
-            this.ctlCalendar1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ctlCalendar1.Location = new System.Drawing.Point(681, 14);
-            this.ctlCalendar1.Name = "ctlCalendar1";
-            this.ctlCalendar1.Size = new System.Drawing.Size(755, 520);
-            this.ctlCalendar1.TabIndex = 12;
-            this.ctlCalendar1.AppointmentClicked += new System.EventHandler(this.ctlCalendar1_AppointmentClicked);
+            this.btnExcelExport.Location = new System.Drawing.Point(7, 6);
+            this.btnExcelExport.Name = "btnExcelExport";
+            this.btnExcelExport.Size = new System.Drawing.Size(241, 90);
+            this.btnExcelExport.TabIndex = 0;
+            this.btnExcelExport.Text = "Export To Excel";
+            this.btnExcelExport.UseVisualStyleBackColor = true;
+            this.btnExcelExport.Click += new System.EventHandler(this.btnExcelExport_Click);
             // 
             // FrmMain
             // 
@@ -262,6 +275,7 @@
             this.tabProfiles.ResumeLayout(false);
             this.grpExisting.ResumeLayout(false);
             this.grpExisting.PerformLayout();
+            this.tabReports.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -286,5 +300,6 @@
         private System.Windows.Forms.Button btnExportProfiles;
         private System.Windows.Forms.Button btnCurrUser;
         private System.Windows.Forms.Button btnImportProfiles;
+        private System.Windows.Forms.Button btnExcelExport;
     }
 }

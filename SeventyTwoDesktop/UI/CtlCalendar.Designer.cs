@@ -27,6 +27,7 @@
         /// </summary>
         private void InitializeComponent( )
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Patient A - +93770998343 - Maternal Antenatal Visit");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Patient 1 - 9374783843  - Maternal Antenatal Visit");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Scheduled", new System.Windows.Forms.TreeNode[] {
@@ -59,6 +60,14 @@
             this.CalDate3 = new SeventyTwoDesktop.UI.CtlCalDate();
             this.CalDate2 = new SeventyTwoDesktop.UI.CtlCalDate();
             this.CalDate1 = new SeventyTwoDesktop.UI.CtlCalDate();
+            this.cmsCalStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmCompleted = new System.Windows.Forms.ToolStripMenuItem();
+            this.scheduledToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.confirmedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.completedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deletedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsCalStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // BtnPrevWeek
@@ -200,6 +209,61 @@
             this.CalDate1.TabIndex = 4;
             this.CalDate1.Clicked += new System.EventHandler(this.CalDate_ClickedEventHandler);
             // 
+            // cmsCalStrip
+            // 
+            this.cmsCalStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.cmsCalStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmOpen,
+            this.tsmCompleted});
+            this.cmsCalStrip.Name = "cmsCalStrip";
+            this.cmsCalStrip.Size = new System.Drawing.Size(198, 68);
+            // 
+            // tsmOpen
+            // 
+            this.tsmOpen.Name = "tsmOpen";
+            this.tsmOpen.Size = new System.Drawing.Size(197, 32);
+            this.tsmOpen.Text = "Open Record";
+            this.tsmOpen.Click += new System.EventHandler(this.tsmOpen_Click);
+            // 
+            // tsmCompleted
+            // 
+            this.tsmCompleted.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scheduledToolStripMenuItem,
+            this.confirmedToolStripMenuItem,
+            this.completedToolStripMenuItem,
+            this.deletedToolStripMenuItem});
+            this.tsmCompleted.Name = "tsmCompleted";
+            this.tsmCompleted.Size = new System.Drawing.Size(197, 32);
+            this.tsmCompleted.Text = "Change Status";
+            // 
+            // scheduledToolStripMenuItem
+            // 
+            this.scheduledToolStripMenuItem.Name = "scheduledToolStripMenuItem";
+            this.scheduledToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.scheduledToolStripMenuItem.Text = "Scheduled";
+            this.scheduledToolStripMenuItem.Click += new System.EventHandler(this.scheduledToolStripMenuItem_Click);
+            // 
+            // confirmedToolStripMenuItem
+            // 
+            this.confirmedToolStripMenuItem.Name = "confirmedToolStripMenuItem";
+            this.confirmedToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.confirmedToolStripMenuItem.Text = "Confirmed";
+            this.confirmedToolStripMenuItem.Click += new System.EventHandler(this.confirmedToolStripMenuItem_Click);
+            // 
+            // completedToolStripMenuItem
+            // 
+            this.completedToolStripMenuItem.Name = "completedToolStripMenuItem";
+            this.completedToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.completedToolStripMenuItem.Text = "Completed";
+            this.completedToolStripMenuItem.Click += new System.EventHandler(this.completedToolStripMenuItem_Click);
+            // 
+            // deletedToolStripMenuItem
+            // 
+            this.deletedToolStripMenuItem.Name = "deletedToolStripMenuItem";
+            this.deletedToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.deletedToolStripMenuItem.Text = "Cancelled";
+            this.deletedToolStripMenuItem.Click += new System.EventHandler(this.deletedToolStripMenuItem_Click);
+            // 
             // CtlCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -218,6 +282,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "CtlCalendar";
             this.Size = new System.Drawing.Size(755, 519);
+            this.cmsCalStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -235,5 +300,12 @@
         private CtlCalDate CalDate6;
         private CtlCalDate CalDate7;
         private System.Windows.Forms.TreeView TvCalendarItems;
+        private System.Windows.Forms.ContextMenuStrip cmsCalStrip;
+        private System.Windows.Forms.ToolStripMenuItem tsmOpen;
+        private System.Windows.Forms.ToolStripMenuItem tsmCompleted;
+        private System.Windows.Forms.ToolStripMenuItem scheduledToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem confirmedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem completedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deletedToolStripMenuItem;
     }
 }

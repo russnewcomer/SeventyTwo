@@ -51,11 +51,17 @@ namespace SeventyTwoDesktop.Controllers
 
         }
 
+        public void UpdateCalendarItem( CalendarItem ci ) {
+            int idx = Data.calendar_items.FindIndex( x => x.item_guid == ci.item_guid );
+            Data.calendar_items[ idx ] = ci;
+            WriteFile( );
+        }
+
         public int GetNumberOfScheduledItemsForToday( ) {
             int retVal = 0;
             try {
                 //Get the number of schedule items for today.
-                retVal = Data.calendar_items.Count( x => x.item_completed == false && x.item_confirmed == false );
+                retVal = Data.calendar_items.Count( x => !x.item_completed && !x.item_confirmed && !x.item_cancelled );
             } catch ( Exception exc ) { Models.Log.WriteToLog( exc ); }
             return retVal;
         }
@@ -65,7 +71,7 @@ namespace SeventyTwoDesktop.Controllers
             int retVal = 0;
             try {
                 //Get the number of schedule items for today.
-                retVal = Data.calendar_items.Count( x => x.item_completed == false && x.item_confirmed == true );
+                retVal = Data.calendar_items.Count( x => !x.item_completed && x.item_confirmed && !x.item_cancelled );
             } catch( Exception exc ) { Models.Log.WriteToLog( exc ); }
             return retVal;
         }
@@ -75,7 +81,7 @@ namespace SeventyTwoDesktop.Controllers
             int retVal = 0;
             try {
                 //Get the number of schedule items for today.
-                retVal = Data.calendar_items.Count( x => x.item_completed == true && x.item_confirmed == true );
+                retVal = Data.calendar_items.Count( x => x.item_completed && x.item_confirmed && !x.item_cancelled );
             } catch( Exception exc ) { Models.Log.WriteToLog( exc ); }
             return retVal;
         }

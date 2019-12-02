@@ -17,9 +17,11 @@ namespace SeventyTwoDesktop.UI
     public partial class CtlCalendar : UserControl
     {
 
-        private Dictionary<string, NodeInfoStruct> NodeInfo = new Dictionary<string, NodeInfoStruct>();
+        private Dictionary<string, CalendarItem> NodeInfo = new Dictionary<string, CalendarItem>();
 
         private CalendarListController clc = new CalendarListController( );
+
+        private Guid SelectedNode;
 
         private DateTime _firstDayOfActiveWeek { get; set; } = new DateTime( 2019, 10, 26 );
         public DateTime ActiveWeekBeginningDate {
@@ -37,25 +39,30 @@ namespace SeventyTwoDesktop.UI
 
         public CtlCalendar( ) {
             InitializeComponent( );
-            ActiveWeekBeginningDate = DateTime.Now;
-            while( ActiveWeekBeginningDate.DayOfWeek != DayOfWeek.Saturday ) {
-                ActiveWeekBeginningDate.AddDays( -1 );
-            }
+            SetStartingDate( );
             LoadData( );
+        }
+
+        public void SetStartingDate() {
+            ActiveWeekBeginningDate = DateTime.Now;
+            while ( ActiveWeekBeginningDate.DayOfWeek != DayOfWeek.Saturday ) {
+                ActiveWeekBeginningDate = ActiveWeekBeginningDate.AddDays( -1 );
+            }
         }
 
         public void LoadData() {
 
             //Clear out the existing data
-            TvCalendarItems.Nodes.Clear( ); 
-            
+            TvCalendarItems.Nodes.Clear( );
+            NodeInfo.Clear( );
+
             //Load data based on _firstDayOfActiveWeek
             for ( var i = 0; i < 7; i++ ) {
                 CalendarDateController cdc = clc.GetCalendarItemsForDate( _firstDayOfActiveWeek.AddDays( i ) );
                 string rootNodeName = cdc.DisplayDate + "-All";
-                foreach ( CalendarItem calItem in cdc.Data.calendar_items ) {
+                foreach ( CalendarItem calItem in cdc.Data.calendar_items.Where( cal => !cal.item_cancelled ) ) {
                     //Terning right around - into the type of item.
-                    var itemType = ( calItem.item_completed ) ? "Completed" : ( ( calItem.item_confirmed ) ? "Comfirmed" : "Scheduled" );
+                    var itemType = ( calItem.item_cancelled ? "Cancelled" : ( calItem.item_completed ) ? "Completed" : ( ( calItem.item_confirmed ) ? "Comfirmed" : "Scheduled" ) );
                     var dateItemNodeName = cdc.DisplayDate + "-" + itemType;
 
                     //Check to see if we have the root 'Scheduled/Confirmed/Completed' nodes.
@@ -67,10 +74,10 @@ namespace SeventyTwoDesktop.UI
                         TvCalendarItems.Nodes[ rootNodeName ].Nodes.Add( dateItemNodeName, itemType );
                     }
                     //Add in the appropriate nodes.
-                    string nodeInfoKey = Guid.NewGuid( ).ToString( );
-                    TvCalendarItems.Nodes[ rootNodeName ].Nodes[ dateItemNodeName ].Nodes.Add( nodeInfoKey, calItem.item_title );
-                    TvCalendarItems.Nodes[ rootNodeName ].Nodes[ dateItemNodeName ].Nodes[ nodeInfoKey ].ToolTipText = "Right-click to change status";
-                    NodeInfo.Add( nodeInfoKey, new NodeInfoStruct { Profile_guid = calItem.linked_profile_guid, Template_type = calItem.record_type, Record_guid = calItem.linked_record_guid } );
+                    
+                    TvCalendarItems.Nodes[ rootNodeName ].Nodes[ dateItemNodeName ].Nodes.Add( calItem.item_guid, calItem.item_title );
+                    TvCalendarItems.Nodes[ rootNodeName ].Nodes[ dateItemNodeName ].Nodes[ calItem.item_guid ].ToolTipText = "Right-click to change status";
+                    NodeInfo.Add( calItem.item_guid, calItem );
                 }
             }
 
@@ -140,37 +147,63 @@ namespace SeventyTwoDesktop.UI
         }
        
         private void TvCalendarItems_NodeMouseDoubleClick( object sender, TreeNodeMouseClickEventArgs e ) {
-            if ( e.Button == MouseButtons.Left ) {
-                AppointmentCalendarItemClicked( e.Node.Name );
+            if ( Guid.TryParse( e.Node.Name, out SelectedNode ) ) {
+                AppointmentCalendarItemClicked( SelectedNode.ToString( ) );
             }
         }
 
         private void TvCalendarItems_NodeMouseClick( object sender, TreeNodeMouseClickEventArgs e ) {
-            if ( e.Button == MouseButtons.Right ) {
-                //Here I want to spawn a pop-up menu so the user can confirm, complete, or delete items.
-                //Need to think of how/when to automatically mark calendar items as completed.
-                //For now will probably require manual completion
+
+            //Since we are storing the GUID in the name, see if the name parses out to a GUID
+            if ( Guid.TryParse( e.Node.Name, out SelectedNode ) ) {
+                //Have to add the Calendar left/right so that the menu spawns in the correct spot.
+                cmsCalStrip.Show( this, new Point( e.X + TvCalendarItems.Left, e.Y + TvCalendarItems.Top ) );
             }
+        }
+
+        private void tsmOpen_Click( object sender, EventArgs e ) {
+            AppointmentCalendarItemClicked( SelectedNode.ToString( ) );
         }
 
         #endregion
 
+        private void scheduledToolStripMenuItem_Click( object sender, EventArgs e ) {
+            NodeInfo[ SelectedNode.ToString( ) ].item_confirmed = false;
+            NodeInfo[ SelectedNode.ToString( ) ].item_completed = false;
+            clc.UpdateCalendarItem( NodeInfo[ SelectedNode.ToString( ) ] );
+            LoadData( );
+        }
+
+        private void confirmedToolStripMenuItem_Click( object sender, EventArgs e ) {
+            NodeInfo[ SelectedNode.ToString( ) ].item_confirmed = true;
+            NodeInfo[ SelectedNode.ToString( ) ].item_completed = false;
+            clc.UpdateCalendarItem( NodeInfo[ SelectedNode.ToString( ) ] );
+            LoadData( );
+        }
+
+        private void completedToolStripMenuItem_Click( object sender, EventArgs e ) {
+            NodeInfo[ SelectedNode.ToString( ) ].item_confirmed = true;
+            NodeInfo[ SelectedNode.ToString( ) ].item_completed = true;
+            clc.UpdateCalendarItem( NodeInfo[ SelectedNode.ToString( ) ] );
+            LoadData( );
+        }
+
+        private void deletedToolStripMenuItem_Click( object sender, EventArgs e ) {
+            if ( MessageBox.Show("Are you sure you want to cancel this appointment?", "Delete", MessageBoxButtons.YesNo ) == DialogResult.Yes ) { 
+                NodeInfo[ SelectedNode.ToString( ) ].item_cancelled = true;
+                clc.UpdateCalendarItem( NodeInfo[ SelectedNode.ToString( ) ] );
+                LoadData( );
+            }
+        }
     }
 
     public class AppointmentHandlingEventArgs : EventArgs
     {
-        public NodeInfoStruct Node;
-        public AppointmentHandlingEventArgs( NodeInfoStruct creationNode )
+        public CalendarItem Node;
+        public AppointmentHandlingEventArgs( CalendarItem creationNode )
         {
             Node = creationNode;
         }
-    }
-    
-    public struct NodeInfoStruct
-    {
-        public string Profile_guid;
-        public string Template_type;
-        public string Record_guid;
     }
 
 }
