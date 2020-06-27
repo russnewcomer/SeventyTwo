@@ -31,11 +31,20 @@ namespace SeventyTwoDesktop
             Application.Run(new FrmMain());
         }
 
+
+
         static void ConfirmDirectory( string directoryName ) {
             //make sure the named directory exists.
-            if( !Directory.Exists( directoryName ) )
+            string path = Controllers.FileReadWriteController.addPath( directoryName );
+            if ( !Directory.Exists( path ) )
             {
-                Directory.CreateDirectory( directoryName );
+                try { 
+                    Directory.CreateDirectory( path );
+                } catch (Exception errMsg){
+                    Console.WriteLine( errMsg.Message );
+                    Models.Log.WriteToLog( errMsg );
+                }
+                
             }
         }
 
@@ -43,8 +52,9 @@ namespace SeventyTwoDesktop
         //Look at the templates directory, and get the list.  Compare it to a file in 'config' and write the new files if necessary.
         static void GetProfileTypesAndLoadIntoConfigFile() {
             bool configListDirty = false;
-            bool templateConfigFileExists = File.Exists( "config/templates.json" );
-            JArray configList = templateConfigFileExists ? JArray.Parse( File.ReadAllText( "config/templates.json" ) ) : new JArray();
+            string configFilePath = Controllers.FileReadWriteController.addPath( "config", "templates.json" );
+            bool templateConfigFileExists = File.Exists( configFilePath );
+            JArray configList = templateConfigFileExists ? JArray.Parse( File.ReadAllText( configFilePath ) ) : new JArray();
             List<string> profileNamesFromConfigList = new List<string>();
             foreach( JToken x in configList ) {
                 foreach( KeyValuePair<string, JToken> property in ( JObject )x ) {
@@ -52,10 +62,12 @@ namespace SeventyTwoDesktop
                 }
             }
 
-            IEnumerable<string> ProfileTypes = Directory.EnumerateFiles( "templates" );
+            IEnumerable<string> ProfileTypes = Directory.EnumerateFiles( Controllers.FileReadWriteController.addPath("templates") );
 
             foreach( string profileFileName in ProfileTypes ) {
-                string name = profileFileName.Replace( ".json", "" ).Replace("templates\\", "");
+
+                string[] fileSplit = profileFileName.Split( '\\' );
+                string name = fileSplit[ fileSplit.Length - 1 ].Replace( ".json", "" );
                 if ( !profileNamesFromConfigList.Contains( name ) ) {
                     JObject template = JObject.Parse( File.ReadAllText( profileFileName ) );
                     JObject item = JObject.Parse( "{\"" +name + "\":\"" + template[ "title" ].ToString( ) + "\"} " );
@@ -65,7 +77,7 @@ namespace SeventyTwoDesktop
             }
             
             if ( configListDirty || !templateConfigFileExists ) {
-                File.WriteAllText( "config/templates.json", configList.ToString( ) );
+                File.WriteAllText( configFilePath, configList.ToString( ) );
             }
         }
 
