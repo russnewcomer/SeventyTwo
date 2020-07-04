@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
@@ -15,7 +17,16 @@ namespace SeventyTwoDesktop
         [STAThread]
         static void Main()
         {
-            
+
+            //We need to get
+            FileIOPermission f2 = new FileIOPermission( FileIOPermissionAccess.Read, Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ) );
+            f2.AddPathList( FileIOPermissionAccess.Write | FileIOPermissionAccess.Read, Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ) );
+            try {
+                f2.Demand( );
+            } catch ( SecurityException s ) {
+                Console.WriteLine( s.Message );
+            }
+
             ConfirmDirectory( "data" );
             ConfirmDirectory( "data/calendar" );
             ConfirmDirectory( "templates" );
