@@ -65,7 +65,7 @@ namespace SeventyTwoDesktop
             Profile.Profile.community = txtCommunity.Text;
             Profile.Profile.location = txtLocation.Text;
             Profile.Profile.phonenumber = txtPhone.Text;
-            Profile.Profile.gender = cbGender.SelectedItem.ToString();
+            Profile.Profile.gender = cbGender.SelectedItem?.ToString();
             Profile.Profile.birthdate = dtpBirthDate.Value;
             Profile.SaveProfileData();
         }
