@@ -794,7 +794,7 @@ namespace SeventyTwoDesktop
                      * Then switch to the tab.  Switching to the tab will trigger this event handler
                      * So if we have a string in the tag, we will populate the record, then clear it out
                      */
-                    if ( !string.IsNullOrEmpty( tabPageToCreate.Tag.ToString( ) ) ) {
+                    if ( tabPageToCreate.Tag != null && !string.IsNullOrEmpty( tabPageToCreate.Tag.ToString( ) ) ) {
                         _PopulateRecordUI( tabPageToCreate.Tag.ToString( ) );
                         tabPageToCreate.Tag = null;
                     }
