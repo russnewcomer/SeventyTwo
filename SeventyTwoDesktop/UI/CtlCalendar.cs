@@ -111,25 +111,25 @@ namespace SeventyTwoDesktop.UI
             //If we are clicking the base node
             if( cdcea.AppointmentType == CalendarAppointmentType.All ) {
                 //Expand or contract as necessary
-                if( TvCalendarItems.Nodes[ baseNodeKey ].IsExpanded ) {
+                if( TvCalendarItems.Nodes[ baseNodeKey ]?.IsExpanded == true ) {
                     TvCalendarItems.Nodes[ baseNodeKey ].Collapse( );
                 } else {
-                    TvCalendarItems.Nodes[ baseNodeKey ].Expand( );
+                    TvCalendarItems.Nodes[ baseNodeKey ]?.Expand( );
                 }
                 //Set the top node
                 TvCalendarItems.TopNode = TvCalendarItems.Nodes[ baseNodeKey ];
             } else {
                 //The subkey is for the sub appointments.  We need to to differentiate from the baseKey
                 string subKey = cdcea.Date + "-" + cdcea.AppointmentType.ToString( );
-                if( TvCalendarItems.Nodes[ baseNodeKey ].Nodes.ContainsKey( subKey ) ) {
-                    if ( TvCalendarItems.Nodes[ baseNodeKey ].Nodes[ subKey ].IsExpanded ) {
-                        TvCalendarItems.Nodes[ baseNodeKey ].Nodes[ subKey ].Collapse( );
+                if( TvCalendarItems.Nodes[ baseNodeKey ]?.Nodes.ContainsKey( subKey ) == true ) {
+                    if ( TvCalendarItems.Nodes[ baseNodeKey ].Nodes[ subKey ]?.IsExpanded == true) {
+                        TvCalendarItems.Nodes[ baseNodeKey ].Nodes[ subKey ]?.Collapse( );
                     } else {
-                        TvCalendarItems.Nodes[ baseNodeKey ].Nodes[ subKey ].Expand( );
-                        TvCalendarItems.TopNode = TvCalendarItems.Nodes[ baseNodeKey ].Nodes[ subKey ];
+                        TvCalendarItems.Nodes[ baseNodeKey ].Nodes[ subKey ]?.Expand( );
+                        TvCalendarItems.TopNode = TvCalendarItems.Nodes[ baseNodeKey ]?.Nodes[ subKey ];
                     }
                 } else {
-                    TvCalendarItems.Nodes[ baseNodeKey ].Expand( );
+                    TvCalendarItems.Nodes[ baseNodeKey ]?.Expand( );
                 }
             }
         }

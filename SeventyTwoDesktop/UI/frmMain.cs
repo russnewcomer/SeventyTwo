@@ -184,7 +184,14 @@ namespace SeventyTwoDesktop
                 };
 
 
-                Button btnEditProfile = new Button { Left = 450, Top = 5, Height = 30, Width = 150, Text = "Back To Profile" };
+                Button btnEditProfile = new Button {
+                    Left = 450,
+                    Top = 5,
+                    Height = 30,
+                    Width = 150,
+                    Text = "Back To Profile",
+                    Visible = false
+                };
 
                 
 
@@ -302,6 +309,7 @@ namespace SeventyTwoDesktop
                     tvTemplateItems.Show( );
                     btnCreateNewRecord.Hide( );
                     cmbNewRecord.Hide( );
+                    btnEditProfile.Show( );
                 }
 
                 void _ChangeToProfileView( ) {
@@ -314,6 +322,7 @@ namespace SeventyTwoDesktop
                     cmbNewRecord.Show( );
                     btnPreviousGuidanceItem.Hide( );
                     btnNextGuidanceItem.Hide( );
+                    btnEditProfile.Hide();
 
                     _PopulateExistingRecordsTreeView( );
                 }
@@ -324,7 +333,6 @@ namespace SeventyTwoDesktop
                     {
                         string curRecordGuid = tvTemplateItems.Nodes[0].Name;
                         LoadedProfiles[ProfileGUID].Records[curRecordGuid].WriteRecord();
-
                     }
                     catch (Exception exc) { Log.WriteToLog(exc); }
 
@@ -786,7 +794,7 @@ namespace SeventyTwoDesktop
                      * Then switch to the tab.  Switching to the tab will trigger this event handler
                      * So if we have a string in the tag, we will populate the record, then clear it out
                      */
-                    if ( !string.IsNullOrEmpty( tabPageToCreate.Tag.ToString( ) ) ) {
+                    if ( tabPageToCreate.Tag != null && !string.IsNullOrEmpty( tabPageToCreate.Tag.ToString( ) ) ) {
                         _PopulateRecordUI( tabPageToCreate.Tag.ToString( ) );
                         tabPageToCreate.Tag = null;
                     }
