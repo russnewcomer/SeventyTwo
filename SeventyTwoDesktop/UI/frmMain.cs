@@ -197,7 +197,7 @@ namespace SeventyTwoDesktop
 
                 CtlPermanentRecord permRecordControl = new CtlPermanentRecord {
                     Name = "permRecordControl",
-                    Top = 5,
+                    Top = 50,
                     Left = 5,
                     Height = 300,
                     Width = 600
@@ -834,7 +834,7 @@ namespace SeventyTwoDesktop
 
 
 
-                    tabPageToCreate.Controls.Add( btnEditProfile );
+                tabPageToCreate.Controls.Add( btnEditProfile );
                 tabPageToCreate.Controls.Add( lblProfileName );
                 tabPageToCreate.Controls.Add( btnPreviousGuidanceItem );
                 tabPageToCreate.Controls.Add( btnNextGuidanceItem );

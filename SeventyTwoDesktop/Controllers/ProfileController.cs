@@ -17,7 +17,7 @@ namespace SeventyTwoDesktop.Controllers
             bool retVal = false;
             try {
                 //Read and load the permanent JSON item.
-                retVal = Directory.Exists( "data/" + guid );
+                retVal = Directory.Exists( FileReadWriteController.addPath( "data", guid ));
 
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
             return retVal;
@@ -50,14 +50,18 @@ namespace SeventyTwoDesktop.Controllers
 
         }
 
-        public void LoadProfileData( string guid, string rootFileLocation = "data/" ) {
+        public void LoadProfileData( string guid, string rootFileLocation = "base" ) {
             try {
-                //Read and load the permanent JSON item.
-                if( Directory.Exists( rootFileLocation + guid ) ) {
-                    Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( rootFileLocation + guid + "/permanent.json" ) );
+                string fileLocation = ( rootFileLocation == "base" ? FileReadWriteController.addPath( "data", guid ) : rootFileLocation + guid );
+                //If the directory does not exist
+                if( !Directory.Exists( fileLocation ) ) {
+                    Profile = new ProfileItem( );
+                } else {
+                    //Read and load the permanent JSON item.
+                    Profile = JsonConvert.DeserializeObject<ProfileItem>( File.ReadAllText( fileLocation + "/permanent.json" ) );
                     
                     //Read and load all other JSON templates.
-                    IEnumerable<string> records = Directory.EnumerateFiles( rootFileLocation + guid );
+                    IEnumerable<string> records = Directory.EnumerateFiles( fileLocation );
 
                     foreach ( string filename in records) {
 
@@ -69,11 +73,8 @@ namespace SeventyTwoDesktop.Controllers
                         }
 
                     }
-
-                } else {
-                    Profile = new ProfileItem( );
+                
                 }
-
 
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
         }
@@ -83,14 +84,15 @@ namespace SeventyTwoDesktop.Controllers
         public void SaveProfileData() {
             try {
 
-                if( !System.IO.Directory.Exists( "data/" + Profile.guid ) ) {
-                    System.IO.Directory.CreateDirectory( "data/" + Profile.guid );
+                if( !Directory.Exists( FileReadWriteController.addPath( "data", Profile.guid ) ) ) {
+                    Directory.CreateDirectory( FileReadWriteController.addPath( "data", Profile.guid ) );
                 }
                 Profile.modifydate = DateTime.Now;
                 Profile.last_modified_guid = UserController.ActiveUser.GUID;
 
                 //Overwrites existing changes
-                File.WriteAllText("data/" + Profile.guid + "/permanent.json", JsonConvert.SerializeObject(Profile));
+                string fileName = FileReadWriteController.addPath( "data", Profile.guid, "permanent.json" );
+                File.WriteAllText(fileName, JsonConvert.SerializeObject(Profile));
                 
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
         }

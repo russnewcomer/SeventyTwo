@@ -73,7 +73,7 @@ namespace SeventyTwoDesktop
                 }
             }
 
-            IEnumerable<string> ProfileTypes = Directory.EnumerateFiles( Controllers.FileReadWriteController.addPath("templates") );
+            IEnumerable<string> ProfileTypes = Directory.EnumerateFiles( Controllers.FileReadWriteController.addPath( "templates" ) );
 
             foreach( string profileFileName in ProfileTypes ) {
 

@@ -20,8 +20,9 @@ namespace SeventyTwoDesktop.Controllers
         public static readonly object TimerLocker = new object( );
 
 
-        public static string addPath( string directoryName, string fileName = "" ) {
-            return Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ), "SeventyTwo", directoryName, fileName );
+        public static string addPath( string directoryName, string extraPath1 = "", string extraPath2 = "" ) {
+            string[] paths = { Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ), "SeventyTwo", directoryName, extraPath1, extraPath2 };
+            return Path.Combine( paths );
         }
 
         public FileReadWriteController( string path, string backupPath = "", double interval = 5000 ) {

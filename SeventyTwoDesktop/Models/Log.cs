@@ -13,7 +13,7 @@ namespace SeventyTwoDesktop.Models
         {
             try
             {
-                string logFileName = "log/" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+                string logFileName = Controllers.FileReadWriteController.addPath( "log", DateTime.Now.ToString("yyyy - MM - dd") + ".txt" );
                 StringBuilder sb = new StringBuilder( DateTime.Now.ToString( "dd-MMM-yyyy hh:mm" ) );
                 sb.AppendLine( "Exception" );
                 sb.Append( exc.ToString( ) );
@@ -31,7 +31,7 @@ namespace SeventyTwoDesktop.Models
 
         public static void WriteImport( String importRecord ) {
             try {
-                string logFileName = "log/Import-" + DateTime.Now.ToString( "yyyy-MM-dd" ) + ".txt";
+                string logFileName = Controllers.FileReadWriteController.addPath( "log", "import-" + DateTime.Now.ToString( "yyyy - MM - dd" ) + ".txt" );
                 StringBuilder sb = new StringBuilder( DateTime.Now.ToString( "dd-MMM-yyyy hh:mm" ) );
                 sb.AppendLine( "Import Log:" );
                 sb.Append( importRecord );
@@ -68,11 +68,12 @@ namespace SeventyTwoDesktop.Models
                 logText.AppendLine( );
 
                 for( var i = 0; i <= numberOfDaysToRetrieve; i++ ) {
-                    if( File.Exists( "log/" + logDay.ToString( "yyyy-MM-dd" ) + ".txt" ) ) {
+                    string logFileName = Controllers.FileReadWriteController.addPath( "log", DateTime.Now.ToString( "yyyy - MM - dd" ) + ".txt" );
+                    if ( File.Exists( logFileName ) ) {
                         logText.AppendLine( );
                         logText.AppendLine( "Logs for " + logDay.ToString( "yyyy-MM-dd" ) );
                         logText.AppendLine( );
-                        logText.Append( File.ReadAllText( "log/" + logDay.ToString( "yyyy-MM-dd" ) + ".txt" ) );
+                        logText.Append( File.ReadAllText( logFileName ) );
                         logText.AppendLine( );
                     } else {
                         logText.AppendLine( );

@@ -48,7 +48,7 @@ namespace SeventyTwoDesktop.Controllers
                 if ( style == TemplateStyle.Blank ) {
                     //If this is a simple record, we first need to set the 
                     TemplateType = RawData;
-                    TemplateInstance = new Template( File.ReadAllText( FileReadWriteController.addPath( "templates/", TemplateType + ".json" ) ) ) {
+                    TemplateInstance = new Template( File.ReadAllText( FileReadWriteController.addPath( "templates", TemplateType + ".json" ) ) ) {
                         date_entered = DateTime.Now //Set the date to the current date.
                     };
                 } else {

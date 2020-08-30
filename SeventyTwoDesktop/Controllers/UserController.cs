@@ -8,8 +8,8 @@ namespace SeventyTwoDesktop.Controllers
 {
     static class UserController {
 
-        const string LIST_FILE_PATH = "data/users.json";
-        const string LIST_DUPLICATE_FILE_PATH = "data/backup_user_list.json";
+        private static string LIST_FILE_PATH = FileReadWriteController.addPath( "data", "users.json" );
+        private static string LIST_DUPLICATE_FILE_PATH = FileReadWriteController.addPath( "data", "backup_user_list.json" );
 
         public static UserItem ActiveUser { get; set; }
         public static List<UserItem> UserList {get; set;} = new List<UserItem>();
@@ -91,6 +91,7 @@ namespace SeventyTwoDesktop.Controllers
             try {
                 foreach ( UserItem ui in UserList ) {
                     ui.Active = ui.GUID == ActiveGuid;
+                    ActiveUser = ui;
                 }
                 SaveList( );
             } catch ( Exception exc ) { Log.WriteToLog( exc ); }
