@@ -80,8 +80,6 @@ namespace SeventyTwoDesktop
         }
         private void BtnSendLogs_Click( object sender, EventArgs e )
         {
-
-            
             try {
                 TabPage tabPageToCreate = new TabPage { Name = "Logs", Text = "Logs" };
 
@@ -97,8 +95,6 @@ namespace SeventyTwoDesktop
                 tabMain.SelectTab( "Logs" );
 
             } catch( Exception exc ) { Log.WriteToLog( exc ); }
-
-
         }
 
         private void ctlCalendar1_AppointmentClicked( object sender, EventArgs e ) {
@@ -269,7 +265,7 @@ namespace SeventyTwoDesktop
                     Top = 355,
                     Height = 110,
                     Width = 550,
-                    Visible = true
+                    Visible = false
                 };
 
 
@@ -323,6 +319,7 @@ namespace SeventyTwoDesktop
                     btnPreviousGuidanceItem.Hide( );
                     btnNextGuidanceItem.Hide( );
                     btnEditProfile.Hide();
+                    pnlFollowup.Hide( );
 
                     _PopulateExistingRecordsTreeView( );
                 }
@@ -331,14 +328,14 @@ namespace SeventyTwoDesktop
 
                     try
                     {
-                        string curRecordGuid = tvTemplateItems.Nodes[0].Name;
-                        LoadedProfiles[ProfileGUID].Records[curRecordGuid].WriteRecord();
+                        if ( tvTemplateItems?.Nodes.Count > 0 ) {
+                            string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
+                            LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ].WriteRecord( );
+                        }
                     }
                     catch (Exception exc) { Log.WriteToLog(exc); }
 
-                 
-
-                      _ChangeToProfileView( );
+                    _ChangeToProfileView( );
 
                 }
 
@@ -681,27 +678,29 @@ namespace SeventyTwoDesktop
                 }
 
                 void _SaveAppointments() {
-                    string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
-                    RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ];
-                    foreach (DateTime dt in AppointmentDates ) {
-                        Dictionary<string, string> FollowupSchedule = rc.GetFollowupSchedule( );
-                        string recordType = FollowupSchedule[ "record_type" ];
-                        string itemTitle = LoadedProfiles[ ProfileGUID ].Profile.name + " - " + LoadedProfiles[ ProfileGUID ].Profile.phonenumber + " - " + TemplateController.GetTemplateTypes( )[ recordType ] + " - ";
-                        try {
-                            ctlCalendar1.AddCalendarItem( new CalendarItem {
-                                item_date = CalendarListController.GetDateString( dt ),
-                                item_title = itemTitle,
-                                record_type = recordType,
-                                linked_record_guid = curRecordGuid,
-                                linked_profile_guid = ProfileGUID,
-                                responsible_party = "",
-                                item_notes = ""
-                            } );
-                        } catch ( Exception exc ) {
-                            Log.WriteToLog( exc );
+                    try {
+                        if ( tvTemplateItems.Nodes.Count > 0 ) { 
+                            string curRecordGuid = tvTemplateItems.Nodes[ 0 ].Name;
+                            RecordController rc = LoadedProfiles[ ProfileGUID ].Records[ curRecordGuid ];
+                            foreach ( DateTime dt in AppointmentDates ) {
+                                Dictionary<string, string> FollowupSchedule = rc.GetFollowupSchedule( );
+                                string recordType = FollowupSchedule[ "record_type" ];
+                                string itemTitle = LoadedProfiles[ ProfileGUID ].Profile.name + " - " + LoadedProfiles[ ProfileGUID ].Profile.phonenumber + " - " + TemplateController.GetTemplateTypes( )[ recordType ] + " - ";
+                                ctlCalendar1.AddCalendarItem( new CalendarItem {
+                                    item_date = CalendarListController.GetDateString( dt ),
+                                    item_title = itemTitle,
+                                    record_type = recordType,
+                                    linked_record_guid = curRecordGuid,
+                                    linked_profile_guid = ProfileGUID,
+                                    responsible_party = "",
+                                    item_notes = ""
+                                } );
+                            }
+                            rc.SetFollowupScheduled( true );
                         }
+                    } catch ( Exception exc ) {
+                        Log.WriteToLog( exc );
                     }
-                    rc.SetFollowupScheduled( true );
                 };
 
                 void _ResetControlDPISizes( Control ctrl ) {
@@ -742,17 +741,13 @@ namespace SeventyTwoDesktop
                 btnCreateNewRecord.Click += delegate ( object o, EventArgs e ) {
                     try {
                         if ( cmbNewRecord.SelectedItem != null ) {
-                            string templateType = TemplateTypes.First( T => T.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key;
                             DialogResult result = MessageBox.Show( "Do you want to create a new " + cmbNewRecord.SelectedItem.ToString( ) + " record?", "Confirmation", MessageBoxButtons.YesNo );
                             if ( result == DialogResult.Yes ) {
-                                //If we confirm we want to create, create a new one
-                                _CreateNewRecord( templateType );
+                                _CreateNewRecord( TemplateTypes.First( T => T.Value == cmbNewRecord.SelectedItem.ToString( ) ).Key );
+                                _ChangeToRecordView( );
                             }
-
-                            _ChangeToRecordView( );
                         }
                     } catch ( Exception exc ) { Log.WriteToLog( exc ); }
-                    
                 };
 
                 tvTemplateItems.NodeMouseClick += delegate ( object o, TreeNodeMouseClickEventArgs e ) {

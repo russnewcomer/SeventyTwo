@@ -158,13 +158,13 @@ namespace SeventyTwoDesktop.Controllers
         }
 
         public bool GetFollowupScheduled() {
-            string scheduledStatus = "false";
+            string scheduledStatus = "none";
             try {
-                scheduledStatus = TC.GetFollowupSchedule( )[ "scheduled" ].ToString( );
+                TC.GetFollowupSchedule( ).TryGetValue("scheduled", out scheduledStatus );
             } catch ( Exception er ) {
                 Models.Log.WriteToLog( er );
             }
-            return ( scheduledStatus == "true" );
+            return ( scheduledStatus == "true" || scheduledStatus == null );
         }
 
         public void SetFollowupScheduled( bool scheduled ) {
